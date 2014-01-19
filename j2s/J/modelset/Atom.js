@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.modelset");
-Clazz.load (["J.util.JmolNode", "$.Point3fi", "J.constant.EnumPalette", "J.viewer.JC"], "J.modelset.Atom", ["java.lang.Float", "JU.CU", "$.P3", "$.SB", "$.V3", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.util.C", "$.Elements", "$.Escape"], function () {
+Clazz.load (["J.util.JmolNode", "$.Point3fi", "J.constant.EnumPalette", "J.viewer.JC"], "J.modelset.Atom", ["java.lang.Float", "JU.CU", "$.P3", "$.PT", "$.SB", "$.V3", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.util.C", "$.Elements"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.altloc = '\0';
 this.atomID = 0;
@@ -653,7 +653,7 @@ var chainID = this.getChainID ();
 if (chainID != 0 && chainID != 32) {
 info.append (":");
 var s = this.getChainIDStr ();
-if (chainID >= 256) s = J.util.Escape.eS (s);
+if (chainID >= 256) s = JU.PT.esc (s);
 info.append (s);
 }if (!allInfo) return info.toString ();
 info.append (".");

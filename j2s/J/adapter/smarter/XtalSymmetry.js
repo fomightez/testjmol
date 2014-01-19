@@ -42,9 +42,13 @@ this.notionalUnitCell =  Clazz.newFloatArray (6, 0);
 this.ptOffset =  new JU.P3 ();
 });
 Clazz.makeConstructor (c$, 
-function (ac) {
-this.ac = ac;
+function () {
+});
+$_M(c$, "set", 
+function (atomSetCollection) {
+this.ac = atomSetCollection;
 this.getSymmetry ();
+return this;
 }, "J.adapter.smarter.AtomSetCollection");
 $_M(c$, "getSymmetry", 
 function () {
@@ -83,7 +87,7 @@ this.fmatSupercell =  Clazz.newFloatArray (16, 0);
 if (this.symmetry.getMatrixFromString (supercell, this.fmatSupercell, true, 0) == null) {
 this.fmatSupercell = null;
 return;
-}J.util.Logger.info ("Using supercell \n" + JU.M4.newA (this.fmatSupercell));
+}J.util.Logger.info ("Using supercell \n" + JU.M4.newA16 (this.fmatSupercell));
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "setNotionalUnitCell", 
 ($fz = function (info, matUnitCellOrientation, unitCellOffset) {
@@ -387,7 +391,7 @@ if (symmetry !== lastSymmetry) {
 if (symmetry.getSpaceGroupOperationCount () == 0) this.finalizeSymmetry (lastSymmetry = symmetry);
 op = symmetry.getSpaceGroupOperation (0);
 }}var c = JU.P3.newP (atom);
-op.transform (c);
+op.rotTrans (c);
 symmetry.toCartesian (c, false);
 if (this.doPackUnitCell) {
 symmetry.toUnitCell (c, this.ptOffset);
@@ -534,7 +538,7 @@ break;
 }
 if (filter.indexOf ("#<") >= 0) {
 len = Math.min (len, JU.PT.parseInt (filter.substring (filter.indexOf ("#<") + 2)) - 1);
-filter = JU.PT.simpleReplace (filter, "#<", "_<");
+filter = JU.PT.rep (filter, "#<", "_<");
 }for (var iAtom = this.firstSymmetryAtom; iAtom < atomMax; iAtom++) atoms[iAtom].bsSymmetry = J.util.BSUtil.newAndSetBit (0);
 
 for (var i = 1; i < len; i++) {
@@ -552,7 +556,7 @@ if (addBonds) atomMap[atomSite] = this.ac.atomCount;
 atom1 = this.ac.newCloneAtom (atoms[iAtom]);
 if (this.ac.bsAtoms != null) this.ac.bsAtoms.set (atom1.index);
 atom1.atomSite = atomSite;
-mat.transform (atom1);
+mat.rotTrans (atom1);
 atom1.bsSymmetry = J.util.BSUtil.newAndSetBit (i);
 if (addBonds) {
 for (var bondNum = this.ac.bondIndex0; bondNum < this.bondCount0; bondNum++) {

@@ -95,7 +95,7 @@ var $t$;
 Clazz_declarePackage ("J.api");
 Clazz_declareInterface (J.api, "JmolPropertyManager");
 Clazz_declarePackage ("J.viewer");
-Clazz_load (["J.api.JmolPropertyManager", "java.util.Hashtable"], "J.viewer.PropertyManager", ["java.lang.Boolean", "$.Double", "$.Float", "java.util.Arrays", "$.Map", "JU.BS", "$.Base64", "$.List", "$.M3", "$.P3", "$.PT", "$.SB", "J.modelset.Atom", "$.BondSet", "$.LabelToken", "J.script.SV", "$.T", "J.util.BSUtil", "$.C", "$.Elements", "$.Escape", "$.JmolEdge", "$.JmolMolecule", "$.Logger", "$.Txt", "J.viewer.Viewer"], function () {
+Clazz_load (["J.api.JmolPropertyManager", "java.util.Hashtable"], "J.viewer.PropertyManager", ["java.lang.Boolean", "$.Double", "$.Float", "java.util.Arrays", "$.Map", "JU.BS", "$.Base64", "$.List", "$.M3", "$.M4", "$.P3", "$.PT", "$.SB", "J.modelset.Atom", "$.BondSet", "$.LabelToken", "J.script.SV", "$.T", "J.util.BSUtil", "$.C", "$.Elements", "$.Escape", "$.JmolEdge", "$.JmolMolecule", "$.Logger", "$.Txt", "J.viewer.Viewer"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.viewer = null;
 this.map = null;
@@ -147,7 +147,7 @@ return info;
 $_M(c$, "getModelProperty", 
 function (propertyName, propertyValue) {
 propertyName = propertyName.$replace (']', ' ').$replace ('[', ' ').$replace ('.', ' ');
-propertyName = JU.PT.simpleReplace (propertyName, "  ", " ");
+propertyName = JU.PT.rep (propertyName, "  ", " ");
 var names = JU.PT.split (JU.PT.trim (propertyName, " "), " ");
 var args =  new Array (names.length);
 propertyName = names[0];
@@ -170,6 +170,12 @@ if (Clazz_instanceOf (property, JU.List)) {
 var v = property;
 if (pt < 0) pt += v.size ();
 if (pt >= 0 && pt < v.size ()) return this.extractProperty (v.get (pt), args, ptr);
+return "";
+}if (Clazz_instanceOf (property, JU.M4)) {
+var m = property;
+var f = [[m.m00, m.m01, m.m02, m.m03], [m.m10, m.m11, m.m12, m.m13], [m.m20, m.m21, m.m22, m.m23], [m.m30, m.m31, m.m32, m.m33]];
+if (pt < 0) pt += 4;
+if (pt >= 0 && pt < 4) return this.extractProperty (f, args, --ptr);
 return "";
 }if (Clazz_instanceOf (property, JU.M3)) {
 var m = property;
@@ -314,7 +320,7 @@ if (width < 0 && height < 0) height = width = -1;
  else height = width;
 if (params.indexOf ("g64") >= 0 || params.indexOf ("base64") >= 0) returnType = "string";
 var type = "JPG";
-if (params.indexOf ("type=") >= 0) type = JU.PT.getTokens (JU.PT.replaceAllCharacter (params.substring (params.indexOf ("type=") + 5), ";,", ' '))[0];
+if (params.indexOf ("type=") >= 0) type = JU.PT.getTokens (JU.PT.replaceWithCharacter (params.substring (params.indexOf ("type=") + 5), ";,", ' '))[0];
 var errMsg =  new Array (1);
 var bytes = this.viewer.getImageAsBytes (type.toUpperCase (), width, height, -1, errMsg);
 return (errMsg[0] != null ? errMsg[0] : returnType == null ? bytes : JU.Base64.getBase64 (bytes).toString ());
@@ -807,7 +813,7 @@ case 1073742120:
 case 1087373320:
 var id = a.getChainID ();
 s = (id == 0 ? " " : a.getChainIDStr ());
-if (id > 255) s = J.util.Escape.eS (s);
+if (id > 255) s = JU.PT.esc (s);
 switch (tok) {
 case 1073742120:
 s = "[" + a.getGroup3 (false) + "]" + a.getSeqcodeString () + ":" + s;
@@ -847,12 +853,12 @@ var sb =  new JU.SB ();
 for (var i = 0; i < ms.modelCount; ++i) {
 if (frames != null && !frames.get (i)) continue;
 var s = "[\"" + ms.getModelNumberDotted (i) + "\"] = ";
-sb.append ("\n\nfile").append (s).append (J.util.Escape.eS (ms.getModelFileName (i)));
+sb.append ("\n\nfile").append (s).append (JU.PT.esc (ms.getModelFileName (i)));
 var id = ms.getModelAuxiliaryInfoValue (i, "modelID");
-if (id != null) sb.append ("\nid").append (s).append (J.util.Escape.eS (id));
-sb.append ("\ntitle").append (s).append (J.util.Escape.eS (ms.getModelTitle (i)));
-sb.append ("\nname").append (s).append (J.util.Escape.eS (ms.getModelName (i)));
-sb.append ("\ntype").append (s).append (J.util.Escape.eS (ms.getModelFileType (i)));
+if (id != null) sb.append ("\nid").append (s).append (JU.PT.esc (id));
+sb.append ("\ntitle").append (s).append (JU.PT.esc (ms.getModelTitle (i)));
+sb.append ("\nname").append (s).append (JU.PT.esc (ms.getModelName (i)));
+sb.append ("\ntype").append (s).append (JU.PT.esc (ms.getModelFileType (i)));
 }
 return sb.toString ();
 }, "JU.BS");

@@ -98,7 +98,7 @@ var m4 = this.viewer.getMatrixtransform ();
 this.mat.setRow (0, m4.m00, m4.m01, m4.m02);
 this.mat.setRow (1, m4.m10, m4.m11, m4.m12);
 this.mat.setRow (2, m4.m20, m4.m21, m4.m22);
-this.matScreenToCartesian.invertM (this.mat);
+this.matScreenToCartesian.invertM3 (this.mat);
 this.setLogic ();
 return true;
 }, $fz.isPrivate = true, $fz));
@@ -192,9 +192,9 @@ this.v1.setT (this.axes[i]);
 this.v1.scale (this.factoredLengths[i]);
 this.mat.setColumnV (i, this.v1);
 }
-this.mat.invertM (this.mat);
+this.mat.invertM3 (this.mat);
 this.matScreenToEllipsoid.mul2 (this.mat, this.matScreenToCartesian);
-this.matEllipsoidToScreen.invertM (this.matScreenToEllipsoid);
+this.matEllipsoidToScreen.invertM3 (this.matScreenToEllipsoid);
 this.perspectiveFactor = this.viewer.scaleToPerspective (this.s0.z, 1.0);
 this.matScreenToEllipsoid.mulf (1 / this.perspectiveFactor);
 }, $fz.isPrivate = true, $fz));
@@ -205,7 +205,7 @@ var iAxis = J.renderspecial.EllipsoidsRenderer.axisPoints[i];
 var i012 = Math.abs (iAxis) - 1;
 this.points[i].scaleAdd2 (this.factoredLengths[i012] * (iAxis < 0 ? -1 : 1), this.axes[i012], this.center);
 this.pt1.setT (J.renderspecial.EllipsoidsRenderer.unitAxisVectors[i]);
-this.matEllipsoidToScreen.transform (this.pt1);
+this.matEllipsoidToScreen.rotate (this.pt1);
 this.screens[i].set (Math.round (this.s0.x + this.pt1.x * this.perspectiveFactor), Math.round (this.s0.y + this.pt1.y * this.perspectiveFactor), Math.round (this.pt1.z + this.s0.z));
 this.screens[i + 32].set (Math.round (this.s0.x + this.pt1.x * this.perspectiveFactor * 1.05), Math.round (this.s0.y + this.pt1.y * this.perspectiveFactor * 1.05), Math.round (this.pt1.z * 1.05 + this.s0.z));
 }
@@ -352,7 +352,7 @@ this.s1.add (this.selectedPoints[1] = this.screens[J.renderspecial.EllipsoidsRen
 this.s1.add (this.selectedPoints[2] = this.screens[J.renderspecial.EllipsoidsRenderer.octants[this.iCutout * 3 + 2]]);
 this.s1.scaleAdd (-3, this.s0, this.s1);
 this.pt1.set (this.s1.x, this.s1.y, this.s1.z);
-this.matScreenToEllipsoid.transform (this.pt1);
+this.matScreenToEllipsoid.rotate (this.pt1);
 this.selectedOctant = J.util.GData.getScreenOctant (this.pt1);
 }}, $fz.isPrivate = true, $fz));
 Clazz.defineStatics (c$,

@@ -1009,7 +1009,7 @@ break;
 case 1297090050:
 var ff = this.floatArraySet (i + 2, this.intParameter (i + 1), 16);
 symops =  new Array (ff.length);
-for (var j = symops.length; --j >= 0; ) symops[j] = JU.M4.newA (ff[j]);
+for (var j = symops.length; --j >= 0; ) symops[j] = JU.M4.newA16 (ff[j]);
 
 i = eval.iToken;
 break;
@@ -1092,7 +1092,7 @@ i = eval.iToken;
 if (this.tokAt (i + 1) == 135368713) {
 i++;
 var f = this.getToken (++i).value;
-sbCommand.append (" function ").append (J.util.Escape.eS (f));
+sbCommand.append (" function ").append (JU.PT.esc (f));
 if (!this.chk) this.addShapeProperty (propertyList, "func", (f.equals ("a+b") || f.equals ("a-b") ? f : this.createFunction ("__iso__", "a,b", f)));
 } else {
 haveIntersection = true;
@@ -1388,7 +1388,7 @@ case 135182:
 surfaceObjectSeen = true;
 var lcaoType = this.parameterAsString (++i);
 this.addShapeProperty (propertyList, "lcaoType", lcaoType);
-sbCommand.append (" lcaocartoon ").append (J.util.Escape.eS (lcaoType));
+sbCommand.append (" lcaocartoon ").append (JU.PT.esc (lcaoType));
 switch (this.getToken (++i).tok) {
 case 10:
 case 1048577:
@@ -1481,7 +1481,7 @@ sbCommand.append (" " + calcType);
 this.addShapeProperty (propertyList, "mepCalcType", Integer.$valueOf (calcType));
 }if (this.tokAt (i + 1) == 4) {
 fname = this.stringParameter (++i);
-sbCommand.append (" /*file*/" + J.util.Escape.eS (fname));
+sbCommand.append (" /*file*/" + JU.PT.esc (fname));
 } else if (this.tokAt (i + 1) == 1716520985) {
 mepOrMlp = propertyName;
 continue;
@@ -1671,7 +1671,7 @@ var name = this.parameterAsString (++i);
 if (name.equals ("=")) {
 sbCommand.append (" =");
 name = this.parameterAsString (++i);
-sbCommand.append (" ").append (J.util.Escape.eS (name));
+sbCommand.append (" ").append (JU.PT.esc (name));
 vxy.addLast (name);
 if (!this.chk) this.addShapeProperty (propertyList, "func", this.createFunction ("__iso__", "x,y,z", name));
 break;
@@ -1874,7 +1874,7 @@ if (surfaceObjectSeen) this.invArg ();
 propertyName = "phase";
 isPhased = true;
 propertyValue = (this.tokAt (i + 1) == 4 ? this.stringParameter (++i) : "_orb");
-sbCommand.append (" phase ").append (J.util.Escape.eS (propertyValue));
+sbCommand.append (" phase ").append (JU.PT.esc (propertyValue));
 break;
 case 1073742104:
 case 1073742122:
@@ -1913,11 +1913,11 @@ case 1073741983:
 propertyName = (!surfaceObjectSeen && !planeSeen && !isMapped ? "readFile" : "mapColor");
 str = this.stringParameter (++i);
 if (str == null) this.invArg ();
-if (isPmesh) str = JU.PT.replaceAllCharacter (str, "{,}|", ' ');
+if (isPmesh) str = JU.PT.replaceWithCharacter (str, "{,}|", ' ');
 if (eval.logMessages) J.util.Logger.debug ("pmesh inline data:\n" + str);
 propertyValue = (this.chk ? null : str);
 this.addShapeProperty (propertyList, "fileName", "");
-sbCommand.append (" INLINE ").append (J.util.Escape.eS (str));
+sbCommand.append (" INLINE ").append (JU.PT.esc (str));
 surfaceObjectSeen = true;
 break;
 case 4:
@@ -1984,8 +1984,8 @@ this.addShapeProperty (propertyList, "calculationType", stype);
 this.addShapeProperty (propertyList, "fileName", filename);
 if (localName != null) filename = localName;
 if (fileIndex >= 0) sbCommand.append (" ").appendI (fileIndex);
-}sbCommand.append (" /*file*/").append (J.util.Escape.eS (filename));
-if (stype != null) sbCommand.append (" ").append (J.util.Escape.eS (stype));
+}sbCommand.append (" /*file*/").append (JU.PT.esc (filename));
+if (stype != null) sbCommand.append (" ").append (JU.PT.esc (stype));
 break;
 case 4106:
 propertyName = "connections";
@@ -3372,7 +3372,7 @@ this.invArg ();
 for (var i = 1; i < this.slen; i++) {
 var timeSec = (this.isFloatParameter (i) ? this.floatParameter (i++) : 2);
 if (timeSec < 0) this.invArg ();
-if (!this.chk && timeSec > 0) eval.refresh ();
+if (!this.chk && timeSec > 0) eval.refresh (false);
 switch (this.getToken (i).tok) {
 case 8:
 case 1048586:
@@ -3469,7 +3469,7 @@ var pathID = eval.objectNameParameter (++i);
 if (this.chk) return;
 this.setShapeProperty (22, "thisID", pathID);
 path = this.getShapeProperty (22, "vertices");
-eval.refresh ();
+eval.refresh (false);
 if (path == null) this.invArg ();
 var indexStart = Clazz.floatToInt (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : 0);
 var indexEnd = Clazz.floatToInt (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : 2147483647);
@@ -3837,7 +3837,7 @@ if (quality < 0) quality = -1;
 }if (data == null && !doDefer) data = "";
 if (len == 0 && !doDefer) len = (bytes == null ? data.length : Clazz.instanceOf (bytes, String) ? (bytes).length : (bytes).length);
 if (isImage) {
-this.eval.refresh ();
+this.eval.refresh (false);
 if (width < 0) width = this.viewer.getScreenWidth ();
 if (height < 0) height = this.viewer.getScreenHeight ();
 }}if (!isCommand) return data;
@@ -4137,7 +4137,7 @@ if (!this.chk) {
 info = this.viewer.getSpaceGroupInfo (null);
 }} else {
 var sg = this.parameterAsString (2);
-if (!this.chk) info = this.viewer.getSpaceGroupInfo (JU.PT.simpleReplace (sg, "''", "\""));
+if (!this.chk) info = this.viewer.getSpaceGroupInfo (JU.PT.rep (sg, "''", "\""));
 }if (info != null) msg = "" + info.get ("spaceGroupInfo") + info.get ("symmetryInfo");
 break;
 case 1048583:
@@ -5288,7 +5288,7 @@ for (var j = 0; j < maps[i].length; j++) bs.set (maps[i][j]);
 vReturn.addLast (bs);
 }}if (stddev < lowestStdDev) {
 mapB = maps[i];
-if (m4 != null) m4.setM (m);
+if (m4 != null) m4.setM4 (m);
 if (center != null) center.setT (c);
 lowestStdDev = stddev;
 }}
@@ -6137,10 +6137,10 @@ var phi = J.script.SV.fValue (args[2]);
 norm = JU.V3.new3 (0, 0, 1);
 pt2 = JU.P3.new3 (0, 1, 0);
 var q = J.util.Quaternion.newVA (pt2, phi);
-q.getMatrix ().transform (norm);
+q.getMatrix ().rotate (norm);
 pt2.set (0, 0, 1);
 q = J.util.Quaternion.newVA (pt2, theta);
-q.getMatrix ().transform (norm);
+q.getMatrix ().rotate (norm);
 pt2.setT (norm);
 pt2.scale (r);
 plane =  new JU.P4 ();
@@ -6214,9 +6214,9 @@ var x = mp.getX ();
 var sFind = J.script.SV.sValue (args[0]);
 var sReplace = J.script.SV.sValue (args[1]);
 var s = (x.tok == 7 ? null : J.script.SV.sValue (x));
-if (s != null) return mp.addXStr (JU.PT.simpleReplace (s, sFind, sReplace));
+if (s != null) return mp.addXStr (JU.PT.rep (s, sFind, sReplace));
 var list = J.script.SV.listValue (x);
-for (var i = list.length; --i >= 0; ) list[i] = JU.PT.simpleReplace (list[i], sFind, sReplace);
+for (var i = list.length; --i >= 0; ) list[i] = JU.PT.rep (list[i], sFind, sReplace);
 
 return mp.addXAS (list);
 }, $fz.isPrivate = true, $fz), "J.script.ScriptMathProcessor,~A");
@@ -6245,7 +6245,7 @@ s += J.util.Escape.eBS (bs);
 }return mp.addXAS (JU.PT.split (s, sArg));
 case 1276117506:
 if (s.length > 0 && s.charAt (s.length - 1) == '\n') s = s.substring (0, s.length - 1);
-return mp.addXStr (JU.PT.simpleReplace (s, "\n", sArg));
+return mp.addXStr (JU.PT.rep (s, "\n", sArg));
 case 1276117512:
 if (s != null) return mp.addXStr (JU.PT.trim (s, sArg));
 var list = J.script.SV.listValue (x);
@@ -6425,8 +6425,8 @@ break;
 }
 }
 if (isMatrix) {
-if (len == 3) return mp.addXM3 (JU.M3.newA (m));
-return mp.addXM4 (JU.M4.newA (m));
+if (len == 3) return mp.addXM3 (JU.M3.newA9 (m));
+return mp.addXM4 (JU.M4.newA16 (m));
 }}}var a =  new Array (args.length);
 for (var i = a.length; --i >= 0; ) a[i] = J.script.SV.newT (args[i]);
 
@@ -7132,7 +7132,7 @@ i = 3;
 axis = (this.tokAt (3) == 2 ? "y" : this.eval.optParameterAsString (i++).toLowerCase ());
 var n = (this.tokAt (i) == 0 ? 5 : this.intParameter (i++));
 s = "; rotate Y 10 10;delay 2.0; rotate Y -10 -10; delay 2.0;rotate Y -10 -10; delay 2.0;rotate Y 10 10;delay 2.0";
-s = JU.PT.simpleReplace (s, "10", "" + n);
+s = JU.PT.rep (s, "10", "" + n);
 break;
 case 1611141175:
 looping = true;
@@ -7152,8 +7152,8 @@ break;
 if (s != null) {
 if (!this.chk) this.viewer.setNavigationMode (false);
 if (axis === "" || "xyz".indexOf (axis) < 0) axis = "y";
-s = JU.PT.simpleReplace (s, "Y", axis);
-s = "capture " + J.util.Escape.eS (fileName) + sfps + s + ";capture;";
+s = JU.PT.rep (s, "Y", axis);
+s = "capture " + JU.PT.esc (fileName) + sfps + s + ";capture;";
 this.eval.script (0, null, s);
 return;
 }if (params != null) params =  new java.util.Hashtable ();

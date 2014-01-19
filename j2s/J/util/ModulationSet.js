@@ -96,7 +96,7 @@ if (this.isSubsystem) this.t = this.tFactor.mul (this.t);
 }this.t = this.gammaIinv.mul (this.t).add (this.tau);
 for (var i = this.mods.size (); --i >= 0; ) this.mods.get (i).apply (this, this.t.getArray ());
 
-this.gammaE.transform (this);
+this.gammaE.rotate (this);
 return this;
 }, "JU.T3,~B");
 $_M(c$, "addUTens", 

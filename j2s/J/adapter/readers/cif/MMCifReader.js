@@ -37,7 +37,7 @@ this.isCourseGrained = this.byChain || this.bySymop;
 if (this.byChain) {
 this.chainAtomMap =  new java.util.Hashtable ();
 this.chainAtomCounts =  new java.util.Hashtable ();
-}if (this.cr.checkFilterKey ("BIOMOLECULE")) this.cr.filter = JU.PT.simpleReplace (this.cr.filter, "BIOMOLECULE", "ASSEMBLY");
+}if (this.cr.checkFilterKey ("BIOMOLECULE")) this.cr.filter = JU.PT.rep (this.cr.filter, "BIOMOLECULE", "ASSEMBLY");
 this.isBiomolecule = this.cr.checkFilterKey ("ASSEMBLY");
 return this.isCourseGrained;
 }, "J.adapter.readers.cif.CifReader");
@@ -130,7 +130,7 @@ var pt = ops.indexOf (")(");
 if (pt >= 0) return this.crossBinary (this.decodeAssemblyOperators (ops.substring (0, pt + 1)), this.decodeAssemblyOperators (ops.substring (pt + 1)));
 if (ops.startsWith ("(")) {
 if (ops.indexOf ("-") >= 0) ops = J.util.Escape.uB ("({" + ops.substring (1, ops.length - 1).$replace ('-', ':') + "})").toString ();
-ops = JU.PT.simpleReplace (ops, " ", "");
+ops = JU.PT.rep (ops, " ", "");
 ops = ops.substring (1, ops.length - 1);
 }return ops;
 }, $fz.isPrivate = true, $fz), "~S");
@@ -177,7 +177,7 @@ this.cr.symmetry.getMatrixFromString (xyz, m, false, 0);
 m[3] *= this.cr.symmetry.getUnitCellInfoType (0) / 12;
 m[7] *= this.cr.symmetry.getUnitCellInfoType (1) / 12;
 m[11] *= this.cr.symmetry.getUnitCellInfoType (2) / 12;
-}m4.setA (m, 0);
+}m4.setA (m);
 if (this.htBiomts == null) this.htBiomts =  new java.util.Hashtable ();
 this.htBiomts.put (id, m4);
 }}
@@ -402,7 +402,7 @@ return ((this.field = this.cr.tokenizer.loopData[i]).length > 0 && (this.firstCh
 $_M(c$, "setBiomolecules", 
 ($fz = function (biomolecule) {
 if (!this.isBiomolecule || this.assemblyIdAtoms == null && this.chainAtomCounts == null) return;
-var mident = JU.M4.newM (null);
+var mident = JU.M4.newM4 (null);
 var ops = JU.PT.split (biomolecule.get ("operators"), ",");
 var assemblies = biomolecule.get ("assemblies");
 var biomts =  new JU.List ();
@@ -461,10 +461,10 @@ this.cr.atomSetCollection.addAtom (a);
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "getOpMatrix", 
 ($fz = function (ops) {
-if (this.htBiomts == null) return JU.M4.newM (null);
+if (this.htBiomts == null) return JU.M4.newM4 (null);
 var pt = ops.indexOf ("|");
 if (pt >= 0) {
-var m = JU.M4.newM (this.htBiomts.get (ops.substring (0, pt)));
+var m = JU.M4.newM4 (this.htBiomts.get (ops.substring (0, pt)));
 m.mulM4 (this.htBiomts.get (ops.substring (pt + 1)));
 return m;
 }return this.htBiomts.get (ops);

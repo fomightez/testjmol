@@ -336,8 +336,8 @@ this.fileManager.setAppletContext (this.appletDocumentBase);
 var appletProxy = info.get ("appletProxy");
 if (appletProxy != null) this.setStringProperty ("appletProxy", appletProxy);
 if (this.$isSignedApplet) {
-this.logFilePath = JU.PT.simpleReplace (this.appletCodeBase, "file://", "");
-this.logFilePath = JU.PT.simpleReplace (this.logFilePath, "file:/", "");
+this.logFilePath = JU.PT.rep (this.appletCodeBase, "file://", "");
+this.logFilePath = JU.PT.rep (this.logFilePath, "file:/", "");
 if (this.logFilePath.indexOf ("//") >= 0) this.logFilePath = null;
  else this.isSignedAppletLocal = true;
 } else if (!this.isJS) {
@@ -1472,7 +1472,7 @@ var s = loadScript.toString ();
 for (var i = 0; i < fileNames.length; i++) {
 var fname = fileNames[i];
 if (fileTypes != null && fileTypes[i] != null) fname = fileTypes[i] + "::" + fname;
-s = JU.PT.simpleReplace (s, "$FILENAME" + (i + 1) + "$", J.util.Escape.eS (fname.$replace ('\\', '/')));
+s = JU.PT.rep (s, "$FILENAME" + (i + 1) + "$", JU.PT.esc (fname.$replace ('\\', '/')));
 }
 loadScript =  new JU.SB ().append (s);
 } else if (reader == null) {
@@ -1490,7 +1490,7 @@ if (loadScript != null) {
 var fname = htParams.get ("fullPathName");
 if (fname == null) fname = "";
 if (htParams.containsKey ("loadScript")) loadScript = htParams.get ("loadScript");
-htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.simpleReplace (loadScript.toString (), "$FILENAME$", J.util.Escape.eS (fname.$replace ('\\', '/')))));
+htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.rep (loadScript.toString (), "$FILENAME$", JU.PT.esc (fname.$replace ('\\', '/')))));
 }return this.createModelSetAndReturnError (atomSetCollection, isAppend, loadScript, htParams);
 }, "~S,~S,~A,~O,~B,java.util.Map,JU.SB,~N");
 $_M(c$, "setLigandModel", 
@@ -1573,7 +1573,7 @@ return this.loadInlineScript (strModel, '\0', isAppend, htParams);
 strModel = this.modelSet.getInlineData (-1);
 if (strModel == null) if (this.global.modelKitMode) strModel = "5\n\nC 0 0 0\nH .63 .63 .63\nH -.63 -.63 .63\nH -.63 .63 -.63\nH .63 -.63 -.63";
  else return "cannot find string data";
-if (loadScript != null) htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.simpleReplace (loadScript.toString (), "$FILENAME$", "data \"model inline\"\n" + strModel + "end \"model inline\"")));
+if (loadScript != null) htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.rep (loadScript.toString (), "$FILENAME$", "data \"model inline\"\n" + strModel + "end \"model inline\"")));
 }if (strModel != null) {
 if (!isAppend) this.zap (true, false, false);
 if (!isLoadVariable && (!haveFileData || isString)) this.getStateCreator ().getInlineData (loadScript, strModel, isAppend, this.getDefaultLoadFilter ());
@@ -1658,8 +1658,8 @@ c$.fixInlineString = $_M(c$, "fixInlineString",
 function (strModel, newLine) {
 var i;
 if (strModel.indexOf ("\\/n") >= 0) {
-strModel = JU.PT.simpleReplace (strModel, "\n", "");
-strModel = JU.PT.simpleReplace (strModel, "\\/n", "\n");
+strModel = JU.PT.rep (strModel, "\n", "");
+strModel = JU.PT.rep (strModel, "\\/n", "\n");
 newLine = String.fromCharCode ( 0);
 }if (newLine.charCodeAt (0) != 0 && newLine != '\n') {
 var repEmpty = (strModel.indexOf ('\n') >= 0);
@@ -1667,7 +1667,7 @@ var len = strModel.length;
 for (i = 0; i < len && strModel.charAt (i) == ' '; ++i) {
 }
 if (i < len && strModel.charAt (i) == newLine) strModel = strModel.substring (i + 1);
-if (repEmpty) strModel = JU.PT.simpleReplace (strModel, "" + newLine, "");
+if (repEmpty) strModel = JU.PT.rep (strModel, "" + newLine, "");
  else strModel = strModel.$replace (newLine, '\n');
 }return strModel;
 }, "~S,~S");
@@ -3268,7 +3268,7 @@ f = "name/" + JU.PT.escapeUrl (f);
 case '$':
 if (name.startsWith ("$$")) {
 f = f.substring (1);
-format = JU.PT.simpleReplace (this.global.smilesUrlFormat, "&get3d=True", "");
+format = JU.PT.rep (this.global.smilesUrlFormat, "&get3d=True", "");
 return J.util.Txt.formatStringS (format, "FILE", JU.PT.escapeUrl (f));
 }case 'N':
 case '2':
@@ -3823,8 +3823,6 @@ case 553648154:
 return this.global.percentVdwAtom;
 case 553648157:
 return this.global.pickingSpinRate;
-case 553648158:
-return this.global.platformSpeed;
 case 553648166:
 return this.global.ribbonAspectRatio;
 case 536870922:
@@ -5483,10 +5481,10 @@ if ((i = text0.indexOf ("@{")) < 0 && (i = text0.indexOf ("%{")) < 0) return tex
 var text = text0;
 var isEscaped = (text.indexOf ("\\") >= 0);
 if (isEscaped) {
-text = JU.PT.simpleReplace (text, "\\%", "\1");
-text = JU.PT.simpleReplace (text, "\\@", "\2");
+text = JU.PT.rep (text, "\\%", "\1");
+text = JU.PT.rep (text, "\\@", "\2");
 isEscaped = !text.equals (text0);
-}text = JU.PT.simpleReplace (text, "%{", "@{");
+}text = JU.PT.rep (text, "%{", "@{");
 var name;
 while ((i = text.indexOf ("@{")) >= 0) {
 i++;
@@ -5501,8 +5499,8 @@ if (Clazz.instanceOf (v, JU.P3)) v = J.util.Escape.eP (v);
 text = text.substring (0, i0 - 2) + v.toString () + text.substring (i + 1);
 }
 if (isEscaped) {
-text = JU.PT.simpleReplace (text, "\2", "@");
-text = JU.PT.simpleReplace (text, "\1", "%");
+text = JU.PT.rep (text, "\2", "@");
+text = JU.PT.rep (text, "\1", "%");
 }return text;
 }, "~S");
 $_M(c$, "getElementSymbol", 
@@ -5773,7 +5771,7 @@ if (type.toLowerCase ().indexOf ("property_") == 0) exp = "{selected}.label(\"%{
  else if (type.equalsIgnoreCase ("XYZRN")) exp = "\"\" + {selected}.size + \"\n\n\"+{selected}.label(\"%-2e %8.3x %8.3y %8.3z %4.2[vdw] 1 [%n]%r.%a#%i\").lines";
  else if (type.startsWith ("USER:")) exp = "{selected}.label(\"" + type.substring (5) + "\").lines";
  else exp = "\"\" + {selected}.size + \"\n\n\"+{selected}.label(\"%-2e %10.5x %10.5y %10.5z\").lines";
-if (!atomExpression.equals ("selected")) exp = JU.PT.simpleReplace (exp, "selected", atomExpression);
+if (!atomExpression.equals ("selected")) exp = JU.PT.rep (exp, "selected", atomExpression);
 return this.evaluateExpression (exp);
 }, "~S,~S");
 $_M(c$, "getModelCml", 
@@ -6084,7 +6082,7 @@ return this.getFileAsString (url);
 $_M(c$, "getHelp", 
 function (what) {
 if (this.global.helpPath.indexOf ("?") < 0) {
-if (what.length > 0 && what.indexOf ("?") != 0) what = "?search=" + JU.PT.simpleReplace (what, " ", "%20");
+if (what.length > 0 && what.indexOf ("?") != 0) what = "?search=" + JU.PT.rep (what, " ", "%20");
 what += (what.length == 0 ? "?ver=" : "&ver=") + J.viewer.JC.version;
 } else {
 what = "&" + what;
@@ -6097,7 +6095,7 @@ this.showUrl (this.setLoadFormat ("_" + smiles, '2', false));
 $_M(c$, "getChemicalInfo", 
 function (smiles, type, info) {
 var s = this.setLoadFormat ("_" + smiles, type, false);
-if (type == '/') s += JU.PT.simpleReplace (info, " ", "%20");
+if (type == '/') s += JU.PT.rep (info, " ", "%20");
 return this.getFileAsString4 (s, -1, false, false, false);
 }, "~S,~S,~S");
 $_M(c$, "addCommand", 

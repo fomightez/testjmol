@@ -92,9 +92,9 @@
 ){
 var $t$;
 //var c$;
-___JmolDate="$Date: 2014-01-10 16:44:05 -0600 (Fri, 10 Jan 2014) $"
+___JmolDate="$Date: 2014-01-16 22:32:41 -0500 (Thu, 16 Jan 2014) $"
 ___fullJmolProperties="src/org/jmol/viewer/Jmol.properties"
-___JmolVersion="14.1.6_dev_2014.01.10"
+___JmolVersion="14.1.6_dev_2014.01.16c"
 // JSmolJavaExt.js
 // will be wrapped by anonymous function using ANT in build_03_tojs.xml
 
@@ -9855,6 +9855,8 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("javajs.api");
 Clazz_declareInterface (javajs.api, "JSInterface");
 Clazz_declarePackage ("javajs.api");
+Clazz_declareInterface (javajs.api, "JSONEncodable");
+Clazz_declarePackage ("javajs.api");
 Clazz_declareInterface (javajs.api, "PlatformViewer");
 Clazz_declarePackage ("javajs.api");
 Clazz_declareInterface (javajs.api, "ZInputStream");
@@ -10028,17 +10030,15 @@ Clazz_defineStatics (c$,
 "FONT_STYLE_BOLDITALIC", 3,
 "fontStyles", ["Plain", "Bold", "Italic", "BoldItalic"]);
 });
-Clazz_declarePackage ("javajs.api");
-Clazz_declareInterface (javajs.api, "JSONEncodable");
 Clazz_declarePackage ("JU");
-Clazz_load (null, "JU.A4", ["JU.T3"], function () {
+Clazz_load (["javajs.api.JSONEncodable"], "JU.A4", ["JU.T3"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.x = 0;
 this.y = 0;
 this.z = 0;
 this.angle = 0;
 Clazz_instantialize (this, arguments);
-}, JU, "A4", null, java.io.Serializable);
+}, JU, "A4", null, [javajs.api.JSONEncodable, java.io.Serializable]);
 Clazz_makeConstructor (c$, 
 function () {
 this.z = 1.0;
@@ -10095,9 +10095,9 @@ this.z = (m10 - m01);
 var sin = 0.5 * Math.sqrt (this.x * this.x + this.y * this.y + this.z * this.z);
 this.angle = Math.atan2 (sin, cos);
 }, "~N,~N,~N,~N,~N,~N,~N,~N,~N");
-$_V(c$, "toString", 
+$_V(c$, "hashCode", 
 function () {
-return "(" + this.x + ", " + this.y + ", " + this.z + ", " + this.angle + ")";
+return JU.T3.floatToIntBits0 (this.x) ^ JU.T3.floatToIntBits0 (this.y) ^ JU.T3.floatToIntBits0 (this.z) ^ JU.T3.floatToIntBits0 (this.angle);
 });
 $_V(c$, "equals", 
 function (o) {
@@ -10105,9 +10105,13 @@ if (!(Clazz_instanceOf (o, JU.A4))) return false;
 var a1 = o;
 return this.x == a1.x && this.y == a1.y && this.z == a1.z && this.angle == a1.angle;
 }, "~O");
-$_V(c$, "hashCode", 
+$_V(c$, "toString", 
 function () {
-return JU.T3.floatToIntBits0 (this.x) ^ JU.T3.floatToIntBits0 (this.y) ^ JU.T3.floatToIntBits0 (this.z) ^ JU.T3.floatToIntBits0 (this.angle);
+return "(" + this.x + ", " + this.y + ", " + this.z + ", " + this.angle + ")";
+});
+$_V(c$, "toJSON", 
+function () {
+return "[" + this.x + "," + this.y + "," + this.z + "," + (this.angle * 180.0 / 3.141592653589793) + "]";
 });
 });
 Clazz_declarePackage ("JU");
@@ -11018,6 +11022,230 @@ return this.removeObject(v);
 }}, "~O");
 });
 Clazz_declarePackage ("JU");
+c$ = Clazz_decorateAsClass (function () {
+this.a = null;
+this.m = 0;
+this.n = 0;
+if (!Clazz_isClassDefined ("JU.Matrix.LUDecomp")) {
+JU.Matrix.$Matrix$LUDecomp$ ();
+}
+Clazz_instantialize (this, arguments);
+}, JU, "Matrix", null, Cloneable);
+Clazz_makeConstructor (c$, 
+function (a, m, n) {
+this.a = (a == null ?  Clazz_newDoubleArray (m, n, 0) : a);
+this.m = m;
+this.n = n;
+}, "~A,~N,~N");
+$_M(c$, "getRowDimension", 
+function () {
+return this.m;
+});
+$_M(c$, "getColumnDimension", 
+function () {
+return this.n;
+});
+$_M(c$, "getArray", 
+function () {
+return this.a;
+});
+$_M(c$, "getArrayCopy", 
+function () {
+var x =  Clazz_newDoubleArray (this.m, this.n, 0);
+for (var i = this.m; --i >= 0; ) for (var j = this.n; --j >= 0; ) x[i][j] = this.a[i][j];
+
+
+return x;
+});
+$_M(c$, "copy", 
+function () {
+var x =  new JU.Matrix (null, this.m, this.n);
+var c = x.a;
+for (var i = this.m; --i >= 0; ) for (var j = this.n; --j >= 0; ) c[i][j] = this.a[i][j];
+
+
+return x;
+});
+$_V(c$, "clone", 
+function () {
+return this.copy ();
+});
+$_M(c$, "getSubmatrix", 
+function (i0, j0, nrows, ncols) {
+var x =  new JU.Matrix (null, nrows, ncols);
+var xa = x.a;
+for (var i = nrows; --i >= 0; ) for (var j = ncols; --j >= 0; ) xa[i][j] = this.a[i0 + i][j0 + j];
+
+
+return x;
+}, "~N,~N,~N,~N");
+$_M(c$, "getMatrixSelected", 
+function (r, n) {
+var x =  new JU.Matrix (null, r.length, n);
+var xa = x.a;
+for (var i = r.length; --i >= 0; ) {
+var b = this.a[r[i]];
+for (var j = n; --j >= 0; ) xa[i][j] = b[j];
+
+}
+return x;
+}, "~A,~N");
+$_M(c$, "transpose", 
+function () {
+var x =  new JU.Matrix (null, this.n, this.m);
+var c = x.a;
+for (var i = this.m; --i >= 0; ) for (var j = this.n; --j >= 0; ) c[j][i] = this.a[i][j];
+
+
+return x;
+});
+$_M(c$, "add", 
+function (b) {
+return this.scaleAdd (b, 1);
+}, "JU.Matrix");
+$_M(c$, "sub", 
+function (b) {
+return this.scaleAdd (b, -1);
+}, "JU.Matrix");
+$_M(c$, "scaleAdd", 
+function (b, scale) {
+var x =  new JU.Matrix (null, this.m, this.n);
+var xa = x.a;
+var ba = b.a;
+for (var i = this.m; --i >= 0; ) for (var j = this.n; --j >= 0; ) xa[i][j] = ba[i][j] * scale + this.a[i][j];
+
+
+return x;
+}, "JU.Matrix,~N");
+$_M(c$, "mul", 
+function (b) {
+if (b.m != this.n) return null;
+var x =  new JU.Matrix (null, this.m, b.n);
+var xa = x.a;
+var ba = b.a;
+for (var j = b.n; --j >= 0; ) for (var i = this.m; --i >= 0; ) {
+var arowi = this.a[i];
+var s = 0;
+for (var k = this.n; --k >= 0; ) s += arowi[k] * ba[k][j];
+
+xa[i][j] = s;
+}
+
+return x;
+}, "JU.Matrix");
+$_M(c$, "inverse", 
+function () {
+return Clazz_innerTypeInstance (JU.Matrix.LUDecomp, this, null).solve (JU.Matrix.identity (this.m, this.m));
+});
+$_M(c$, "trace", 
+function () {
+var t = 0;
+for (var i = Math.min (this.m, this.n); --i >= 0; ) t += this.a[i][i];
+
+return t;
+});
+c$.identity = $_M(c$, "identity", 
+function (m, n) {
+var x =  new JU.Matrix (null, m, n);
+var xa = x.a;
+for (var i = Math.min (m, n); --i >= 0; ) xa[i][i] = 1;
+
+return x;
+}, "~N,~N");
+$_V(c$, "toString", 
+function () {
+var s = "[\n";
+for (var i = 0; i < this.m; i++) {
+s += "  [";
+for (var j = 0; j < this.n; j++) s += " " + this.a[i][j];
+
+s += "]\n";
+}
+s += "]";
+return s;
+});
+$_M(c$, "getRotation", 
+function () {
+return this.getSubmatrix (0, 0, this.m - 1, this.n - 1);
+});
+$_M(c$, "getTranslation", 
+function () {
+return this.getSubmatrix (0, this.n - 1, this.m - 1, 1);
+});
+c$.newT = $_M(c$, "newT", 
+function (r, asColumn) {
+return (asColumn ?  new JU.Matrix ([[r.x], [r.y], [r.z]], 3, 1) :  new JU.Matrix ([[r.x, r.y, r.z]], 1, 3));
+}, "JU.P3,~B");
+c$.$Matrix$LUDecomp$ = function () {
+Clazz_pu$h ();
+c$ = Clazz_decorateAsClass (function () {
+Clazz_prepareCallback (this, arguments);
+this.LU = null;
+this.piv = null;
+this.pivsign = 0;
+Clazz_instantialize (this, arguments);
+}, JU.Matrix, "LUDecomp");
+Clazz_makeConstructor (c$, 
+function () {
+this.LU = this.b$["JU.Matrix"].getArrayCopy ();
+this.piv =  Clazz_newIntArray (this.b$["JU.Matrix"].m, 0);
+for (var a = this.b$["JU.Matrix"].m; --a >= 0; ) this.piv[a] = a;
+
+this.pivsign = 1;
+var b;
+var c =  Clazz_newDoubleArray (this.b$["JU.Matrix"].m, 0);
+for (var d = 0; d < this.b$["JU.Matrix"].n; d++) {
+for (var e = this.b$["JU.Matrix"].m; --e >= 0; ) c[e] = this.LU[e][d];
+
+for (var f = this.b$["JU.Matrix"].m; --f >= 0; ) {
+b = this.LU[f];
+var g = Math.min (f, d);
+var h = 0.0;
+for (var i = g; --i >= 0; ) h += b[i] * c[i];
+
+b[d] = c[f] -= h;
+}
+var g = d;
+for (var h = this.b$["JU.Matrix"].m; --h > d; ) if (Math.abs (c[h]) > Math.abs (c[g])) g = h;
+
+if (g != d) {
+for (var i = this.b$["JU.Matrix"].n; --i >= 0; ) {
+var j = this.LU[g][i];
+this.LU[g][i] = this.LU[d][i];
+this.LU[d][i] = j;
+}
+var j = this.piv[g];
+this.piv[g] = this.piv[d];
+this.piv[d] = j;
+this.pivsign = -this.pivsign;
+}if ( new Boolean (d < this.b$["JU.Matrix"].m & this.LU[d][d] != 0.0).valueOf ()) for (var i = this.b$["JU.Matrix"].m; --i > d; ) this.LU[i][d] /= this.LU[d][d];
+
+}
+});
+$_M(c$, "solve", 
+function (a) {
+if (a.m != this.b$["JU.Matrix"].m) return null;
+for (var b = 0; b < this.b$["JU.Matrix"].n; b++) if (this.LU[b][b] == 0) return null;
+
+var c = a.n;
+var d = a.getMatrixSelected (this.piv, c);
+var e = d.a;
+for (var f = 0; f < this.b$["JU.Matrix"].n; f++) for (var g = f + 1; g < this.b$["JU.Matrix"].n; g++) for (var h = 0; h < c; h++) e[g][h] -= e[f][h] * this.LU[g][f];
+
+
+
+for (var i = this.b$["JU.Matrix"].n; --i >= 0; ) {
+for (var j = c; --j >= 0; ) e[i][j] /= this.LU[i][i];
+
+for (var k = i; --k >= 0; ) for (var l = c; --l >= 0; ) e[k][l] -= e[i][l] * this.LU[k][i];
+
+
+}
+return d;
+}, "JU.Matrix");
+c$ = Clazz_p0p ();
+};
+Clazz_declarePackage ("JU");
 Clazz_load (null, "JU.M3", ["java.lang.ArrayIndexOutOfBoundsException", "JU.T3"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.m00 = 0;
@@ -11034,13 +11262,13 @@ Clazz_instantialize (this, arguments);
 Clazz_makeConstructor (c$, 
 function () {
 });
-c$.newA = $_M(c$, "newA", 
+c$.newA9 = $_M(c$, "newA9", 
 function (v) {
 var m =  new JU.M3 ();
 m.setA (v);
 return m;
 }, "~A");
-c$.newM = $_M(c$, "newM", 
+c$.newM3 = $_M(c$, "newM3", 
 function (m1) {
 var m =  new JU.M3 ();
 if (m1 == null) {
@@ -11063,15 +11291,8 @@ return "[\n  [" + this.m00 + "\t" + this.m01 + "\t" + this.m02 + "]" + "\n  [" +
 });
 $_M(c$, "setIdentity", 
 function () {
-this.m00 = 1.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m10 = 0.0;
-this.m11 = 1.0;
-this.m12 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 1.0;
+this.clear ();
+this.m00 = this.m11 = this.m22 = 1;
 });
 $_M(c$, "setElement", 
 function (row, col, v) {
@@ -11116,8 +11337,12 @@ return;
 }
 break;
 }
-throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+this.err ();
 }, "~N,~N,~N");
+$_M(c$, "err", 
+function () {
+throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+});
 $_M(c$, "getElement", 
 function (row, col) {
 switch (row) {
@@ -11152,42 +11377,53 @@ return this.m22;
 }
 break;
 }
-throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+this.err ();
+return 0;
 }, "~N,~N");
 $_M(c$, "setRow", 
 function (row, x, y, z) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = x;
 this.m01 = y;
 this.m02 = z;
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = x;
 this.m11 = y;
 this.m12 = z;
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = x;
 this.m21 = y;
 this.m22 = z;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,~N,~N,~N");
+return;
+default:
+this.err ();
+}
+}, "~N,~N,~N,~N");
 $_M(c$, "setRowV", 
 function (row, v) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = v.x;
 this.m01 = v.y;
 this.m02 = v.z;
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = v.x;
 this.m11 = v.y;
 this.m12 = v.z;
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = v.x;
 this.m21 = v.y;
 this.m22 = v.z;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,JU.T3");
+return;
+default:
+this.err ();
+}
+}, "~N,JU.T3");
 $_M(c$, "getRow", 
 function (row, v) {
 switch (row) {
@@ -11207,26 +11443,31 @@ v[1] = this.m21;
 v[2] = this.m22;
 return;
 }
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
+this.err ();
 }, "~N,~A");
 $_M(c$, "setRowA", 
 function (row, v) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = v[0];
 this.m01 = v[1];
 this.m02 = v[2];
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = v[0];
 this.m11 = v[1];
 this.m12 = v[2];
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = v[0];
 this.m21 = v[1];
 this.m22 = v[2];
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,~A");
-$_M(c$, "setColumn", 
+return;
+default:
+this.err ();
+}
+}, "~N,~A");
+$_M(c$, "setColumn3", 
 function (column, x, y, z) {
 if (column == 0) {
 this.m00 = x;
@@ -11241,7 +11482,7 @@ this.m02 = x;
 this.m12 = y;
 this.m22 = z;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~N,~N,~N");
 $_M(c$, "setColumnV", 
 function (column, v) {
@@ -11258,7 +11499,7 @@ this.m02 = v.x;
 this.m12 = v.y;
 this.m22 = v.z;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,JU.V3");
 $_M(c$, "setColumnA", 
 function (column, v) {
@@ -11275,7 +11516,7 @@ this.m02 = v[0];
 this.m12 = v[1];
 this.m22 = v[2];
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~A");
 $_M(c$, "getColumnV", 
 function (column, v) {
@@ -11292,7 +11533,7 @@ v.x = this.m02;
 v.y = this.m12;
 v.z = this.m22;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,JU.V3");
 $_M(c$, "getColumn", 
 function (column, v) {
@@ -11309,7 +11550,7 @@ v[0] = this.m02;
 v[1] = this.m12;
 v[2] = this.m22;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~A");
 $_M(c$, "add", 
 function (m1) {
@@ -11349,7 +11590,7 @@ this.m21 = tmp;
 });
 $_M(c$, "transposeM", 
 function (m1) {
-this.setM (m1);
+this.setM3 (m1);
 this.transpose ();
 }, "JU.M3");
 $_M(c$, "setAA", 
@@ -11382,7 +11623,7 @@ tmp2 = x * s;
 this.m12 = (tmp1 - tmp2);
 this.m21 = (tmp1 + tmp2);
 }, "~N,~N,~N,~N");
-$_M(c$, "setM", 
+$_M(c$, "setM3", 
 function (m1) {
 this.m00 = m1.m00;
 this.m01 = m1.m01;
@@ -11406,9 +11647,9 @@ this.m20 = m[6];
 this.m21 = m[7];
 this.m22 = m[8];
 }, "~A");
-$_M(c$, "invertM", 
+$_M(c$, "invertM3", 
 function (m1) {
-this.setM (m1);
+this.setM3 (m1);
 this.invert ();
 }, "JU.M3");
 $_M(c$, "invert", 
@@ -11416,7 +11657,7 @@ function () {
 var s = this.determinant ();
 if (s == 0.0) return;
 s = 1 / s;
-this.set (this.m11 * this.m22 - this.m12 * this.m21, this.m02 * this.m21 - this.m01 * this.m22, this.m01 * this.m12 - this.m02 * this.m11, this.m12 * this.m20 - this.m10 * this.m22, this.m00 * this.m22 - this.m02 * this.m20, this.m02 * this.m10 - this.m00 * this.m12, this.m10 * this.m21 - this.m11 * this.m20, this.m01 * this.m20 - this.m00 * this.m21, this.m00 * this.m11 - this.m01 * this.m10);
+this.set9 (this.m11 * this.m22 - this.m12 * this.m21, this.m02 * this.m21 - this.m01 * this.m22, this.m01 * this.m12 - this.m02 * this.m11, this.m12 * this.m20 - this.m10 * this.m22, this.m00 * this.m22 - this.m02 * this.m20, this.m02 * this.m10 - this.m00 * this.m12, this.m10 * this.m21 - this.m11 * this.m20, this.m01 * this.m20 - this.m00 * this.m21, this.m00 * this.m11 - this.m01 * this.m10);
 this.mulf (s);
 });
 $_M(c$, "determinant", 
@@ -11495,11 +11736,11 @@ this.mul2 (this, m1);
 }, "JU.M3");
 $_M(c$, "mul2", 
 function (m1, m2) {
-this.set (m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20, m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21, m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22, m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20, m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21, m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22, m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20, m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21, m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22);
+this.set9 (m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20, m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21, m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22, m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20, m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21, m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22, m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20, m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21, m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22);
 }, "JU.M3,JU.M3");
 $_V(c$, "equals", 
 function (o) {
-if (!(Clazz_instanceOf (o, JU.M3))) return false;
+if (Clazz_instanceOf (o, JU.M4) || !(Clazz_instanceOf (o, JU.M3))) return false;
 var m = o;
 return this.m00 == m.m00 && this.m01 == m.m01 && this.m02 == m.m02 && this.m10 == m.m10 && this.m11 == m.m11 && this.m12 == m.m12 && this.m20 == m.m20 && this.m21 == m.m21 && this.m22 == m.m22;
 }, "~O");
@@ -11509,35 +11750,21 @@ return JU.T3.floatToIntBits0 (this.m00) ^ JU.T3.floatToIntBits0 (this.m01) ^ JU.
 });
 $_M(c$, "setZero", 
 function () {
-this.m00 = 0.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m10 = 0.0;
-this.m11 = 0.0;
-this.m12 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 0.0;
+this.clear ();
 });
-$_M(c$, "transform", 
+$_M(c$, "clear", 
+function () {
+this.m00 = this.m01 = this.m02 = this.m10 = this.m11 = this.m12 = this.m20 = this.m21 = this.m22 = 0.0;
+});
+$_M(c$, "rotate", 
 function (t) {
-this.transform2 (t, t);
+this.rotate2 (t, t);
 }, "JU.T3");
-$_M(c$, "transform2", 
+$_M(c$, "rotate2", 
 function (t, result) {
 result.set (this.m00 * t.x + this.m01 * t.y + this.m02 * t.z, this.m10 * t.x + this.m11 * t.y + this.m12 * t.z, this.m20 * t.x + this.m21 * t.y + this.m22 * t.z);
 }, "JU.T3,JU.T3");
-$_M(c$, "transformAdd", 
-function (t, scale, t2) {
-t2.x += scale * (this.m00 * t.x + this.m01 * t.y + this.m02 * t.z);
-t2.y += scale * (this.m10 * t.x + this.m11 * t.y + this.m12 * t.z);
-t2.z += scale * (this.m20 * t.x + this.m21 * t.y + this.m22 * t.z);
-}, "JU.T3,~N,JU.T3");
-$_M(c$, "toArrayD", 
-function () {
-return [[this.m00, this.m01, this.m02], [this.m10, this.m11, this.m12], [this.m20, this.m21, this.m22]];
-});
-$_M(c$, "set", 
+$_M(c$, "set9", 
 function (m00, m01, m02, m10, m11, m12, m20, m21, m22) {
 this.m00 = m00;
 this.m01 = m01;
@@ -11551,27 +11778,18 @@ this.m22 = m22;
 }, "~N,~N,~N,~N,~N,~N,~N,~N,~N");
 });
 Clazz_declarePackage ("JU");
-Clazz_load (null, "JU.M4", ["java.lang.ArrayIndexOutOfBoundsException", "JU.T3"], function () {
+Clazz_load (["JU.M3"], "JU.M4", ["JU.T3"], function () {
 c$ = Clazz_decorateAsClass (function () {
-this.m00 = 0;
-this.m01 = 0;
-this.m02 = 0;
 this.m03 = 0;
-this.m10 = 0;
-this.m11 = 0;
-this.m12 = 0;
 this.m13 = 0;
-this.m20 = 0;
-this.m21 = 0;
-this.m22 = 0;
 this.m23 = 0;
 this.m30 = 0;
 this.m31 = 0;
 this.m32 = 0;
 this.m33 = 0;
 Clazz_instantialize (this, arguments);
-}, JU, "M4", null, java.io.Serializable);
-c$.newA = $_M(c$, "newA", 
+}, JU, "M4", JU.M3);
+c$.newA16 = $_M(c$, "newA16", 
 function (v) {
 var m =  new JU.M4 ();
 m.m00 = v[0];
@@ -11592,23 +11810,15 @@ m.m32 = v[14];
 m.m33 = v[15];
 return m;
 }, "~A");
-c$.newM = $_M(c$, "newM", 
+c$.newM4 = $_M(c$, "newM4", 
 function (m1) {
 var m =  new JU.M4 ();
 if (m1 == null) {
 m.setIdentity ();
 return m;
-}m.m00 = m1.m00;
-m.m01 = m1.m01;
-m.m02 = m1.m02;
+}m.setM3 (m1);
 m.m03 = m1.m03;
-m.m10 = m1.m10;
-m.m11 = m1.m11;
-m.m12 = m1.m12;
 m.m13 = m1.m13;
-m.m20 = m1.m20;
-m.m21 = m1.m21;
-m.m22 = m1.m22;
 m.m23 = m1.m23;
 m.m30 = m1.m30;
 m.m31 = m1.m31;
@@ -11627,142 +11837,71 @@ function (m1, t) {
 this.setM3 (m1);
 this.setTranslation (t);
 }, "JU.M3,JU.V3");
-$_M(c$, "setAA", 
-function (a1) {
-this.setFromAxisAngle (a1.x, a1.y, a1.z, a1.angle);
-}, "JU.A4");
-$_M(c$, "setFromAxisAngle", 
-function (x, y, z, angle) {
-var n = Math.sqrt (x * x + y * y + z * z);
-n = 1 / n;
-x *= n;
-y *= n;
-z *= n;
-var c = Math.cos (angle);
-var s = Math.sin (angle);
-var omc = 1.0 - c;
-this.m00 = (c + x * x * omc);
-this.m11 = (c + y * y * omc);
-this.m22 = (c + z * z * omc);
-var tmp1 = x * y * omc;
-var tmp2 = z * s;
-this.m01 = (tmp1 - tmp2);
-this.m10 = (tmp1 + tmp2);
-tmp1 = x * z * omc;
-tmp2 = y * s;
-this.m02 = (tmp1 + tmp2);
-this.m20 = (tmp1 - tmp2);
-tmp1 = y * z * omc;
-tmp2 = x * s;
-this.m12 = (tmp1 - tmp2);
-this.m21 = (tmp1 + tmp2);
-}, "~N,~N,~N,~N");
-$_M(c$, "setM", 
+$_M(c$, "setM4", 
 function (m1) {
-this.m00 = m1.m00;
-this.m01 = m1.m01;
-this.m02 = m1.m02;
+this.setM3 (m1);
 this.m03 = m1.m03;
-this.m10 = m1.m10;
-this.m11 = m1.m11;
-this.m12 = m1.m12;
 this.m13 = m1.m13;
-this.m20 = m1.m20;
-this.m21 = m1.m21;
-this.m22 = m1.m22;
 this.m23 = m1.m23;
 this.m30 = m1.m30;
 this.m31 = m1.m31;
 this.m32 = m1.m32;
 this.m33 = m1.m33;
 }, "JU.M4");
-$_V(c$, "toString", 
+$_V(c$, "setZero", 
 function () {
-return "[\n  [" + this.m00 + "\t" + this.m01 + "\t" + this.m02 + "\t" + this.m03 + "]" + "\n  [" + this.m10 + "\t" + this.m11 + "\t" + this.m12 + "\t" + this.m13 + "]" + "\n  [" + this.m20 + "\t" + this.m21 + "\t" + this.m22 + "\t" + this.m23 + "]" + "\n  [" + this.m30 + "\t" + this.m31 + "\t" + this.m32 + "\t" + this.m33 + "] ]";
+this.clear ();
+this.m03 = this.m13 = this.m23 = this.m30 = this.m31 = this.m32 = this.m33 = 0.0;
 });
-$_M(c$, "setIdentity", 
+$_V(c$, "setIdentity", 
 function () {
-this.m00 = 1.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m03 = 0.0;
-this.m10 = 0.0;
-this.m11 = 1.0;
-this.m12 = 0.0;
-this.m13 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 1.0;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
-this.m33 = 1.0;
+this.clear ();
+this.m03 = this.m13 = this.m23 = this.m30 = this.m31 = this.m32 = 0.0;
+this.m00 = this.m11 = this.m22 = this.m33 = 1.0;
 });
 $_M(c$, "setElement", 
-function (row, column, value) {
-if (row == 0) if (column == 0) this.m00 = value;
- else if (column == 1) this.m01 = value;
- else if (column == 2) this.m02 = value;
- else if (column == 3) this.m03 = value;
- else throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
- else if (row == 1) if (column == 0) this.m10 = value;
- else if (column == 1) this.m11 = value;
- else if (column == 2) this.m12 = value;
- else if (column == 3) this.m13 = value;
- else throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
- else if (row == 2) if (column == 0) this.m20 = value;
- else if (column == 1) this.m21 = value;
- else if (column == 2) this.m22 = value;
- else if (column == 3) this.m23 = value;
- else throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
- else if (row == 3) if (column == 0) this.m30 = value;
- else if (column == 1) this.m31 = value;
- else if (column == 2) this.m32 = value;
- else if (column == 3) this.m33 = value;
- else throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
- else throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
+function (row, col, v) {
+if (row < 3 && col < 3) {
+Clazz_superCall (this, JU.M4, "setElement", [row, col, v]);
+return;
+}if (row > 3 || col > 3) this.err ();
+switch (row) {
+case 0:
+this.m03 = v;
+return;
+case 1:
+this.m13 = v;
+return;
+case 2:
+this.m23 = v;
+return;
+}
+switch (col) {
+case 0:
+this.m30 = v;
+return;
+case 1:
+this.m31 = v;
+return;
+case 2:
+this.m32 = v;
+return;
+case 3:
+this.m33 = v;
+return;
+}
 }, "~N,~N,~N");
 $_M(c$, "getElement", 
 function (row, col) {
+if (row < 3 && col < 3) return Clazz_superCall (this, JU.M4, "getElement", [row, col]);
 switch (row) {
 case 0:
-switch (col) {
-case 0:
-return this.m00;
-case 1:
-return this.m01;
-case 2:
-return this.m02;
-case 3:
 return this.m03;
-}
-break;
 case 1:
-switch (col) {
-case 0:
-return this.m10;
-case 1:
-return this.m11;
-case 2:
-return this.m12;
-case 3:
 return this.m13;
-}
-break;
 case 2:
-switch (col) {
-case 0:
-return this.m20;
-case 1:
-return this.m21;
-case 2:
-return this.m22;
-case 3:
 return this.m23;
 }
-break;
-case 3:
 switch (col) {
 case 0:
 return this.m30;
@@ -11773,9 +11912,8 @@ return this.m32;
 case 3:
 return this.m33;
 }
-break;
-}
-throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+this.err ();
+return 0;
 }, "~N,~N");
 $_M(c$, "get", 
 function (trans) {
@@ -11807,56 +11945,50 @@ this.m20 = m1.m20;
 this.m21 = m1.m21;
 this.m22 = m1.m22;
 }, "JU.M3");
-$_M(c$, "setRow", 
+$_M(c$, "setRowA", 
 function (row, v) {
-if (row == 0) {
-this.m00 = v[0];
-this.m01 = v[1];
-this.m02 = v[2];
+if (row < 3) Clazz_superCall (this, JU.M4, "setRowA", [row, v]);
+switch (row) {
+case 0:
 this.m03 = v[3];
-} else if (row == 1) {
-this.m10 = v[0];
-this.m11 = v[1];
-this.m12 = v[2];
+return;
+case 1:
 this.m13 = v[3];
-} else if (row == 2) {
-this.m20 = v[0];
-this.m21 = v[1];
-this.m22 = v[2];
+return;
+case 2:
 this.m23 = v[3];
-} else if (row == 3) {
+return;
+case 3:
 this.m30 = v[0];
 this.m31 = v[1];
 this.m32 = v[2];
 this.m33 = v[3];
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 3 and is " + row);
-}}, "~N,~A");
+return;
+}
+this.err ();
+}, "~N,~A");
 $_M(c$, "getRow", 
 function (row, v) {
-if (row == 0) {
-v[0] = this.m00;
-v[1] = this.m01;
-v[2] = this.m02;
+if (row < 3) Clazz_superCall (this, JU.M4, "getRow", [row, v]);
+switch (row) {
+case 0:
 v[3] = this.m03;
-} else if (row == 1) {
-v[0] = this.m10;
-v[1] = this.m11;
-v[2] = this.m12;
+return;
+case 1:
 v[3] = this.m13;
-} else if (row == 2) {
-v[0] = this.m20;
-v[1] = this.m21;
-v[2] = this.m22;
+return;
+case 2:
 v[3] = this.m23;
-} else if (row == 3) {
+return;
+case 3:
 v[0] = this.m30;
 v[1] = this.m31;
 v[2] = this.m32;
 v[3] = this.m33;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 3 and is " + row);
-}}, "~N,~A");
+return;
+}
+this.err ();
+}, "~N,~A");
 $_M(c$, "setColumn4", 
 function (column, x, y, z, w) {
 if (column == 0) {
@@ -11880,71 +12012,59 @@ this.m13 = y;
 this.m23 = z;
 this.m33 = w;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
+this.err ();
 }}, "~N,~N,~N,~N,~N");
-$_M(c$, "setColumn", 
+$_V(c$, "setColumnA", 
 function (column, v) {
-if (column == 0) {
-this.m00 = v[0];
-this.m10 = v[1];
-this.m20 = v[2];
+if (column < 3) this.setColumnA (column, v);
+switch (column) {
+case 0:
 this.m30 = v[3];
-} else if (column == 1) {
-this.m01 = v[0];
-this.m11 = v[1];
-this.m21 = v[2];
+return;
+case 1:
 this.m31 = v[3];
-} else if (column == 2) {
-this.m02 = v[0];
-this.m12 = v[1];
-this.m22 = v[2];
+return;
+case 2:
 this.m32 = v[3];
-} else if (column == 3) {
+return;
+case 3:
 this.m03 = v[0];
 this.m13 = v[1];
 this.m23 = v[2];
 this.m33 = v[3];
-} else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
-}}, "~N,~A");
+return;
+default:
+this.err ();
+}
+}, "~N,~A");
 $_M(c$, "getColumn", 
 function (column, v) {
-if (column == 0) {
-v[0] = this.m00;
-v[1] = this.m10;
-v[2] = this.m20;
+if (column < 3) Clazz_superCall (this, JU.M4, "getColumn", [column, v]);
+switch (column) {
+case 0:
 v[3] = this.m30;
-} else if (column == 1) {
-v[0] = this.m01;
-v[1] = this.m11;
-v[2] = this.m21;
+return;
+case 1:
 v[3] = this.m31;
-} else if (column == 2) {
-v[0] = this.m02;
-v[1] = this.m12;
-v[2] = this.m22;
+return;
+case 2:
 v[3] = this.m32;
-} else if (column == 3) {
+return;
+case 3:
 v[0] = this.m03;
 v[1] = this.m13;
 v[2] = this.m23;
 v[3] = this.m33;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 3 and is " + column);
-}}, "~N,~A");
+return;
+default:
+this.err ();
+}
+}, "~N,~A");
 $_M(c$, "sub", 
 function (m1) {
-this.m00 -= m1.m00;
-this.m01 -= m1.m01;
-this.m02 -= m1.m02;
+Clazz_superCall (this, JU.M4, "sub", [m1]);
 this.m03 -= m1.m03;
-this.m10 -= m1.m10;
-this.m11 -= m1.m11;
-this.m12 -= m1.m12;
 this.m13 -= m1.m13;
-this.m20 -= m1.m20;
-this.m21 -= m1.m21;
-this.m22 -= m1.m22;
 this.m23 -= m1.m23;
 this.m30 -= m1.m30;
 this.m31 -= m1.m31;
@@ -11953,18 +12073,10 @@ this.m33 -= m1.m33;
 }, "JU.M4");
 $_M(c$, "transpose", 
 function () {
-var tmp = this.m01;
-this.m01 = this.m10;
-this.m10 = tmp;
-tmp = this.m02;
-this.m02 = this.m20;
-this.m20 = tmp;
-tmp = this.m03;
+Clazz_superCall (this, JU.M4, "transpose", []);
+var tmp = this.m03;
 this.m03 = this.m30;
 this.m30 = tmp;
-tmp = this.m12;
-this.m12 = this.m21;
-this.m21 = tmp;
 tmp = this.m13;
 this.m13 = this.m31;
 this.m31 = tmp;
@@ -11974,10 +12086,10 @@ this.m32 = tmp;
 });
 $_M(c$, "invertM", 
 function (m1) {
-this.setM (m1);
+this.setM4 (m1);
 this.invert ();
 }, "JU.M4");
-$_M(c$, "invert", 
+$_V(c$, "invert", 
 function () {
 var s = this.determinant ();
 if (s == 0.0) return;
@@ -11985,66 +12097,34 @@ s = 1 / s;
 this.set (this.m11 * (this.m22 * this.m33 - this.m23 * this.m32) + this.m12 * (this.m23 * this.m31 - this.m21 * this.m33) + this.m13 * (this.m21 * this.m32 - this.m22 * this.m31), this.m21 * (this.m02 * this.m33 - this.m03 * this.m32) + this.m22 * (this.m03 * this.m31 - this.m01 * this.m33) + this.m23 * (this.m01 * this.m32 - this.m02 * this.m31), this.m31 * (this.m02 * this.m13 - this.m03 * this.m12) + this.m32 * (this.m03 * this.m11 - this.m01 * this.m13) + this.m33 * (this.m01 * this.m12 - this.m02 * this.m11), this.m01 * (this.m13 * this.m22 - this.m12 * this.m23) + this.m02 * (this.m11 * this.m23 - this.m13 * this.m21) + this.m03 * (this.m12 * this.m21 - this.m11 * this.m22), this.m12 * (this.m20 * this.m33 - this.m23 * this.m30) + this.m13 * (this.m22 * this.m30 - this.m20 * this.m32) + this.m10 * (this.m23 * this.m32 - this.m22 * this.m33), this.m22 * (this.m00 * this.m33 - this.m03 * this.m30) + this.m23 * (this.m02 * this.m30 - this.m00 * this.m32) + this.m20 * (this.m03 * this.m32 - this.m02 * this.m33), this.m32 * (this.m00 * this.m13 - this.m03 * this.m10) + this.m33 * (this.m02 * this.m10 - this.m00 * this.m12) + this.m30 * (this.m03 * this.m12 - this.m02 * this.m13), this.m02 * (this.m13 * this.m20 - this.m10 * this.m23) + this.m03 * (this.m10 * this.m22 - this.m12 * this.m20) + this.m00 * (this.m12 * this.m23 - this.m13 * this.m22), this.m13 * (this.m20 * this.m31 - this.m21 * this.m30) + this.m10 * (this.m21 * this.m33 - this.m23 * this.m31) + this.m11 * (this.m23 * this.m30 - this.m20 * this.m33), this.m23 * (this.m00 * this.m31 - this.m01 * this.m30) + this.m20 * (this.m01 * this.m33 - this.m03 * this.m31) + this.m21 * (this.m03 * this.m30 - this.m00 * this.m33), this.m33 * (this.m00 * this.m11 - this.m01 * this.m10) + this.m30 * (this.m01 * this.m13 - this.m03 * this.m11) + this.m31 * (this.m03 * this.m10 - this.m00 * this.m13), this.m03 * (this.m11 * this.m20 - this.m10 * this.m21) + this.m00 * (this.m13 * this.m21 - this.m11 * this.m23) + this.m01 * (this.m10 * this.m23 - this.m13 * this.m20), this.m10 * (this.m22 * this.m31 - this.m21 * this.m32) + this.m11 * (this.m20 * this.m32 - this.m22 * this.m30) + this.m12 * (this.m21 * this.m30 - this.m20 * this.m31), this.m20 * (this.m02 * this.m31 - this.m01 * this.m32) + this.m21 * (this.m00 * this.m32 - this.m02 * this.m30) + this.m22 * (this.m01 * this.m30 - this.m00 * this.m31), this.m30 * (this.m02 * this.m11 - this.m01 * this.m12) + this.m31 * (this.m00 * this.m12 - this.m02 * this.m10) + this.m32 * (this.m01 * this.m10 - this.m00 * this.m11), this.m00 * (this.m11 * this.m22 - this.m12 * this.m21) + this.m01 * (this.m12 * this.m20 - this.m10 * this.m22) + this.m02 * (this.m10 * this.m21 - this.m11 * this.m20));
 this.mul (s);
 });
-$_M(c$, "determinant", 
+$_V(c$, "determinant", 
 function () {
 return (this.m00 * this.m11 - this.m01 * this.m10) * (this.m22 * this.m33 - this.m23 * this.m32) - (this.m00 * this.m12 - this.m02 * this.m10) * (this.m21 * this.m33 - this.m23 * this.m31) + (this.m00 * this.m13 - this.m03 * this.m10) * (this.m21 * this.m32 - this.m22 * this.m31) + (this.m01 * this.m12 - this.m02 * this.m11) * (this.m20 * this.m33 - this.m23 * this.m30) - (this.m01 * this.m13 - this.m03 * this.m11) * (this.m20 * this.m32 - this.m22 * this.m30) + (this.m02 * this.m13 - this.m03 * this.m12) * (this.m20 * this.m31 - this.m21 * this.m30);
 });
 $_M(c$, "setM3", 
 function (m1) {
-this.m00 = m1.m00;
-this.m01 = m1.m01;
-this.m02 = m1.m02;
-this.m03 = 0.0;
-this.m10 = m1.m10;
-this.m11 = m1.m11;
-this.m12 = m1.m12;
-this.m13 = 0.0;
-this.m20 = m1.m20;
-this.m21 = m1.m21;
-this.m22 = m1.m22;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
+Clazz_superCall (this, JU.M4, "setM3", [m1]);
+this.m03 = this.m13 = this.m23 = this.m30 = this.m31 = this.m32 = 0.0;
 this.m33 = 1.0;
 }, "JU.M3");
-$_M(c$, "setA", 
-function (m, i) {
-this.m00 = m[i++];
-this.m01 = m[i++];
-this.m02 = m[i++];
-this.m03 = m[i++];
-this.m10 = m[i++];
-this.m11 = m[i++];
-this.m12 = m[i++];
-this.m13 = m[i++];
-this.m20 = m[i++];
-this.m21 = m[i++];
-this.m22 = m[i++];
-this.m23 = m[i++];
-this.m30 = m[i++];
-this.m31 = m[i++];
-this.m32 = m[i++];
-this.m33 = m[i++];
-}, "~A,~N");
-$_M(c$, "toA", 
+$_V(c$, "setA", 
 function (m) {
-m[0] = this.m00;
-m[1] = this.m01;
-m[2] = this.m02;
-m[3] = this.m03;
-m[4] = this.m10;
-m[5] = this.m11;
-m[6] = this.m12;
-m[7] = this.m13;
-m[8] = this.m20;
-m[9] = this.m21;
-m[10] = this.m22;
-m[11] = this.m23;
-m[12] = this.m30;
-m[13] = this.m31;
-m[14] = this.m32;
-m[15] = this.m33;
+this.m00 = m[0];
+this.m01 = m[1];
+this.m02 = m[2];
+this.m03 = m[3];
+this.m10 = m[4];
+this.m11 = m[5];
+this.m12 = m[6];
+this.m13 = m[7];
+this.m20 = m[8];
+this.m21 = m[9];
+this.m22 = m[10];
+this.m23 = m[11];
+this.m30 = m[12];
+this.m31 = m[13];
+this.m32 = m[14];
+this.m33 = m[15];
 }, "~A");
 $_M(c$, "setTranslation", 
 function (trans) {
@@ -12052,69 +12132,6 @@ this.m03 = trans.x;
 this.m13 = trans.y;
 this.m23 = trans.z;
 }, "JU.V3");
-$_M(c$, "rotX", 
-function (angle) {
-var c = Math.cos (angle);
-var s = Math.sin (angle);
-this.m00 = 1.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m03 = 0.0;
-this.m10 = 0.0;
-this.m11 = c;
-this.m12 = -s;
-this.m13 = 0.0;
-this.m20 = 0.0;
-this.m21 = s;
-this.m22 = c;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
-this.m33 = 1.0;
-}, "~N");
-$_M(c$, "rotY", 
-function (angle) {
-var c = Math.cos (angle);
-var s = Math.sin (angle);
-this.m00 = c;
-this.m01 = 0.0;
-this.m02 = s;
-this.m03 = 0.0;
-this.m10 = 0.0;
-this.m11 = 1.0;
-this.m12 = 0.0;
-this.m13 = 0.0;
-this.m20 = -s;
-this.m21 = 0.0;
-this.m22 = c;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
-this.m33 = 1.0;
-}, "~N");
-$_M(c$, "rotZ", 
-function (angle) {
-var c = Math.cos (angle);
-var s = Math.sin (angle);
-this.m00 = c;
-this.m01 = -s;
-this.m02 = 0.0;
-this.m03 = 0.0;
-this.m10 = s;
-this.m11 = c;
-this.m12 = 0.0;
-this.m13 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 1.0;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
-this.m33 = 1.0;
-}, "~N");
 $_M(c$, "mul", 
 function (scalar) {
 this.m00 *= scalar;
@@ -12136,68 +12153,28 @@ this.m33 *= scalar;
 }, "~N");
 $_M(c$, "mulM4", 
 function (m1) {
-this.mul2 (this, m1);
+this.mul42 (this, m1);
 }, "JU.M4");
-$_M(c$, "mul2", 
+$_M(c$, "mul42", 
 function (m1, m2) {
 this.set (m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20 + m1.m03 * m2.m30, m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21 + m1.m03 * m2.m31, m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22 + m1.m03 * m2.m32, m1.m00 * m2.m03 + m1.m01 * m2.m13 + m1.m02 * m2.m23 + m1.m03 * m2.m33, m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20 + m1.m13 * m2.m30, m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21 + m1.m13 * m2.m31, m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22 + m1.m13 * m2.m32, m1.m10 * m2.m03 + m1.m11 * m2.m13 + m1.m12 * m2.m23 + m1.m13 * m2.m33, m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20 + m1.m23 * m2.m30, m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21 + m1.m23 * m2.m31, m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22 + m1.m23 * m2.m32, m1.m20 * m2.m03 + m1.m21 * m2.m13 + m1.m22 * m2.m23 + m1.m23 * m2.m33, m1.m30 * m2.m00 + m1.m31 * m2.m10 + m1.m32 * m2.m20 + m1.m33 * m2.m30, m1.m30 * m2.m01 + m1.m31 * m2.m11 + m1.m32 * m2.m21 + m1.m33 * m2.m31, m1.m30 * m2.m02 + m1.m31 * m2.m12 + m1.m32 * m2.m22 + m1.m33 * m2.m32, m1.m30 * m2.m03 + m1.m31 * m2.m13 + m1.m32 * m2.m23 + m1.m33 * m2.m33);
 }, "JU.M4,JU.M4");
-$_V(c$, "equals", 
-function (o) {
-if (!(Clazz_instanceOf (o, JU.M4))) return false;
-var m = o;
-return (this.m00 == m.m00 && this.m01 == m.m01 && this.m02 == m.m02 && this.m03 == m.m03 && this.m10 == m.m10 && this.m11 == m.m11 && this.m12 == m.m12 && this.m13 == m.m13 && this.m20 == m.m20 && this.m21 == m.m21 && this.m22 == m.m22 && this.m23 == m.m23 && this.m30 == m.m30 && this.m31 == m.m31 && this.m32 == m.m32 && this.m33 == m.m33);
-}, "~O");
-$_V(c$, "hashCode", 
-function () {
-return JU.T3.floatToIntBits0 (this.m00) ^ JU.T3.floatToIntBits0 (this.m01) ^ JU.T3.floatToIntBits0 (this.m02) ^ JU.T3.floatToIntBits0 (this.m03) ^ JU.T3.floatToIntBits0 (this.m10) ^ JU.T3.floatToIntBits0 (this.m11) ^ JU.T3.floatToIntBits0 (this.m12) ^ JU.T3.floatToIntBits0 (this.m13) ^ JU.T3.floatToIntBits0 (this.m20) ^ JU.T3.floatToIntBits0 (this.m21) ^ JU.T3.floatToIntBits0 (this.m22) ^ JU.T3.floatToIntBits0 (this.m23) ^ JU.T3.floatToIntBits0 (this.m30) ^ JU.T3.floatToIntBits0 (this.m31) ^ JU.T3.floatToIntBits0 (this.m32) ^ JU.T3.floatToIntBits0 (this.m33);
-});
-$_M(c$, "transformT2", 
+$_M(c$, "transform4", 
+function (vec) {
+this.transform42 (vec, vec);
+}, "JU.T4");
+$_M(c$, "rotTrans", 
+function (point) {
+this.rotTrans2 (point, point);
+}, "JU.T3");
+$_M(c$, "rotTrans2", 
+function (point, pointOut) {
+pointOut.set (this.m00 * point.x + this.m01 * point.y + this.m02 * point.z + this.m03, this.m10 * point.x + this.m11 * point.y + this.m12 * point.z + this.m13, this.m20 * point.x + this.m21 * point.y + this.m22 * point.z + this.m23);
+}, "JU.T3,JU.T3");
+$_M(c$, "transform42", 
 function (vec, vecOut) {
 vecOut.set (this.m00 * vec.x + this.m01 * vec.y + this.m02 * vec.z + this.m03 * vec.w, this.m10 * vec.x + this.m11 * vec.y + this.m12 * vec.z + this.m13 * vec.w, this.m20 * vec.x + this.m21 * vec.y + this.m22 * vec.z + this.m23 * vec.w, this.m30 * vec.x + this.m31 * vec.y + this.m32 * vec.z + this.m33 * vec.w);
 }, "JU.T4,JU.T4");
-$_M(c$, "transform4", 
-function (vec) {
-this.transformT2 (vec, vec);
-}, "JU.T4");
-$_M(c$, "transform", 
-function (point) {
-this.transform2 (point, point);
-}, "JU.T3");
-$_M(c$, "rotate", 
-function (point, pointOut) {
-pointOut.set (this.m00 * point.x + this.m01 * point.y + this.m02 * point.z, this.m10 * point.x + this.m11 * point.y + this.m12 * point.z, this.m20 * point.x + this.m21 * point.y + this.m22 * point.z);
-}, "JU.T3,JU.T3");
-$_M(c$, "transform2", 
-function (point, pointOut) {
-try {
-pointOut.set (this.m00 * point.x + this.m01 * point.y + this.m02 * point.z + this.m03, this.m10 * point.x + this.m11 * point.y + this.m12 * point.z + this.m13, this.m20 * point.x + this.m21 * point.y + this.m22 * point.z + this.m23);
-} catch (e) {
-if (Clazz_exceptionOf (e, NullPointerException)) {
-} else {
-throw e;
-}
-}
-}, "JU.T3,JU.T3");
-$_M(c$, "setZero", 
-function () {
-this.m00 = 0.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m03 = 0.0;
-this.m10 = 0.0;
-this.m11 = 0.0;
-this.m12 = 0.0;
-this.m13 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 0.0;
-this.m23 = 0.0;
-this.m30 = 0.0;
-this.m31 = 0.0;
-this.m32 = 0.0;
-this.m33 = 0.0;
-});
 $_M(c$, "set", 
 function (m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
 this.m00 = m00;
@@ -12217,6 +12194,20 @@ this.m31 = m31;
 this.m32 = m32;
 this.m33 = m33;
 }, "~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N,~N");
+$_V(c$, "equals", 
+function (o) {
+if (!(Clazz_instanceOf (o, JU.M4))) return false;
+var m = o;
+return (this.m00 == m.m00 && this.m01 == m.m01 && this.m02 == m.m02 && this.m03 == m.m03 && this.m10 == m.m10 && this.m11 == m.m11 && this.m12 == m.m12 && this.m13 == m.m13 && this.m20 == m.m20 && this.m21 == m.m21 && this.m22 == m.m22 && this.m23 == m.m23 && this.m30 == m.m30 && this.m31 == m.m31 && this.m32 == m.m32 && this.m33 == m.m33);
+}, "~O");
+$_V(c$, "hashCode", 
+function () {
+return JU.T3.floatToIntBits0 (this.m00) ^ JU.T3.floatToIntBits0 (this.m01) ^ JU.T3.floatToIntBits0 (this.m02) ^ JU.T3.floatToIntBits0 (this.m03) ^ JU.T3.floatToIntBits0 (this.m10) ^ JU.T3.floatToIntBits0 (this.m11) ^ JU.T3.floatToIntBits0 (this.m12) ^ JU.T3.floatToIntBits0 (this.m13) ^ JU.T3.floatToIntBits0 (this.m20) ^ JU.T3.floatToIntBits0 (this.m21) ^ JU.T3.floatToIntBits0 (this.m22) ^ JU.T3.floatToIntBits0 (this.m23) ^ JU.T3.floatToIntBits0 (this.m30) ^ JU.T3.floatToIntBits0 (this.m31) ^ JU.T3.floatToIntBits0 (this.m32) ^ JU.T3.floatToIntBits0 (this.m33);
+});
+$_V(c$, "toString", 
+function () {
+return "[\n  [" + this.m00 + "\t" + this.m01 + "\t" + this.m02 + "\t" + this.m03 + "]" + "\n  [" + this.m10 + "\t" + this.m11 + "\t" + this.m12 + "\t" + this.m13 + "]" + "\n  [" + this.m20 + "\t" + this.m21 + "\t" + this.m22 + "\t" + this.m23 + "]" + "\n  [" + this.m30 + "\t" + this.m31 + "\t" + this.m32 + "\t" + this.m33 + "] ]";
+});
 });
 Clazz_declarePackage ("JU");
 Clazz_load (["JU.T3"], "JU.P3", null, function () {
@@ -12275,7 +12266,7 @@ return Math.sqrt (dx * dx + dy * dy + dz * dz + dw * dw);
 }, "JU.P4");
 });
 Clazz_declarePackage ("JU");
-Clazz_load (null, "JU.PT", ["java.lang.Character", "$.Double", "$.Float", "java.util.Map", "javajs.api.JSONEncodable", "JU.A4", "$.DF", "$.List", "$.M3", "$.M4", "$.P4", "$.SB", "$.T3"], function () {
+Clazz_load (null, "JU.PT", ["java.lang.Boolean", "$.Character", "$.Float", "$.Number", "java.util.Map", "javajs.api.JSONEncodable", "JU.AU", "$.DF", "$.List", "$.M3", "$.M4", "$.SB"], function () {
 c$ = Clazz_declareType (JU, "PT");
 c$.parseInt = $_M(c$, "parseInt", 
 function (str) {
@@ -12547,9 +12538,8 @@ return str.substring (ich, ichLast + 1);
 c$.dVal = $_M(c$, "dVal", 
 function (s) {
 {
-if(s==null){
+if(s==null)
 throw new NumberFormatException("null");
-}
 var d=parseFloat(s);
 if(isNaN(d))
 throw new NumberFormatException("Not a Number : "+s);
@@ -12635,7 +12625,7 @@ c$.approx = $_M(c$, "approx",
 function (f, n) {
 return Math.round (f * n) / n;
 }, "~N,~N");
-c$.simpleReplace = $_M(c$, "simpleReplace", 
+c$.rep = $_M(c$, "rep", 
 function (str, strFrom, strTo) {
 if (str == null || strFrom.length == 0 || str.indexOf (strFrom) < 0) return str;
 var isOnce = (strTo.indexOf (strFrom) >= 0);
@@ -12671,11 +12661,18 @@ for (var i = padLength; --i > 0; ) sb.appendC (padChar);
 if (!alignLeft) sb.append (isNeg ? padChar + value.substring (1) : value);
 return sb.toString ();
 }, "~S,~N,~N,~B,~B");
+c$.replaceWithCharacter = $_M(c$, "replaceWithCharacter", 
+function (str, strFrom, chTo) {
+if (str == null) return null;
+for (var i = strFrom.length; --i >= 0; ) str = str.$replace (strFrom.charAt (i), chTo);
+
+return str;
+}, "~S,~S,~S");
 c$.replaceAllCharacters = $_M(c$, "replaceAllCharacters", 
 function (str, strFrom, strTo) {
 for (var i = strFrom.length; --i >= 0; ) {
 var chFrom = strFrom.substring (i, i + 1);
-str = JU.PT.simpleReplace (str, chFrom, strTo);
+str = JU.PT.rep (str, chFrom, strTo);
 }
 return str;
 }, "~S,~S,~S");
@@ -12695,150 +12692,79 @@ c$.trimQuotes = $_M(c$, "trimQuotes",
 function (value) {
 return (value != null && value.length > 1 && value.startsWith ("\"") && value.endsWith ("\"") ? value.substring (1, value.length - 1) : value);
 }, "~S");
-c$.replaceAllCharacter = $_M(c$, "replaceAllCharacter", 
-function (str, strFrom, chTo) {
-if (str == null) return null;
-for (var i = strFrom.length; --i >= 0; ) str = str.$replace (strFrom.charAt (i), chTo);
-
-return str;
-}, "~S,~S,~S");
+c$.isNonStringPrimitive = $_M(c$, "isNonStringPrimitive", 
+function (info) {
+return Clazz_instanceOf (info, Number) || Clazz_instanceOf (info, Boolean);
+}, "~O");
+c$.arrayGet = $_M(c$, "arrayGet", 
+function (info, i) {
+{
+return info[i];
+}}, "~O,~N");
 c$.toJSON = $_M(c$, "toJSON", 
 function (infoType, info) {
-var sb =  new JU.SB ();
-var sep = "";
 if (info == null) return JU.PT.packageJSON (infoType, null);
-if (Clazz_instanceOf (info, Integer) || Clazz_instanceOf (info, Float) || Clazz_instanceOf (info, Double)) {
-return JU.PT.packageJSON (infoType, info.toString ());
-}if (Clazz_instanceOf (info, String)) {
-sb.append (JU.PT.fixString (info));
-} else if (Clazz_instanceOf (info, javajs.api.JSONEncodable)) {
-sb.append ((info).toJSON ());
-} else if (JU.PT.isAS (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.fixString ((info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAI (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).appendI ((info)[i]);
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAF (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).appendF ((info)[i]);
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAD (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).appendD ((info)[i]);
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAP (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep);
-JU.PT.addJsonTuple (sb, (info)[i]);
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isASS (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAII (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAFF (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isADD (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (JU.PT.isAFFF (info)) {
-sb.append ("[");
-var imax = (info).length;
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info)[i]));
-sep = ",";
-}
-sb.append ("]");
-} else if (Clazz_instanceOf (info, JU.List)) {
-sb.append ("[ ");
-var imax = (info).size ();
-for (var i = 0; i < imax; i++) {
-sb.append (sep).append (JU.PT.toJSON (null, (info).get (i)));
-sep = ",";
-}
-sb.append (" ]");
-} else if (Clazz_instanceOf (info, JU.M4)) {
-var x =  Clazz_newFloatArray (4, 0);
-var m4 = info;
-sb.appendC ('[');
-for (var i = 0; i < 4; i++) {
-if (i > 0) sb.appendC (',');
-m4.getRow (i, x);
-sb.append (JU.PT.toJSON (null, x));
-}
-sb.appendC (']');
-} else if (Clazz_instanceOf (info, JU.M3)) {
-var x =  Clazz_newFloatArray (3, 0);
-var m3 = info;
-sb.appendC ('[');
-for (var i = 0; i < 3; i++) {
-if (i > 0) sb.appendC (',');
-m3.getRow (i, x);
-sb.append (JU.PT.toJSON (null, x));
-}
-sb.appendC (']');
-} else if (Clazz_instanceOf (info, JU.T3)) {
-JU.PT.addJsonTuple (sb, info);
-} else if (Clazz_instanceOf (info, JU.A4)) {
-sb.append ("[").appendF ((info).x).append (",").appendF ((info).y).append (",").appendF ((info).z).append (",").appendF (((info).angle * 180 / 3.141592653589793)).append ("]");
-} else if (Clazz_instanceOf (info, JU.P4)) {
-sb.append ("[").appendF ((info).x).append (",").appendF ((info).y).append (",").appendF ((info).z).append (",").appendF ((info).w).append ("]");
-} else if (Clazz_instanceOf (info, java.util.Map)) {
+if (JU.PT.isNonStringPrimitive (info)) return JU.PT.packageJSON (infoType, info.toString ());
+var s = null;
+var sb = null;
+while (true) {
+if (Clazz_instanceOf (info, String)) {
+s = JU.PT.fixString (info);
+break;
+}if (Clazz_instanceOf (info, javajs.api.JSONEncodable)) {
+s = (info).toJSON ();
+break;
+}sb =  new JU.SB ();
+if (Clazz_instanceOf (info, java.util.Map)) {
 sb.append ("{ ");
+var sep = "";
 for (var key, $key = (info).keySet ().iterator (); $key.hasNext () && ((key = $key.next ()) || true);) {
 sb.append (sep).append (JU.PT.packageJSON (key, JU.PT.toJSON (null, (info).get (key))));
 sep = ",";
 }
 sb.append (" }");
-} else {
-sb.append (JU.PT.fixString (info.toString ()));
-}return JU.PT.packageJSON (infoType, sb.toString ());
+break;
+}if (Clazz_instanceOf (info, JU.List)) {
+sb.append ("[ ");
+var n = (info).size ();
+for (var i = 0; i < n; i++) {
+if (i > 0) sb.appendC (',');
+sb.append (JU.PT.toJSON (null, (info).get (i)));
+}
+sb.append (" ]");
+break;
+}if (Clazz_instanceOf (info, JU.M3)) {
+var len = (Clazz_instanceOf (info, JU.M4) ? 4 : 3);
+var x =  Clazz_newFloatArray (len, 0);
+var m = info;
+sb.appendC ('[');
+for (var i = 0; i < len; i++) {
+if (i > 0) sb.appendC (',');
+m.getRow (i, x);
+sb.append (JU.PT.toJSON (null, x));
+}
+sb.appendC (']');
+break;
+}s = JU.PT.nonArrayString (info);
+if (s == null) {
+sb.append ("[");
+var n = JU.AU.getLength (info);
+for (var i = 0; i < n; i++) {
+if (i > 0) sb.appendC (',');
+sb.append (JU.PT.toJSON (null, JU.PT.arrayGet (info, i)));
+}
+sb.append ("]");
+break;
+}info = info.toString ();
+}
+return JU.PT.packageJSON (infoType, (s == null ? sb.toString () : s));
 }, "~S,~O");
+c$.nonArrayString = $_M(c$, "nonArrayString", 
+function (x) {
+{
+var s = info.toString(); return (s.startsWith("[object") &&
+s.endsWith("Array]") ? null : s);
+}}, "~O");
 c$.packageJSON = $_M(c$, "packageJSON", 
 function (infoType, info) {
 return (infoType == null ? info : "\"" + infoType + "\": " + info);
@@ -12848,14 +12774,10 @@ function (s) {
 {
 if (typeof s == "undefined") return "null"
 }if (s == null || s.indexOf ("{\"") == 0) return s;
-s = JU.PT.simpleReplace (s, "\"", "\\\"");
-s = JU.PT.simpleReplace (s, "\n", "\\n");
+s = JU.PT.rep (s, "\"", "\\\"");
+s = JU.PT.rep (s, "\n", "\\n");
 return "\"" + s + "\"";
 }, "~S");
-c$.addJsonTuple = $_M(c$, "addJsonTuple", 
-function (sb, pt) {
-sb.append ("[").appendF (pt.x).append (",").appendF (pt.y).append (",").appendF (pt.z).append ("]");
-}, "JU.SB,JU.T3");
 c$.isAS = $_M(c$, "isAS", 
 function (x) {
 {
@@ -12918,18 +12840,47 @@ return Clazz_isAFFF(x);
 }}, "~O");
 c$.escapeUrl = $_M(c$, "escapeUrl", 
 function (url) {
-url = JU.PT.simpleReplace (url, "\n", "");
-url = JU.PT.simpleReplace (url, "%", "%25");
-url = JU.PT.simpleReplace (url, "#", "%23");
-url = JU.PT.simpleReplace (url, "[", "%5B");
-url = JU.PT.simpleReplace (url, "]", "%5D");
-url = JU.PT.simpleReplace (url, " ", "%20");
+url = JU.PT.rep (url, "\n", "");
+url = JU.PT.rep (url, "%", "%25");
+url = JU.PT.rep (url, "#", "%23");
+url = JU.PT.rep (url, "[", "%5B");
+url = JU.PT.rep (url, "]", "%5D");
+url = JU.PT.rep (url, " ", "%20");
 return url;
+}, "~S");
+c$.esc = $_M(c$, "esc", 
+function (str) {
+if (str == null || str.length == 0) return "\"\"";
+var haveEscape = false;
+var i = 0;
+for (; i < "\\\\\tt\rr\nn\"\"".length; i += 2) if (str.indexOf ("\\\\\tt\rr\nn\"\"".charAt (i)) >= 0) {
+haveEscape = true;
+break;
+}
+if (haveEscape) while (i < "\\\\\tt\rr\nn\"\"".length) {
+var pt = -1;
+var ch = "\\\\\tt\rr\nn\"\"".charAt (i++);
+var ch2 = "\\\\\tt\rr\nn\"\"".charAt (i++);
+var sb =  new JU.SB ();
+var pt0 = 0;
+while ((pt = str.indexOf (ch, pt + 1)) >= 0) {
+sb.append (str.substring (pt0, pt)).appendC ('\\').appendC (ch2);
+pt0 = pt + 1;
+}
+sb.append (str.substring (pt0, str.length));
+str = sb.toString ();
+}
+for (i = str.length; --i >= 0; ) if (str.charCodeAt (i) > 0x7F) {
+var s = "0000" + Integer.toHexString (str.charCodeAt (i));
+str = str.substring (0, i) + "\\u" + s.substring (s.length - 4) + str.substring (i + 1);
+}
+return "\"" + str + "\"";
 }, "~S");
 Clazz_defineStatics (c$,
 "tensScale", [10, 100, 1000, 10000, 100000, 1000000],
 "decimalScale", [0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001, 0.000000001],
-"FLOAT_MIN_SAFE", 2E-45);
+"FLOAT_MIN_SAFE", 2E-45,
+"escapable", "\\\\\tt\rr\nn\"\"");
 });
 Clazz_declarePackage ("JU");
 c$ = Clazz_decorateAsClass (function () {
@@ -13069,13 +13020,13 @@ for (var i = off + len, j = i - off; --i >= off; ) b[--j] = (this.charAt (i)).ch
 return b;
 }, "~N,~N");
 Clazz_declarePackage ("JU");
-Clazz_load (null, "JU.T3", ["java.lang.Float"], function () {
+Clazz_load (["javajs.api.JSONEncodable"], "JU.T3", ["java.lang.Float"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.x = 0;
 this.y = 0;
 this.z = 0;
 Clazz_instantialize (this, arguments);
-}, JU, "T3", null, java.io.Serializable);
+}, JU, "T3", null, [javajs.api.JSONEncodable, java.io.Serializable]);
 Clazz_makeConstructor (c$, 
 function () {
 });
@@ -13196,6 +13147,10 @@ return (this.x == t2.x && this.y == t2.y && this.z == t2.z);
 $_V(c$, "toString", 
 function () {
 return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+});
+$_V(c$, "toJSON", 
+function () {
+return "[" + this.x + "," + this.y + "," + this.z + "]";
 });
 });
 Clazz_declarePackage ("JU");
@@ -13334,14 +13289,14 @@ function () {
 return "(" + this.x + ", " + this.y + ", " + this.z + ")";
 });
 Clazz_declarePackage ("JU");
-Clazz_load (null, "JU.T4", ["JU.T3"], function () {
+Clazz_load (["javajs.api.JSONEncodable"], "JU.T4", ["JU.T3"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.x = 0;
 this.y = 0;
 this.z = 0;
 this.w = 0;
 Clazz_instantialize (this, arguments);
-}, JU, "T4", null, java.io.Serializable);
+}, JU, "T4", null, [java.io.Serializable, javajs.api.JSONEncodable]);
 Clazz_makeConstructor (c$, 
 function () {
 });
@@ -13372,6 +13327,10 @@ return (this.x == t.x && this.y == t.y && this.z == t.z && this.w == t.w);
 $_V(c$, "toString", 
 function () {
 return "(" + this.x + ", " + this.y + ", " + this.z + ", " + this.w + ")";
+});
+$_V(c$, "toJSON", 
+function () {
+return "[" + this.x + ", " + this.y + ", " + this.z + ", " + this.w + "]";
 });
 });
 Clazz_declarePackage ("JU");
@@ -14012,7 +13971,7 @@ return this.atom;
 });
 });
 Clazz_declarePackage ("J.adapter.smarter");
-Clazz_load (["java.util.Hashtable"], "J.adapter.smarter.AtomSetCollection", ["java.lang.Boolean", "$.Float", "java.util.Collections", "$.Properties", "JU.AU", "$.BS", "$.List", "$.P3", "$.V3", "J.adapter.smarter.Atom", "$.Bond", "$.SmarterJmolAdapter", "$.XtalSymmetry", "J.util.Logger"], function () {
+Clazz_load (["java.util.Hashtable"], "J.adapter.smarter.AtomSetCollection", ["java.lang.Boolean", "$.Float", "java.util.Collections", "$.Properties", "JU.AU", "$.BS", "$.List", "$.P3", "$.V3", "J.adapter.smarter.Atom", "$.Bond", "$.SmarterJmolAdapter", "J.api.Interface", "J.util.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.reader = null;
 this.bsAtoms = null;
@@ -14529,7 +14488,7 @@ return atom.anisoBorU;
 }, "J.adapter.smarter.Atom");
 $_M(c$, "getXSymmetry", 
 function () {
-if (this.xtalSymmetry == null) this.xtalSymmetry =  new J.adapter.smarter.XtalSymmetry (this);
+if (this.xtalSymmetry == null) this.xtalSymmetry = (J.api.Interface.getInterface ("J.adapter.smarter.XtalSymmetry")).set (this);
 return this.xtalSymmetry;
 });
 $_M(c$, "getSymmetry", 
@@ -15371,8 +15330,8 @@ if (this.checkFilterKey ("NAME=")) {
 this.nameRequired = this.filter.substring (this.filter.indexOf ("NAME=") + 5);
 if (this.nameRequired.startsWith ("'")) this.nameRequired = JU.PT.split (this.nameRequired, "'")[1];
  else if (this.nameRequired.startsWith ("\"")) this.nameRequired = JU.PT.split (this.nameRequired, "\"")[1];
-filter0 = this.filter = JU.PT.simpleReplace (this.filter, this.nameRequired, "");
-filter0 = this.filter = JU.PT.simpleReplace (this.filter, "NAME=", "");
+filter0 = this.filter = JU.PT.rep (this.filter, this.nameRequired, "");
+filter0 = this.filter = JU.PT.rep (this.filter, "NAME=", "");
 }if (this.filter == null) return;
 this.filterAtomName = this.checkFilterKey ("*.") || this.checkFilterKey ("!.");
 this.filterElement = this.checkFilterKey ("_");
@@ -15453,7 +15412,7 @@ this.matrixRotate.setColumnV (1, v);
 v.set (x3, y3, z3);
 v.normalize ();
 this.matrixRotate.setColumnV (2, v);
-this.atomSetCollection.setAtomSetCollectionAuxiliaryInfo ("defaultOrientationMatrix", JU.M3.newM (this.matrixRotate));
+this.atomSetCollection.setAtomSetCollectionAuxiliaryInfo ("defaultOrientationMatrix", JU.M3.newM3 (this.matrixRotate));
 var q = J.util.Quaternion.newM (this.matrixRotate);
 this.atomSetCollection.setAtomSetCollectionAuxiliaryInfo ("defaultOrientationQuaternion", q);
 J.util.Logger.info ("defaultOrientationMatrix = " + this.matrixRotate);
@@ -17505,7 +17464,7 @@ function (name) {
 this.name = name.$replace ('\\', '/');
 this.fullName = name;
 if (!this.fullName.startsWith ("/") && J.viewer.FileManager.urlTypeIndex (name) < 0) this.fullName = J.viewer.Viewer.jsDocumentBase + "/" + this.fullName;
-this.fullName = JU.PT.simpleReplace (this.fullName, "/./", "/");
+this.fullName = JU.PT.rep (this.fullName, "/./", "/");
 name = name.substring (name.lastIndexOf ("/") + 1);
 }, "~S");
 $_V(c$, "getParentAsFile", 
@@ -17582,7 +17541,7 @@ context.font = font.font;
 return Math.ceil(context.measureText(text).width);
 }}, "javajs.awt.Font,~O,~S");
 Clazz_declarePackage ("J.awtjs2d");
-Clazz_load (["javajs.api.GenericMouseInterface", "javajs.awt.event.Event"], "J.awtjs2d.Mouse", ["java.lang.Character", "JU.V3", "J.util.Escape", "$.Logger"], function () {
+Clazz_load (["javajs.api.GenericMouseInterface", "javajs.awt.event.Event"], "J.awtjs2d.Mouse", ["java.lang.Character", "JU.PT", "$.V3", "J.util.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.viewer = null;
 this.manager = null;
@@ -17796,12 +17755,12 @@ return;
 if (this.keyBuffer.length > 0) this.keyBuffer = this.keyBuffer.substring (0, this.keyBuffer.length - 1);
 } else {
 this.keyBuffer += ch;
-}if (this.viewer.getBooleanProperty ("showKeyStrokes")) this.viewer.evalStringQuietSync ("!set echo _KEYSTROKES; set echo bottom left;echo " + J.util.Escape.eS ("\1" + this.keyBuffer), true, true);
+}if (this.viewer.getBooleanProperty ("showKeyStrokes")) this.viewer.evalStringQuietSync ("!set echo _KEYSTROKES; set echo bottom left;echo " + JU.PT.esc ("\1" + this.keyBuffer), true, true);
 }, "~S");
 $_M(c$, "sendKeyBuffer", 
 function () {
 var kb = this.keyBuffer;
-if (this.viewer.getBooleanProperty ("showKeyStrokes")) this.viewer.evalStringQuietSync ("!set echo _KEYSTROKES; set echo bottom left;echo " + J.util.Escape.eS (this.keyBuffer), true, true);
+if (this.viewer.getBooleanProperty ("showKeyStrokes")) this.viewer.evalStringQuietSync ("!set echo _KEYSTROKES; set echo bottom left;echo " + JU.PT.esc (this.keyBuffer), true, true);
 this.clearKeyBuffer ();
 this.viewer.evalStringQuietSync (kb, false, true);
 });
@@ -20407,7 +20366,7 @@ function (rotationMatrix) {
 var vertexVectors = J.util.Normix.getVertexVectors ();
 for (var i = J.g3d.Graphics3D.normixCount; --i >= 0; ) {
 var tv = this.transformedVectors[i];
-rotationMatrix.transform2 (vertexVectors[i], tv);
+rotationMatrix.rotate2 (vertexVectors[i], tv);
 this.shadeIndexes[i] = this.shader.getShadeB (tv.x, -tv.y, tv.z);
 this.shadeIndexes2Sided[i] = (tv.z >= 0 ? this.shadeIndexes[i] : this.shader.getShadeB (-tv.x, tv.y, -tv.z));
 }
@@ -21543,7 +21502,7 @@ mode = 2;
 this.z0 = zPixel;
 if (checkOctant) {
 this.ptTemp.set (xCurrent - this.x, yCurrent - this.y, zPixel - this.z);
-this.mat.transform (this.ptTemp);
+this.mat.rotate (this.ptTemp);
 var thisOctant = J.util.GData.getScreenOctant (this.ptTemp);
 if (thisOctant == this.selectedOctant) {
 iShade = this.getPlaneShade (xCurrent, yCurrent, this.zroot);
@@ -22441,7 +22400,7 @@ return (map.size () == 0 ? null :  new J.i18n.Resource (map, null));
 }, "~S");
 c$.fix = $_M(c$, "fix", 
 function (line) {
-return JU.PT.simpleReplace (line.substring (line.indexOf ("\"") + 1, line.lastIndexOf ("\"")), "\\n", "\n");
+return JU.PT.rep (line.substring (line.indexOf ("\"") + 1, line.lastIndexOf ("\"")), "\\n", "\n");
 }, "~S");
 });
 Clazz_declarePackage ("J.io");
@@ -23309,11 +23268,11 @@ sb.appendO (data);
 c$.wrapCdata = $_M(c$, "wrapCdata", 
 function (data) {
 var s = "" + data;
-return (s.indexOf ("&") < 0 && s.indexOf ("<") < 0 ? (s.startsWith ("\n") ? "" : "\n") + s : "<![CDATA[" + JU.PT.simpleReplace (s, "]]>", "]]]]><![CDATA[>") + "]]>");
+return (s.indexOf ("&") < 0 && s.indexOf ("<") < 0 ? (s.startsWith ("\n") ? "" : "\n") + s : "<![CDATA[" + JU.PT.rep (s, "]]>", "]]]]><![CDATA[>") + "]]>");
 }, "~O");
 c$.unwrapCdata = $_M(c$, "unwrapCdata", 
 function (s) {
-return (s.startsWith ("<![CDATA[") && s.endsWith ("]]>") ? JU.PT.simpleReplace (s.substring (9, s.length - 3), "]]]]><![CDATA[>", "]]>") : s);
+return (s.startsWith ("<![CDATA[") && s.endsWith ("]]>") ? JU.PT.rep (s.substring (9, s.length - 3), "]]]]><![CDATA[>", "]]>") : s);
 }, "~S");
 c$.appendTagObj = $_M(c$, "appendTagObj", 
 function (sb, name, attributes, data) {
@@ -23335,7 +23294,7 @@ sb.append (" ").appendO (name).append ("=\"").appendO (value).append ("\"");
 }, "JU.SB,~O,~O");
 });
 Clazz_declarePackage ("J.modelset");
-Clazz_load (["J.util.JmolNode", "$.Point3fi", "J.constant.EnumPalette", "J.viewer.JC"], "J.modelset.Atom", ["java.lang.Float", "JU.CU", "$.P3", "$.SB", "$.V3", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.util.C", "$.Elements", "$.Escape"], function () {
+Clazz_load (["J.util.JmolNode", "$.Point3fi", "J.constant.EnumPalette", "J.viewer.JC"], "J.modelset.Atom", ["java.lang.Float", "JU.CU", "$.P3", "$.PT", "$.SB", "$.V3", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.util.C", "$.Elements"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.altloc = '\0';
 this.atomID = 0;
@@ -23989,7 +23948,7 @@ var chainID = this.getChainID ();
 if (chainID != 0 && chainID != 32) {
 info.append (":");
 var s = this.getChainIDStr ();
-if (chainID >= 256) s = J.util.Escape.eS (s);
+if (chainID >= 256) s = JU.PT.esc (s);
 info.append (s);
 }if (!allInfo) return info.toString ();
 info.append (".");
@@ -25702,9 +25661,9 @@ x.scaleAdd2 (2.828, x, z);
 if (pt != 3) {
 x.normalize ();
 var a = JU.A4.new4 (z.x, z.y, z.z, (pt == 2 ? 1 : -1) * 2.09439507);
-var m = JU.M3.newM (null);
+var m = JU.M3.newM3 (null);
 m.setAA (a);
-m.transform (x);
+m.rotate (x);
 }z.setT (x);
 x.cross (vTemp, z);
 break;
@@ -26093,7 +26052,7 @@ case 1073741824:
 return this.getIdentifierOrNull (specInfo);
 case 1048608:
 var atomSpec = (specInfo).toUpperCase ();
-if (atomSpec.indexOf ("\\?") >= 0) atomSpec = JU.PT.simpleReplace (atomSpec, "\\?", "\1");
+if (atomSpec.indexOf ("\\?") >= 0) atomSpec = JU.PT.rep (atomSpec, "\\?", "\1");
 for (i = this.atomCount; --i >= 0; ) if (this.isAtomNameMatch (this.atoms[i], atomSpec, false)) bs.set (i);
 
 break;
@@ -26173,7 +26132,7 @@ return bs;
 $_M(c$, "getIdentifierOrNull", 
 function (identifier) {
 var bs = this.getSpecNameOrNull (identifier, false);
-if (identifier.indexOf ("\\?") >= 0) identifier = JU.PT.simpleReplace (identifier, "\\?", "\1");
+if (identifier.indexOf ("\\?") >= 0) identifier = JU.PT.rep (identifier, "\\?", "\1");
 if (bs != null || identifier.indexOf ("?") > 0) return bs;
 if (identifier.indexOf ("*") > 0) return this.getSpecNameOrNull (identifier, true);
 var len = identifier.length;
@@ -26221,7 +26180,7 @@ $_M(c$, "getSpecNameOrNull",
 function (name, checkStar) {
 var bs = null;
 name = name.toUpperCase ();
-if (name.indexOf ("\\?") >= 0) name = JU.PT.simpleReplace (name, "\\?", "\1");
+if (name.indexOf ("\\?") >= 0) name = JU.PT.rep (name, "\\?", "\1");
 for (var i = this.atomCount; --i >= 0; ) {
 var g3 = this.atoms[i].getGroup3 (true);
 if (g3 != null && g3.length > 0) {
@@ -28326,7 +28285,7 @@ Clazz_defineStatics (c$,
 "twoCharLabelTokenIds", [1112541188, 1112541189, 1112541190, 1112539153, 1112539154, 1112539155, 1112541202, 1112541203, 1112541204]);
 });
 Clazz_declarePackage ("J.modelset");
-Clazz_load (null, "J.modelset.Measurement", ["java.lang.Float", "JU.List", "$.SB", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.modelset.LabelToken", "J.util.Escape", "$.Measure"], function () {
+Clazz_load (null, "J.modelset.Measurement", ["java.lang.Float", "JU.List", "$.PT", "$.SB", "J.atomdata.RadiusData", "J.constant.EnumVdw", "J.modelset.LabelToken", "J.util.Escape", "$.Measure"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.thisID = null;
 this.modelSet = null;
@@ -28656,7 +28615,7 @@ var f = this.fixValue (units, true);
 var sb =  new JU.SB ();
 sb.append (this.count == 2 ? (this.type == null ? "distance" : this.type) : this.count == 3 ? "angle" : "dihedral");
 sb.append (" \t").appendF (f);
-sb.append (" \t").append (J.util.Escape.eS (this.strMeasurement));
+sb.append (" \t").append (JU.PT.esc (this.strMeasurement));
 for (var i = 1; i <= this.count; i++) sb.append (" \t").append (this.getLabel (i, false, false));
 
 if (this.thisID != null) sb.append (" \t").append (this.thisID);
@@ -30986,14 +30945,14 @@ if (this.modelSetProperties != null) {
 var e = this.modelSetProperties.propertyNames ();
 while (e.hasMoreElements ()) {
 var propertyName = e.nextElement ();
-sb.append ("\n <property name=\"").append (propertyName).append ("\" value=").append (J.util.Escape.eS (this.modelSetProperties.getProperty (propertyName))).append (" />");
+sb.append ("\n <property name=\"").append (propertyName).append ("\" value=").append (JU.PT.esc (this.modelSetProperties.getProperty (propertyName))).append (" />");
 }
 sb.append ("\n</properties>");
 }for (var i = 0; i < this.modelCount; ++i) {
-sb.append ("\n<model index=\"").appendI (i).append ("\" n=\"").append (this.getModelNumberDotted (i)).append ("\" id=").append (J.util.Escape.eS ("" + this.getModelAuxiliaryInfoValue (i, "modelID")));
+sb.append ("\n<model index=\"").appendI (i).append ("\" n=\"").append (this.getModelNumberDotted (i)).append ("\" id=").append (JU.PT.esc ("" + this.getModelAuxiliaryInfoValue (i, "modelID")));
 var ib = this.viewer.getJDXBaseModelIndex (i);
-if (ib != i) sb.append (" baseModelId=").append (J.util.Escape.eS (this.getModelAuxiliaryInfoValue (ib, "jdxModelID")));
-sb.append (" name=").append (J.util.Escape.eS (this.getModelName (i))).append (" title=").append (J.util.Escape.eS (this.getModelTitle (i))).append (" hasVibrationVectors=\"").appendB (this.viewer.modelHasVibrationVectors (i)).append ("\" />");
+if (ib != i) sb.append (" baseModelId=").append (JU.PT.esc (this.getModelAuxiliaryInfoValue (ib, "jdxModelID")));
+sb.append (" name=").append (JU.PT.esc (this.getModelName (i))).append (" title=").append (JU.PT.esc (this.getModelTitle (i))).append (" hasVibrationVectors=\"").appendB (this.viewer.modelHasVibrationVectors (i)).append ("\" />");
 }
 sb.append ("\n</models>");
 return sb.toString ();
@@ -31205,7 +31164,7 @@ for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
 if (--atomsMax < 0) break;
 var atom = this.atoms[i];
 var name = atom.getAtomName ();
-JU.PT.simpleReplace (name, "\"", "''");
+JU.PT.rep (name, "\"", "''");
 bsAtoms.set (atom.index);
 xmlUtil.appendTag (sb, "atom/", ["id", "a" + (atom.index + 1), "title", atom.getAtomName (), "elementType", atom.getElementSymbol (), "x3", "" + atom.x, "y3", "" + atom.y, "z3", "" + atom.z]);
 }
@@ -33058,7 +33017,7 @@ this.matTemp.setAA (aa);
 this.ptTemp.setT (a1);
 for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
 this.atoms[i].sub (this.ptTemp);
-this.matTemp.transform (this.atoms[i]);
+this.matTemp.rotate (this.atoms[i]);
 this.atoms[i].add (this.ptTemp);
 this.taintAtom (i, 2);
 }
@@ -33068,9 +33027,9 @@ $_M(c$, "moveAtoms",
 function (mNew, matrixRotate, translation, bs, center, isInternal, translationOnly) {
 if (!translationOnly) {
 if (mNew == null) {
-this.matTemp.setM (matrixRotate);
+this.matTemp.setM3 (matrixRotate);
 } else {
-this.matInv.setM (matrixRotate);
+this.matInv.setM3 (matrixRotate);
 this.matInv.invert ();
 this.ptTemp.set (0, 0, 0);
 this.matTemp.mul2 (mNew, matrixRotate);
@@ -33089,10 +33048,10 @@ this.mat4.mulM4 (this.mat4t);
 this.mat4.setM3 (this.matTemp);
 }for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
 if (isInternal) {
-this.mat4.transform (this.atoms[i]);
+this.mat4.rotTrans (this.atoms[i]);
 } else {
 this.ptTemp.add (this.atoms[i]);
-this.mat4.transform (this.atoms[i]);
+this.mat4.rotTrans (this.atoms[i]);
 this.ptTemp.sub (this.atoms[i]);
 }this.taintAtom (i, 2);
 }
@@ -33106,7 +33065,7 @@ for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) this.atoms[i]
 if (!translationOnly) {
 this.mat4t.setIdentity ();
 this.mat4t.setTranslation (translation);
-this.mat4.mul2 (this.mat4t, this.mat4);
+this.mat4.mul42 (this.mat4t, this.mat4);
 }}this.recalculatePositionDependentQuantities (bs, this.mat4);
 }, "JU.M3,JU.M3,JU.V3,JU.BS,JU.P3,~B,~B");
 $_M(c$, "recalculatePositionDependentQuantities", 
@@ -33159,7 +33118,7 @@ return ops;
 }, "~N");
 });
 Clazz_declarePackage ("J.modelset");
-Clazz_load (["JU.M3", "$.P3"], "J.modelset.Orientation", ["J.util.Escape"], function () {
+Clazz_load (["JU.M3", "$.P3"], "J.modelset.Orientation", ["JU.PT", "J.util.Escape"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.saveName = null;
 this.rotationMatrix = null;
@@ -33198,7 +33157,7 @@ return;
 if (asDefault) {
 var rotationMatrix = viewer.getModelSetAuxiliaryInfoValue ("defaultOrientationMatrix");
 if (rotationMatrix == null) this.rotationMatrix.setIdentity ();
- else this.rotationMatrix.setM (rotationMatrix);
+ else this.rotationMatrix.setM3 (rotationMatrix);
 } else {
 viewer.getRotation (this.rotationMatrix);
 }this.xTrans = viewer.getTranslationXPercent ();
@@ -33221,7 +33180,7 @@ this.cameraY = viewer.getCamera ().y;
 }}, "J.viewer.Viewer,~B,~A");
 $_M(c$, "getMoveToText", 
 function (asCommand) {
-return (asCommand ? "   " + this.moveToText + "\n  save orientation " + J.util.Escape.eS (this.saveName.substring (12)) + ";\n" : this.moveToText);
+return (asCommand ? "   " + this.moveToText + "\n  save orientation " + JU.PT.esc (this.saveName.substring (12)) + ";\n" : this.moveToText);
 }, "~B");
 $_M(c$, "restore", 
 function (timeSeconds, isAll) {
@@ -34161,7 +34120,7 @@ return this.message;
 });
 });
 Clazz_declarePackage ("J.script");
-Clazz_load (["javajs.api.JSONEncodable", "J.script.T", "JU.P3"], "J.script.SV", ["java.lang.Boolean", "$.Float", "java.util.Arrays", "$.Collections", "$.Hashtable", "$.Map", "JU.BS", "$.List", "$.M3", "$.M4", "$.P4", "$.PT", "$.SB", "$.V3", "J.modelset.BondSet", "J.util.BSUtil", "$.Escape", "$.Measure", "$.Quaternion", "$.Txt"], function () {
+Clazz_load (["javajs.api.JSONEncodable", "J.script.T", "JU.P3"], "J.script.SV", ["java.lang.Boolean", "$.Float", "java.util.Arrays", "$.Collections", "$.Hashtable", "$.Map", "JU.BS", "$.List", "$.M3", "$.M4", "$.P4", "$.PT", "$.SB", "$.T3", "$.V3", "J.modelset.BondSet", "J.util.BSUtil", "$.Escape", "$.Measure", "$.Quaternion", "$.Txt"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.index = 2147483647;
 this.flags = 2;
@@ -34231,7 +34190,7 @@ return 0;
 }, "J.script.T");
 c$.isVariableType = $_M(c$, "isVariableType", 
 function (x) {
-return (Clazz_instanceOf (x, J.script.SV) || Clazz_instanceOf (x, JU.BS) || Clazz_instanceOf (x, Boolean) || Clazz_instanceOf (x, Float) || Clazz_instanceOf (x, Integer) || Clazz_instanceOf (x, String) || Clazz_instanceOf (x, JU.P3) || Clazz_instanceOf (x, JU.V3) || Clazz_instanceOf (x, JU.P4) || Clazz_instanceOf (x, J.util.Quaternion) || Clazz_instanceOf (x, java.util.Map) || J.script.SV.isArray (x));
+return (Clazz_instanceOf (x, J.script.SV) || Clazz_instanceOf (x, JU.BS) || Clazz_instanceOf (x, Boolean) || Clazz_instanceOf (x, Float) || Clazz_instanceOf (x, Integer) || Clazz_instanceOf (x, String) || Clazz_instanceOf (x, JU.T3) || Clazz_instanceOf (x, JU.P4) || Clazz_instanceOf (x, J.util.Quaternion) || Clazz_instanceOf (x, java.util.Map) || J.script.SV.isArray (x));
 }, "~O");
 c$.getVariable = $_M(c$, "getVariable", 
 function (x) {
@@ -34249,7 +34208,7 @@ if (Clazz_instanceOf (x, JU.V3)) return J.script.SV.newV (8, JU.P3.newP (x));
 if (Clazz_instanceOf (x, JU.BS)) return J.script.SV.newV (10, x);
 if (Clazz_instanceOf (x, JU.P4)) return J.script.SV.newV (9, x);
 if (Clazz_instanceOf (x, J.util.Quaternion)) return J.script.SV.newV (9, (x).toPoint4f ());
-if (Clazz_instanceOf (x, JU.M3)) return J.script.SV.newV (11, x);
+if (Clazz_instanceOf (x, JU.M3)) return J.script.SV.newV (Clazz_instanceOf (x, JU.M4) ? 12 : 11, x);
 if (Clazz_instanceOf (x, JU.M4)) return J.script.SV.newV (12, x);
 if (Clazz_instanceOf (x, java.util.Map)) return J.script.SV.getVariableMap (x);
 if (Clazz_instanceOf (x, JU.List)) return J.script.SV.getVariableList (x);
@@ -34262,8 +34221,10 @@ if (JU.PT.isAS (x)) return J.script.SV.getVariableAS (x);
 if (JU.PT.isAP (x)) return J.script.SV.getVariableAP (x);
 if (JU.PT.isAII (x)) return J.script.SV.getVariableAII (x);
 if (JU.PT.isAFF (x)) return J.script.SV.getVariableAFF (x);
+if (JU.PT.isASS (x)) return J.script.SV.getVariableASS (x);
+if (JU.PT.isADD (x)) return J.script.SV.getVariableADD (x);
 if (JU.PT.isAFloat (x)) return J.script.SV.newV (13, x);
-return J.script.SV.newS (J.util.Escape.toReadable (null, x));
+return J.script.SV.newS (x.toString ());
 }, "~O");
 c$.isArray = $_M(c$, "isArray", 
 function (x) {
@@ -34280,11 +34241,8 @@ break;
 }
 if (!(Clazz_instanceOf (o, J.script.SV))) {
 var x2 =  new java.util.Hashtable ();
-for (var entry, $entry = ht.entrySet ().iterator (); $entry.hasNext () && ((entry = $entry.next ()) || true);) {
-var key = entry.getKey ();
-o = entry.getValue ();
-x2.put (key, J.script.SV.isVariableType (o) ? J.script.SV.getVariable (o) : J.script.SV.newV (4, J.util.Escape.toReadable (null, o)));
-}
+for (var entry, $entry = ht.entrySet ().iterator (); $entry.hasNext () && ((entry = $entry.next ()) || true);) x2.put (entry.getKey (), J.script.SV.getVariable (entry.getValue ()));
+
 x = x2;
 }return J.script.SV.newV (6, x);
 }, "java.util.Map");
@@ -34329,6 +34287,20 @@ c$.getVariableAFF = $_M(c$, "getVariableAFF",
 function (fx) {
 var objects =  new JU.List ();
 for (var i = 0; i < fx.length; i++) objects.addLast (J.script.SV.getVariableAF (fx[i]));
+
+return J.script.SV.newV (7, objects);
+}, "~A");
+c$.getVariableADD = $_M(c$, "getVariableADD", 
+function (fx) {
+var objects =  new JU.List ();
+for (var i = 0; i < fx.length; i++) objects.addLast (J.script.SV.getVariableAD (fx[i]));
+
+return J.script.SV.newV (7, objects);
+}, "~A");
+c$.getVariableASS = $_M(c$, "getVariableASS", 
+function (fx) {
+var objects =  new JU.List ();
+for (var i = 0; i < fx.length; i++) objects.addLast (J.script.SV.getVariableAS (fx[i]));
 
 return J.script.SV.newV (7, objects);
 }, "~A");
@@ -34539,11 +34511,11 @@ case 9:
 return J.util.Measure.distanceToPlane (x.value, J.script.SV.pt0);
 case 11:
 var pt =  new JU.P3 ();
-(x.value).transform (pt);
+(x.value).rotate (pt);
 return pt.length ();
 case 12:
 var pt1 =  new JU.P3 ();
-(x.value).transform (pt1);
+(x.value).rotTrans (pt1);
 return pt1.length ();
 default:
 return 0;
@@ -34610,7 +34582,7 @@ sb.append ("{ ");
 var sep = "";
 for (var i = 0; i < keys.length; i++) {
 var key = keys[i];
-sb.append (sep).append (J.util.Escape.eS (key)).appendC (':');
+sb.append (sep).append (JU.PT.esc (key)).appendC (':');
 J.script.SV.sValueArray (sb, ht.get (key), map, level + 1, true);
 sep = ", ";
 }
@@ -34836,10 +34808,10 @@ for (var i = 0; i < len; i++) data[i] = J.script.SV.fValue (sv.get (i));
 
 if (selector > 0) {
 if (this.tok == 11) (this.value).setRowA (selector - 1, data);
- else (this.value).setRow (selector - 1, data);
+ else (this.value).setRowA (selector - 1, data);
 } else {
 if (this.tok == 11) (this.value).setColumnA (-1 - selector, data);
- else (this.value).setColumn (-1 - selector, data);
+ else (this.value).setColumnA (-1 - selector, data);
 }return true;
 }}return false;
 case 4:
@@ -34867,7 +34839,7 @@ $_M(c$, "escape",
 function () {
 switch (this.tok) {
 case 4:
-return J.util.Escape.eS (this.value);
+return JU.PT.esc (this.value);
 case 7:
 case 6:
 var sb =  new JU.SB ();
@@ -34953,7 +34925,7 @@ case 1:
 return J.script.SV.sValue (args[0]);
 }
 var sb =  new JU.SB ();
-var format = JU.PT.split (JU.PT.simpleReplace (J.script.SV.sValue (args[0]), "%%", "\1"), "%");
+var format = JU.PT.split (JU.PT.rep (J.script.SV.sValue (args[0]), "%%", "\1"), "%");
 sb.append (format[0]);
 for (var i = 1; i < format.length; i++) {
 var ret = J.script.SV.sprintf (J.util.Txt.formatCheck ("%" + format[i]), (i < args.length ? args[i] : null));
@@ -37960,9 +37932,9 @@ if (name.length > 0) isOverloaded = true;
 var n = 0;
 if (colorScheme.length > pt + 1 && !colorScheme.contains ("[")) {
 colorScheme = "[" + colorScheme.substring (pt + 1).trim () + "]";
-colorScheme = JU.PT.simpleReplace (colorScheme.$replace ('\n', ' '), "  ", " ");
-colorScheme = JU.PT.simpleReplace (colorScheme, ", ", ",").$replace (' ', ',');
-colorScheme = JU.PT.simpleReplace (colorScheme, ",", "][");
+colorScheme = JU.PT.rep (colorScheme.$replace ('\n', ' '), "  ", " ");
+colorScheme = JU.PT.rep (colorScheme, ", ", ",").$replace (' ', ',');
+colorScheme = JU.PT.rep (colorScheme, ",", "][");
 }pt = -1;
 while ((pt = colorScheme.indexOf ("[", pt + 1)) >= 0) n++;
 
@@ -38705,7 +38677,7 @@ J.util.Logger.error ("ERROR!!! Element table length mismatch:\n elementSymbols.l
 "electroNegativities", [0, 2.2, 0, 0.97, 1.47, 2.01, 2.5, 3.07, 3.5, 4.1, 0, 1.01, 1.23, 1.47, 1.74, 2.06, 2.44, 2.83, 0, 0.91, 1.04, 1.2, 1.32, 1.45, 1.56, 1.6, 1.64, 1.7, 1.75, 1.75, 1.66, 1.82, 2.02, 2.2, 2.48, 2.74, 0, 0.89, 0.99, 1.11, 1.22, 1.23, 1.3, 1.36, 1.42, 1.45, 1.35, 1.42, 1.46, 1.49, 1.72, 1.82, 2.01, 2.21]);
 });
 Clazz_declarePackage ("J.util");
-Clazz_load (null, "J.util.Escape", ["java.lang.Character", "$.Float", "java.util.Map", "JU.A4", "$.BS", "$.List", "$.M3", "$.M4", "$.P3", "$.P4", "$.PT", "$.SB", "$.T3", "J.script.SV", "J.util.BSUtil"], function () {
+Clazz_load (null, "J.util.Escape", ["java.lang.Character", "$.Float", "java.util.Map", "JU.A4", "$.BS", "$.List", "$.M3", "$.M4", "$.P3", "$.P4", "$.PT", "$.SB", "$.T3", "J.script.SV", "J.util.BSUtil", "$.Quaternion"], function () {
 c$ = Clazz_declareType (J.util, "Escape");
 c$.escapeColor = $_M(c$, "escapeColor", 
 function (argb) {
@@ -38738,59 +38710,25 @@ return "{" + x.x + " " + x.y + " " + x.z + " " + x.w + "}";
 c$.e = $_M(c$, "e", 
 function (x) {
 if (x == null) return "null";
-if (Clazz_instanceOf (x, String)) return J.util.Escape.eS (x);
+if (JU.PT.isNonStringPrimitive (x)) return x.toString ();
+if (Clazz_instanceOf (x, String)) return JU.PT.esc (x);
 if (Clazz_instanceOf (x, JU.List)) return J.util.Escape.eV (x);
+if (Clazz_instanceOf (x, java.util.Map)) return J.util.Escape.escapeMap (x);
 if (Clazz_instanceOf (x, JU.BS)) return J.util.Escape.eBS (x);
 if (Clazz_instanceOf (x, JU.T3)) return J.util.Escape.eP (x);
 if (Clazz_instanceOf (x, JU.P4)) return J.util.Escape.eP4 (x);
 if (JU.PT.isAS (x)) return J.util.Escape.eAS (x, true);
-if (JU.PT.isAI (x)) return J.util.Escape.eAI (x);
-if (JU.PT.isAF (x)) return J.util.Escape.eAF (x);
-if (JU.PT.isAD (x)) return J.util.Escape.eAD (x);
-if (JU.PT.isAP (x)) return J.util.Escape.eAP (x);
-if (Clazz_instanceOf (x, JU.M3)) return JU.PT.simpleReplace ((x).toString (), "\t", ",\t");
-if (Clazz_instanceOf (x, JU.M4)) return JU.PT.simpleReplace ((x).toString (), "\t", ",\t");
+if (Clazz_instanceOf (x, JU.M3)) return JU.PT.rep ((x).toString (), "\t", ",\t");
 if (Clazz_instanceOf (x, JU.A4)) {
 var a = x;
 return "{" + a.x + " " + a.y + " " + a.z + " " + (a.angle * 180 / 3.141592653589793) + "}";
-}if (Clazz_instanceOf (x, java.util.Map)) return J.util.Escape.escapeMap (x);
-if (JU.PT.isAII (x) || JU.PT.isAFF (x) || JU.PT.isADD (x) || JU.PT.isAFFF (x)) return JU.PT.toJSON (null, x);
-return x.toString ();
+}if (Clazz_instanceOf (x, J.util.Quaternion)) return (x).toString ();
+var s = JU.PT.nonArrayString (x);
+return (s == null ? JU.PT.toJSON (null, x) : s);
 }, "~O");
-c$.eS = $_M(c$, "eS", 
-function (str) {
-if (str == null || str.length == 0) return "\"\"";
-var haveEscape = false;
-var i = 0;
-for (; i < "\\\\\tt\rr\nn\"\"".length; i += 2) if (str.indexOf ("\\\\\tt\rr\nn\"\"".charAt (i)) >= 0) {
-haveEscape = true;
-break;
-}
-if (haveEscape) while (i < "\\\\\tt\rr\nn\"\"".length) {
-var pt = -1;
-var ch = "\\\\\tt\rr\nn\"\"".charAt (i++);
-var ch2 = "\\\\\tt\rr\nn\"\"".charAt (i++);
-var sb =  new JU.SB ();
-var pt0 = 0;
-while ((pt = str.indexOf (ch, pt + 1)) >= 0) {
-sb.append (str.substring (pt0, pt)).appendC ('\\').appendC (ch2);
-pt0 = pt + 1;
-}
-sb.append (str.substring (pt0, str.length));
-str = sb.toString ();
-}
-for (i = str.length; --i >= 0; ) if (str.charCodeAt (i) > 0x7F) str = str.substring (0, i) + J.util.Escape.unicode (str.charAt (i)) + str.substring (i + 1);
-
-return "\"" + str + "\"";
-}, "~S");
-c$.unicode = $_M(c$, "unicode", 
-function (c) {
-var s = "0000" + Integer.toHexString (c.charCodeAt (0));
-return "\\u" + s.substring (s.length - 4);
-}, "~S");
 c$.eV = $_M(c$, "eV", 
 function (list) {
-if (list == null) return J.util.Escape.eS ("");
+if (list == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < list.size (); i++) {
@@ -38807,7 +38745,7 @@ sb.append ("{ ");
 var sep = "";
 for (var entry, $entry = ht.entrySet ().iterator (); $entry.hasNext () && ((entry = $entry.next ()) || true);) {
 var key = entry.getKey ();
-sb.append (sep).append (J.util.Escape.eS (key)).appendC (':');
+sb.append (sep).append (JU.PT.esc (key)).appendC (':');
 var val = entry.getValue ();
 if (!(Clazz_instanceOf (val, J.script.SV))) val = J.script.SV.getVariable (val);
 sb.append ((val).escape ());
@@ -38855,19 +38793,19 @@ return sb.toString ();
 }, "~A,~B");
 c$.eAS = $_M(c$, "eAS", 
 function (list, nicely) {
-if (list == null) return J.util.Escape.eS ("");
+if (list == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < list.length; i++) {
 if (i > 0) s.append (", ");
-s.append (nicely ? J.util.Escape.escapeNice (list[i]) : J.util.Escape.eS (list[i]));
+s.append (nicely ? J.util.Escape.escapeNice (list[i]) : JU.PT.esc (list[i]));
 }
 s.append ("]");
 return s.toString ();
 }, "~A,~B");
 c$.eAI = $_M(c$, "eAI", 
 function (ilist) {
-if (ilist == null) return J.util.Escape.eS ("");
+if (ilist == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < ilist.length; i++) {
@@ -38878,7 +38816,7 @@ return s.append ("]").toString ();
 }, "~A");
 c$.eAD = $_M(c$, "eAD", 
 function (dlist) {
-if (dlist == null) return J.util.Escape.eS ("");
+if (dlist == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < dlist.length; i++) {
@@ -38889,7 +38827,7 @@ return s.append ("]").toString ();
 }, "~A");
 c$.eAF = $_M(c$, "eAF", 
 function (flist) {
-if (flist == null) return J.util.Escape.eS ("");
+if (flist == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < flist.length; i++) {
@@ -38900,7 +38838,7 @@ return s.append ("]").toString ();
 }, "~A");
 c$.eAP = $_M(c$, "eAP", 
 function (plist) {
-if (plist == null) return J.util.Escape.eS ("");
+if (plist == null) return JU.PT.esc ("");
 var s =  new JU.SB ();
 s.append ("[");
 for (var i = 0; i < plist.length; i++) {
@@ -38913,7 +38851,7 @@ c$.escapeNice = $_M(c$, "escapeNice",
 function (s) {
 if (s == null) return "null";
 var f = JU.PT.parseFloatStrict (s);
-return (Float.isNaN (f) ? J.util.Escape.eS (s) : s);
+return (Float.isNaN (f) ? JU.PT.esc (s) : s);
 }, "~S");
 c$.uABsM = $_M(c$, "uABsM", 
 function (s) {
@@ -39011,8 +38949,8 @@ if (Float.isNaN (points[nPoints])) {
 break;
 }}
 if (!Float.isNaN (JU.PT.parseFloatNext (str, next))) return strMatrix;
-if (nPoints == 9) return JU.M3.newA (points);
-if (nPoints == 16) return JU.M4.newA (points);
+if (nPoints == 9) return JU.M3.newA9 (points);
+if (nPoints == 16) return JU.M4.newA16 (points);
 return strMatrix;
 }, "~S");
 c$.eBS = $_M(c$, "eBS", 
@@ -39052,12 +38990,14 @@ function (name, info) {
 var sb =  new JU.SB ();
 var sep = "";
 if (info == null) return "null";
-if (Clazz_instanceOf (info, String)) return J.util.Escape.packageReadable (name, null, J.util.Escape.eS (info));
+if (JU.PT.isNonStringPrimitive (info)) return J.util.Escape.packageReadable (name, null, info.toString ());
+if (Clazz_instanceOf (info, String)) return J.util.Escape.packageReadable (name, null, JU.PT.esc (info));
+if (Clazz_instanceOf (info, J.script.SV)) return J.util.Escape.packageReadable (name, null, (info).escape ());
 if (JU.PT.isAS (info)) {
 sb.append ("[");
 var imax = (info).length;
 for (var i = 0; i < imax; i++) {
-sb.append (sep).append (J.util.Escape.eS ((info)[i]));
+sb.append (sep).append (JU.PT.esc ((info)[i]));
 sep = ",";
 }
 sb.append ("]");
@@ -39150,7 +39090,7 @@ var key = e.next ();
 sb.append (J.util.Escape.toReadable ((name == null ? "" : name + ".") + key, (info).get (key)));
 }
 return sb.toString ();
-}return J.util.Escape.packageReadable (name, null, info.toString ());
+}return J.util.Escape.packageReadable (name, null, JU.PT.toJSON (null, info));
 }, "~S,~O");
 c$.packageReadableSb = $_M(c$, "packageReadableSb", 
 function (infoName, infoType, sb) {
@@ -39213,7 +39153,7 @@ next[0] = 1;
 while (next[0] < data.length) {
 var s = JU.PT.getQuotedStringNext (data, next);
 if (s == null) return null;
-v.addLast (JU.PT.simpleReplace (s, "\\\"", "\""));
+v.addLast (JU.PT.rep (s, "\\\"", "\""));
 while (next[0] < data.length && data.charAt (next[0]) != '"') next[0]++;
 
 }
@@ -39222,10 +39162,8 @@ return v.toArray ( new Array (v.size ()));
 c$.isAV = $_M(c$, "isAV", 
 function (x) {
 {
-return Clazz_instanceOf(x[0], J.scriSV);
+return Clazz_instanceOf(x[0], J.script.SV);
 }}, "~O");
-Clazz_defineStatics (c$,
-"escapable", "\\\\\tt\rr\nn\"\"");
 });
 Clazz_declarePackage ("J.util");
 Clazz_load (["J.api.JmolGraphicsInterface"], "J.util.GData", ["javajs.awt.Font", "JU.AU", "J.util.C", "$.Shader"], function () {
@@ -39689,7 +39627,7 @@ Clazz_defineStatics (c$,
 "zLT", 32);
 });
 Clazz_declarePackage ("J.util");
-Clazz_load (["J.api.JmolAppletInterface", "$.JmolStatusListener", "java.util.Hashtable"], "J.util.GenericApplet", ["java.lang.Boolean", "java.net.URL", "javajs.awt.Dimension", "JU.List", "$.PT", "$.SB", "J.constant.EnumCallback", "J.i18n.GT", "J.util.Escape", "$.Logger", "J.viewer.JC", "$.Viewer"], function () {
+Clazz_load (["J.api.JmolAppletInterface", "$.JmolStatusListener", "java.util.Hashtable"], "J.util.GenericApplet", ["java.lang.Boolean", "java.net.URL", "javajs.awt.Dimension", "JU.List", "$.PT", "$.SB", "J.constant.EnumCallback", "J.i18n.GT", "J.util.Logger", "J.viewer.JC", "$.Viewer"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.isJS = false;
 this.codeBase = null;
@@ -39844,7 +39782,7 @@ return this.viewer.processMouseEvent (e.id, e.x, e.y, e.modifiers, e.when);
 }, "java.awt.Event");
 $_V(c$, "getAppletInfo", 
 function () {
-return J.i18n.GT.o (J.i18n.GT._ ("Jmol Applet version {0} {1}.\n\nAn OpenScience project.\n\nSee http://www.jmol.org for more information"), [J.viewer.JC.version, J.viewer.JC.date]) + "\nhtmlName = " + J.util.Escape.eS (this.htmlName) + "\nsyncId = " + J.util.Escape.eS (this.syncId) + "\ndocumentBase = " + J.util.Escape.eS (this.documentBase) + "\ncodeBase = " + J.util.Escape.eS (this.codeBase);
+return J.i18n.GT.o (J.i18n.GT._ ("Jmol Applet version {0} {1}.\n\nAn OpenScience project.\n\nSee http://www.jmol.org for more information"), [J.viewer.JC.version, J.viewer.JC.date]) + "\nhtmlName = " + JU.PT.esc (this.htmlName) + "\nsyncId = " + JU.PT.esc (this.syncId) + "\ndocumentBase = " + JU.PT.esc (this.documentBase) + "\ncodeBase = " + JU.PT.esc (this.codeBase);
 });
 $_V(c$, "script", 
 function (script) {
@@ -41352,7 +41290,7 @@ var v =  new JU.List ();
 for (var i = 0; i < vPts.size (); i++) {
 var pt = JU.P3.newP (vPts.get (i));
 pt.sub (center);
-m4.transform2 (pt, pt);
+m4.rotTrans2 (pt, pt);
 pt.add (center);
 v.addLast (pt);
 }
@@ -42247,8 +42185,8 @@ c$.fixDataString = $_M(c$, "fixDataString",
 function (str) {
 str = str.$replace (';', str.indexOf ('\n') < 0 ? '\n' : ' ');
 str = JU.PT.trim (str, "\n \t");
-str = JU.PT.simpleReplace (str, "\n ", "\n");
-str = JU.PT.simpleReplace (str, "\n\n", "\n");
+str = JU.PT.rep (str, "\n ", "\n");
+str = JU.PT.rep (str, "\n\n", "\n");
 return str;
 }, "~S");
 c$.parseFloatArray2d = $_M(c$, "parseFloatArray2d", 
@@ -42641,20 +42579,20 @@ $_M(c$, "transformPt",
 function (pt) {
 if (this.mat == null) this.setMatrix ();
 var ptNew = JU.P3.newP (pt);
-this.mat.transform (ptNew);
+this.mat.rotate (ptNew);
 return ptNew;
 }, "JU.P3");
 $_M(c$, "transformP2", 
 function (pt, ptNew) {
 if (this.mat == null) this.setMatrix ();
-this.mat.transform2 (pt, ptNew);
+this.mat.rotate2 (pt, ptNew);
 return ptNew;
 }, "JU.T3,JU.T3");
 $_M(c$, "transform", 
 function (v) {
 if (this.mat == null) this.setMatrix ();
 var vNew = JU.V3.newV (v);
-this.mat.transform (vNew);
+this.mat.rotate (vNew);
 return vNew;
 }, "JU.V3");
 $_M(c$, "leftDifference", 
@@ -43295,7 +43233,7 @@ break;
 }
 scaleMatrix[i] = parameters[6 + i] * f;
 }
-this.matrixCartesianToFractional = JU.M4.newA (scaleMatrix);
+this.matrixCartesianToFractional = JU.M4.newA16 (scaleMatrix);
 this.matrixFractionalToCartesian =  new JU.M4 ();
 this.matrixFractionalToCartesian.invertM (this.matrixCartesianToFractional);
 } else if (parameters.length > 14 && !Float.isNaN (parameters[14])) {
@@ -43326,12 +43264,12 @@ return fpt;
 }, "JU.P3");
 $_M(c$, "toCartesian", 
 function (pt, isAbsolute) {
-if (this.matrixFractionalToCartesian != null) (isAbsolute ? this.matrixFtoCAbsolute : this.matrixFractionalToCartesian).transform (pt);
+if (this.matrixFractionalToCartesian != null) (isAbsolute ? this.matrixFtoCAbsolute : this.matrixFractionalToCartesian).rotTrans (pt);
 }, "JU.T3,~B");
 $_M(c$, "toFractional", 
 function (pt, isAbsolute) {
 if (this.matrixCartesianToFractional == null) return;
-(isAbsolute ? this.matrixCtoFAbsolute : this.matrixCartesianToFractional).transform (pt);
+(isAbsolute ? this.matrixCtoFAbsolute : this.matrixCartesianToFractional).rotTrans (pt);
 }, "JU.T3,~B");
 $_M(c$, "isPolymer", 
 function () {
@@ -43606,7 +43544,7 @@ for (var i = 0; i < dVal.length; i++) strFormat = J.util.Txt.formatString (strFo
 
 }
 }
-return JU.PT.simpleReplace (strFormat, "%%", "%");
+return JU.PT.rep (strFormat, "%%", "%");
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
 } else {
@@ -43614,7 +43552,7 @@ throw e;
 }
 }
 System.out.println ("TextFormat.sprintf error " + list + " " + strFormat);
-return JU.PT.simpleReplace (strFormat, "%", "?");
+return JU.PT.rep (strFormat, "%", "?");
 }, "~S,~S,~A");
 c$.formatString = $_M(c$, "formatString", 
 function (strFormat, key, strT, floatT, doubleT, doOne) {
@@ -43683,9 +43621,9 @@ return strLabel;
 c$.formatCheck = $_M(c$, "formatCheck", 
 function (strFormat) {
 if (strFormat == null || strFormat.indexOf ('p') < 0 && strFormat.indexOf ('q') < 0) return strFormat;
-strFormat = JU.PT.simpleReplace (strFormat, "%%", "\1");
-strFormat = JU.PT.simpleReplace (strFormat, "%p", "%6.2p");
-strFormat = JU.PT.simpleReplace (strFormat, "%q", "%6.2q");
+strFormat = JU.PT.rep (strFormat, "%%", "\1");
+strFormat = JU.PT.rep (strFormat, "%p", "%6.2p");
+strFormat = JU.PT.rep (strFormat, "%q", "%6.2q");
 var format = JU.PT.split (strFormat, "%");
 var sb =  new JU.SB ();
 sb.append (format[0]);
@@ -43790,7 +43728,7 @@ var n = list.size ();
 for (var i = 0; i < n; i++) {
 var name = list.get (i);
 var newName = newList.get (i);
-if (!newName.equals (name)) s = JU.PT.simpleReplace (s, "\"" + name + "\"", "\"" + newName + "\"");
+if (!newName.equals (name)) s = JU.PT.rep (s, "\"" + name + "\"", "\"" + newName + "\"");
 }
 return s;
 }, "~S,java.util.List,java.util.List");
@@ -43800,7 +43738,7 @@ var n = list.size ();
 for (var i = 0; i < n; i++) {
 var name = list.get (i);
 var newName = newList.get (i);
-if (!newName.equals (name)) s = JU.PT.simpleReplace (s, name, newName);
+if (!newName.equals (name)) s = JU.PT.rep (s, name, newName);
 }
 return s;
 }, "~S,java.util.List,java.util.List");
@@ -44656,25 +44594,25 @@ var script = (obj)[1];
 var nearestPoint = null;
 if (script.indexOf ("_ATOM") >= 0) {
 var iatom = this.findNearestAtom (x, y, null, true);
-script = JU.PT.simpleReplace (script, "_ATOM", "({" + (iatom >= 0 ? "" + iatom : "") + "})");
-if (iatom >= 0) script = JU.PT.simpleReplace (script, "_POINT", J.util.Escape.eP (this.viewer.getModelSet ().atoms[iatom]));
+script = JU.PT.rep (script, "_ATOM", "({" + (iatom >= 0 ? "" + iatom : "") + "})");
+if (iatom >= 0) script = JU.PT.rep (script, "_POINT", J.util.Escape.eP (this.viewer.getModelSet ().atoms[iatom]));
 }if (!this.drawMode && (script.indexOf ("_POINT") >= 0 || script.indexOf ("_OBJECT") >= 0 || script.indexOf ("_BOND") >= 0)) {
 var t = this.viewer.checkObjectClicked (x, y, mouseAction);
 if (t != null && (nearestPoint = t.get ("pt")) != null) {
 var isBond = t.get ("type").equals ("bond");
-if (isBond) script = JU.PT.simpleReplace (script, "_BOND", "[{" + t.get ("index") + "}]");
-script = JU.PT.simpleReplace (script, "_POINT", J.util.Escape.eP (nearestPoint));
-script = JU.PT.simpleReplace (script, "_OBJECT", J.util.Escape.escapeMap (t));
-}script = JU.PT.simpleReplace (script, "_BOND", "[{}]");
-script = JU.PT.simpleReplace (script, "_OBJECT", "{}");
-}script = JU.PT.simpleReplace (script, "_POINT", "{}");
-script = JU.PT.simpleReplace (script, "_ACTION", "" + mouseAction);
-script = JU.PT.simpleReplace (script, "_X", "" + x);
-script = JU.PT.simpleReplace (script, "_Y", "" + (this.viewer.getScreenHeight () - y));
-script = JU.PT.simpleReplace (script, "_DELTAX", "" + deltaX);
-script = JU.PT.simpleReplace (script, "_DELTAY", "" + deltaY);
-script = JU.PT.simpleReplace (script, "_TIME", "" + time);
-script = JU.PT.simpleReplace (script, "_MODE", "" + mode);
+if (isBond) script = JU.PT.rep (script, "_BOND", "[{" + t.get ("index") + "}]");
+script = JU.PT.rep (script, "_POINT", J.util.Escape.eP (nearestPoint));
+script = JU.PT.rep (script, "_OBJECT", J.util.Escape.escapeMap (t));
+}script = JU.PT.rep (script, "_BOND", "[{}]");
+script = JU.PT.rep (script, "_OBJECT", "{}");
+}script = JU.PT.rep (script, "_POINT", "{}");
+script = JU.PT.rep (script, "_ACTION", "" + mouseAction);
+script = JU.PT.rep (script, "_X", "" + x);
+script = JU.PT.rep (script, "_Y", "" + (this.viewer.getScreenHeight () - y));
+script = JU.PT.rep (script, "_DELTAX", "" + deltaX);
+script = JU.PT.rep (script, "_DELTAY", "" + deltaY);
+script = JU.PT.rep (script, "_TIME", "" + time);
+script = JU.PT.rep (script, "_MODE", "" + mode);
 if (script.startsWith ("+:")) {
 passThrough = true;
 script = script.substring (2);
@@ -46571,7 +46509,7 @@ var bytes = this.viewer.getImageAsBytes (isPngjPost ? "PNGJ" : "PNG", 0, 0, -1, 
 if (errMsg[0] != null) return errMsg[0];
 if (isPngjBinaryPost) {
 outputBytes = bytes;
-name = JU.PT.simpleReplace (name, "?_", "=_");
+name = JU.PT.rep (name, "?_", "=_");
 } else {
 name =  new JU.SB ().append (name).append ("=").appendSB (JU.Base64.getBase64 (bytes)).toString ();
 }}var iurl = J.viewer.FileManager.urlTypeIndex (name);
@@ -46960,8 +46898,8 @@ $_M(c$, "classifyName",
 function (name, isFullLoad) {
 if (name == null) return [null];
 var doSetPathForAllFiles = (this.pathForAllFiles.length > 0);
-if (name.startsWith ("?")) {
-if ((name = this.viewer.dialogAsk ("Load", name.substring (1))) == null) return [isFullLoad ? "#CANCELED#" : null];
+if (name.startsWith ("?") || name.startsWith ("http://?")) {
+if ((name = this.viewer.dialogAsk ("Load", name)) == null) return [isFullLoad ? "#CANCELED#" : null];
 doSetPathForAllFiles = false;
 }var file = null;
 var url = null;
@@ -47034,7 +46972,7 @@ return (name == null ? "" : name.substring (0, name.lastIndexOf ("/")));
 c$.fixPath = $_M(c$, "fixPath", 
 function (path) {
 path = path.$replace ('\\', '/');
-path = JU.PT.simpleReplace (path, "/./", "/");
+path = JU.PT.rep (path, "/./", "/");
 var pt = path.lastIndexOf ("//") + 1;
 if (pt < 1) pt = path.indexOf (":/") + 1;
 if (pt < 1) pt = path.indexOf ("/");
@@ -47043,7 +46981,7 @@ var protocol = path.substring (0, pt);
 path = path.substring (pt);
 while ((pt = path.lastIndexOf ("/../")) >= 0) {
 var pt0 = path.substring (0, pt).lastIndexOf ("/");
-if (pt0 < 0) return JU.PT.simpleReplace (protocol + path, "/../", "/");
+if (pt0 < 0) return JU.PT.rep (protocol + path, "/../", "/");
 path = path.substring (0, pt0) + path.substring (pt + 3);
 }
 if (path.length == 0) path = "/";
@@ -47080,6 +47018,8 @@ if (!forDialog) viewer.setStringProperty ("defaultDirectoryLocal", path);
 }, "J.viewer.Viewer,~S,~B");
 c$.getLocalPathForWritingFile = $_M(c$, "getLocalPathForWritingFile", 
 function (viewer, file) {
+if (file.startsWith ("http://")) return file;
+file = JU.PT.rep (file, "?", "");
 if (file.indexOf ("file:/") == 0) return file.substring (6);
 if (file.indexOf ("/") == 0 || file.indexOf (":") >= 0) return file;
 var dir = null;
@@ -47097,13 +47037,13 @@ c$.setScriptFileReferences = $_M(c$, "setScriptFileReferences",
 function (script, localPath, remotePath, scriptPath) {
 if (localPath != null) script = J.viewer.FileManager.setScriptFileRefs (script, localPath, true);
 if (remotePath != null) script = J.viewer.FileManager.setScriptFileRefs (script, remotePath, false);
-script = JU.PT.simpleReplace (script, "\1\"", "\"");
+script = JU.PT.rep (script, "\1\"", "\"");
 if (scriptPath != null) {
 while (scriptPath.endsWith ("/")) scriptPath = scriptPath.substring (0, scriptPath.length - 1);
 
 for (var ipt = 0; ipt < J.viewer.FileManager.scriptFilePrefixes.length; ipt++) {
 var tag = J.viewer.FileManager.scriptFilePrefixes[ipt];
-script = JU.PT.simpleReplace (script, tag + ".", tag + scriptPath);
+script = JU.PT.rep (script, tag + ".", tag + scriptPath);
 }
 }return script;
 }, "~S,~S,~S,~S");
@@ -47141,11 +47081,11 @@ return name.substring (pt + 1);
 }, "~S");
 c$.fixFileNameVariables = $_M(c$, "fixFileNameVariables", 
 function (format, fname) {
-var str = JU.PT.simpleReplace (format, "%FILE", fname);
+var str = JU.PT.rep (format, "%FILE", fname);
 if (str.indexOf ("%LC") < 0) return str;
 fname = fname.toLowerCase ();
-str = JU.PT.simpleReplace (str, "%LCFILE", fname);
-if (fname.length == 4) str = JU.PT.simpleReplace (str, "%LC13", fname.substring (1, 3));
+str = JU.PT.rep (str, "%LCFILE", fname);
+if (fname.length == 4) str = JU.PT.rep (str, "%LC13", fname.substring (1, 3));
 return str;
 }, "~S,~S");
 $_M(c$, "clearPngjCache", 
@@ -49743,9 +49683,9 @@ var isRemove = (newStatusList.length > 0 && newStatusList.charAt (0) == '-');
 var isAdd = (newStatusList.length > 0 && newStatusList.charAt (0) == '+');
 var getList = false;
 if (isRemove) {
-this.statusList = JU.PT.simpleReplace (this.statusList, newStatusList.substring (1, newStatusList.length), "");
+this.statusList = JU.PT.rep (this.statusList, newStatusList.substring (1, newStatusList.length), "");
 } else {
-newStatusList = JU.PT.simpleReplace (newStatusList, "+", "");
+newStatusList = JU.PT.rep (newStatusList, "+", "");
 if (this.statusList.equals (newStatusList) || isAdd && this.statusList.indexOf (newStatusList) >= 0) {
 getList = true;
 } else {
@@ -50248,7 +50188,7 @@ this.windowCentered = true;
 this.setRotationCenterAndRadiusXYZ (null, true);
 this.matrixRotate.setIdentity ();
 var m = this.viewer.getModelSetAuxiliaryInfoValue ("defaultOrientationMatrix");
-if (m != null) this.matrixRotate.setM (m);
+if (m != null) this.matrixRotate.setM3 (m);
 this.setZoomEnabled (true);
 this.zoomToPercent (this.viewer.global.modelKitMode ? 50 : 100);
 this.zoomPercent = this.zoomPercentSetting;
@@ -50306,7 +50246,7 @@ y -= this.fixedTranslation.y;
 var z = radius2 - x * x - y * y;
 z = (z < 0 ? -1 : 1) * Math.sqrt (Math.abs (z));
 if (factor == 0) {
-this.arcBall0Rotation.setM (this.matrixRotate);
+this.arcBall0Rotation.setM3 (this.matrixRotate);
 this.arcBall0.set (x, -y, z);
 if (!Float.isNaN (z)) this.arcBall0.normalize ();
 return;
@@ -50315,7 +50255,7 @@ this.arcBall1.set (x, -y, z);
 this.arcBall1.normalize ();
 this.arcBallAxis.cross (this.arcBall0, this.arcBall1);
 this.axisangleT.setVA (this.arcBallAxis, factor * Math.acos (this.arcBall0.dot (this.arcBall1)));
-this.matrixRotate.setM (this.arcBall0Rotation);
+this.matrixRotate.setM3 (this.arcBall0Rotation);
 this.rotateAxisAngle2 (this.axisangleT, null);
 }, "~N,~N,~N");
 $_M(c$, "rotateXYBy", 
@@ -50454,7 +50394,7 @@ $_M(c$, "rotateAxisAngleRadiansInternal",
 function (radians, bsAtoms) {
 this.internalRotationAngle = radians;
 this.vectorT.set (this.internalRotationAxis.x, this.internalRotationAxis.y, this.internalRotationAxis.z);
-this.matrixRotate.transform2 (this.vectorT, this.vectorT2);
+this.matrixRotate.rotate2 (this.vectorT, this.vectorT2);
 this.axisangleT.setVA (this.vectorT2, radians);
 this.matrixTemp3.setAA (this.axisangleT);
 this.applyRotation (this.matrixTemp3, true, bsAtoms, this.internalTranslation, radians > 1e6);
@@ -50468,7 +50408,7 @@ this.matrixTemp4.setAA (this.axisangleT);
 this.vectorT.setT (this.internalRotationCenter);
 this.pointT2.sub2 (this.fixedRotationCenter, this.vectorT);
 var pt =  new JU.P3 ();
-this.matrixTemp4.transform2 (this.pointT2, pt);
+this.matrixTemp4.rotTrans2 (this.pointT2, pt);
 pt.add (this.vectorT);
 this.setRotationCenterAndRadiusXYZ (pt, false);
 });
@@ -50604,11 +50544,11 @@ return this.matrixRotate;
 });
 $_M(c$, "setRotation", 
 function (matrixRotation) {
-if (!Float.isNaN (matrixRotation.m00)) this.matrixRotate.setM (matrixRotation);
+if (!Float.isNaN (matrixRotation.m00)) this.matrixRotate.setM3 (matrixRotation);
 }, "JU.M3");
 $_M(c$, "getRotation", 
 function (matrixRotation) {
-matrixRotation.setM (this.matrixRotate);
+matrixRotation.setM3 (this.matrixRotate);
 }, "JU.M3");
 $_M(c$, "zoomBy", 
 function (pixels) {
@@ -50834,13 +50774,13 @@ this.visualRange = angstroms;
 }, "~N");
 $_M(c$, "getUnscaledTransformMatrix", 
 function () {
-var unscaled = JU.M4.newM (null);
+var unscaled = JU.M4.newM4 (null);
 this.vectorTemp.setT (this.fixedRotationCenter);
 this.matrixTemp.setZero ();
 this.matrixTemp.setTranslation (this.vectorTemp);
 unscaled.sub (this.matrixTemp);
 this.matrixTemp.setM3 (this.matrixRotate);
-unscaled.mul2 (this.matrixTemp, unscaled);
+unscaled.mul42 (this.matrixTemp, unscaled);
 return unscaled;
 });
 $_M(c$, "setScreenParameters0", 
@@ -50973,11 +50913,11 @@ this.matrixTemp.setZero ();
 this.matrixTemp.setTranslation (this.vectorTemp);
 this.matrixTransform.sub (this.matrixTemp);
 this.matrixTemp.setM3 (this.stereoFrame ? this.matrixStereo : this.matrixRotate);
-this.matrixTransform.mul2 (this.matrixTemp, this.matrixTransform);
+this.matrixTransform.mul42 (this.matrixTemp, this.matrixTransform);
 this.matrixTemp.setIdentity ();
 this.matrixTemp.m00 = this.matrixTemp.m11 = this.matrixTemp.m22 = this.scalePixelsPerAngstrom;
 this.matrixTemp.m11 = this.matrixTemp.m22 = -this.scalePixelsPerAngstrom;
-this.matrixTransform.mul2 (this.matrixTemp, this.matrixTransform);
+this.matrixTransform.mul42 (this.matrixTemp, this.matrixTransform);
 this.matrixTransform.m23 += this.modelCenterOffset;
 try {
 this.matrixTransformInv.invertM (this.matrixTransform);
@@ -50991,7 +50931,7 @@ throw e;
 });
 $_M(c$, "rotatePoint", 
 function (pt, ptRot) {
-this.matrixRotate.transform2 (pt, ptRot);
+this.matrixRotate.rotate2 (pt, ptRot);
 ptRot.y = -ptRot.y;
 }, "JU.P3,JU.P3");
 $_M(c$, "transformPoints", 
@@ -51023,7 +50963,7 @@ this.point3iScreenTemp.y = (this.screenHeight - Clazz_floatToInt (ptXyp.y));
 }if (this.antialias) {
 this.point3iScreenTemp.x <<= 1;
 this.point3iScreenTemp.y <<= 1;
-}this.matrixTransform.transform2 (this.fixedRotationCenter, this.pointTsp);
+}this.matrixTransform.rotTrans2 (this.fixedRotationCenter, this.pointTsp);
 this.point3iScreenTemp.z = Clazz_floatToInt (this.pointTsp.z);
 return this.point3iScreenTemp;
 }, "JU.P3");
@@ -51044,7 +50984,7 @@ screen.setT (this.point3fScreenTemp);
 }, "JU.P3,JU.P3");
 $_M(c$, "transformVector", 
 function (vectorAngstroms, vectorTransformed) {
-this.matrixTransform.rotate (vectorAngstroms, vectorTransformed);
+this.matrixTransform.rotate2 (vectorAngstroms, vectorTransformed);
 }, "JU.V3,JU.V3");
 $_M(c$, "move", 
 function (eval, dRot, dZoom, dTrans, dSlab, floatSecondsTotal, fps) {
@@ -51059,14 +50999,14 @@ if (Float.isNaN (degrees)) return true;
 this.aaTest1.setVA (axis, (degrees / 57.29577951308232));
 this.ptTest1.set (4.321, 1.23456, 3.14159);
 this.getRotation (this.matrixTest);
-this.matrixTest.transform2 (this.ptTest1, this.ptTest2);
+this.matrixTest.rotate2 (this.ptTest1, this.ptTest2);
 this.matrixTest.setAA (this.aaTest1);
-this.matrixTest.transform2 (this.ptTest1, this.ptTest3);
+this.matrixTest.rotate2 (this.ptTest1, this.ptTest3);
 return (this.ptTest3.distance (this.ptTest2) < 0.1);
 }, "JU.V3,~N");
 $_M(c$, "moveToPyMOL", 
 function (eval, floatSecondsTotal, pymolView) {
-var m3 = JU.M3.newA (pymolView);
+var m3 = JU.M3.newA9 (pymolView);
 m3.invert ();
 var cameraX = pymolView[9];
 var cameraY = -pymolView[10];
@@ -51261,7 +51201,7 @@ var m = this.viewer.getModelSetAuxiliaryInfoValue ("defaultOrientationMatrix");
 if (m == null) {
 m = this.matrixRotate;
 } else {
-m = JU.M3.newM (m);
+m = JU.M3.newM3 (m);
 m.invert ();
 m.mul2 (this.matrixRotate, m);
 }var m22 = m.m22;
@@ -51590,7 +51530,7 @@ return (z <= 0 ? this.referencePlaneOffset : this.referencePlaneOffset / z);
 }, "~N");
 $_M(c$, "getTempScreenPt", 
 function (ptXYZ, ptRef) {
-this.matrixTransform.transform2 (ptXYZ, this.point3fScreenTemp);
+this.matrixTransform.rotTrans2 (ptXYZ, this.point3fScreenTemp);
 var z = this.point3fScreenTemp.z;
 if (Float.isNaN (z)) {
 if (!this.haveNotifiedNaN && J.util.Logger.debugging) J.util.Logger.debug ("NaN seen in TransformPoint");
@@ -51661,7 +51601,7 @@ this.untransformedPoint.x -= this.perspectiveShiftXY.x;
 this.untransformedPoint.y -= this.perspectiveShiftXY.y;
 break;
 }
-this.matrixTransformInv.transform2 (this.untransformedPoint, coordPt);
+this.matrixTransformInv.rotTrans2 (this.untransformedPoint, coordPt);
 }, "JU.P3,JU.P3");
 $_M(c$, "canNavigate", 
 function () {
@@ -52171,8 +52111,8 @@ this.fileManager.setAppletContext (this.appletDocumentBase);
 var appletProxy = info.get ("appletProxy");
 if (appletProxy != null) this.setStringProperty ("appletProxy", appletProxy);
 if (this.$isSignedApplet) {
-this.logFilePath = JU.PT.simpleReplace (this.appletCodeBase, "file://", "");
-this.logFilePath = JU.PT.simpleReplace (this.logFilePath, "file:/", "");
+this.logFilePath = JU.PT.rep (this.appletCodeBase, "file://", "");
+this.logFilePath = JU.PT.rep (this.logFilePath, "file:/", "");
 if (this.logFilePath.indexOf ("//") >= 0) this.logFilePath = null;
  else this.isSignedAppletLocal = true;
 } else if (!this.isJS) {
@@ -53307,7 +53247,7 @@ var s = loadScript.toString ();
 for (var i = 0; i < fileNames.length; i++) {
 var fname = fileNames[i];
 if (fileTypes != null && fileTypes[i] != null) fname = fileTypes[i] + "::" + fname;
-s = JU.PT.simpleReplace (s, "$FILENAME" + (i + 1) + "$", J.util.Escape.eS (fname.$replace ('\\', '/')));
+s = JU.PT.rep (s, "$FILENAME" + (i + 1) + "$", JU.PT.esc (fname.$replace ('\\', '/')));
 }
 loadScript =  new JU.SB ().append (s);
 } else if (reader == null) {
@@ -53325,7 +53265,7 @@ if (loadScript != null) {
 var fname = htParams.get ("fullPathName");
 if (fname == null) fname = "";
 if (htParams.containsKey ("loadScript")) loadScript = htParams.get ("loadScript");
-htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.simpleReplace (loadScript.toString (), "$FILENAME$", J.util.Escape.eS (fname.$replace ('\\', '/')))));
+htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.rep (loadScript.toString (), "$FILENAME$", JU.PT.esc (fname.$replace ('\\', '/')))));
 }return this.createModelSetAndReturnError (atomSetCollection, isAppend, loadScript, htParams);
 }, "~S,~S,~A,~O,~B,java.util.Map,JU.SB,~N");
 $_M(c$, "setLigandModel", 
@@ -53408,7 +53348,7 @@ return this.loadInlineScript (strModel, '\0', isAppend, htParams);
 strModel = this.modelSet.getInlineData (-1);
 if (strModel == null) if (this.global.modelKitMode) strModel = "5\n\nC 0 0 0\nH .63 .63 .63\nH -.63 -.63 .63\nH -.63 .63 -.63\nH .63 -.63 -.63";
  else return "cannot find string data";
-if (loadScript != null) htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.simpleReplace (loadScript.toString (), "$FILENAME$", "data \"model inline\"\n" + strModel + "end \"model inline\"")));
+if (loadScript != null) htParams.put ("loadScript", loadScript =  new JU.SB ().append (JU.PT.rep (loadScript.toString (), "$FILENAME$", "data \"model inline\"\n" + strModel + "end \"model inline\"")));
 }if (strModel != null) {
 if (!isAppend) this.zap (true, false, false);
 if (!isLoadVariable && (!haveFileData || isString)) this.getStateCreator ().getInlineData (loadScript, strModel, isAppend, this.getDefaultLoadFilter ());
@@ -53493,8 +53433,8 @@ c$.fixInlineString = $_M(c$, "fixInlineString",
 function (strModel, newLine) {
 var i;
 if (strModel.indexOf ("\\/n") >= 0) {
-strModel = JU.PT.simpleReplace (strModel, "\n", "");
-strModel = JU.PT.simpleReplace (strModel, "\\/n", "\n");
+strModel = JU.PT.rep (strModel, "\n", "");
+strModel = JU.PT.rep (strModel, "\\/n", "\n");
 newLine = String.fromCharCode ( 0);
 }if (newLine.charCodeAt (0) != 0 && newLine != '\n') {
 var repEmpty = (strModel.indexOf ('\n') >= 0);
@@ -53502,7 +53442,7 @@ var len = strModel.length;
 for (i = 0; i < len && strModel.charAt (i) == ' '; ++i) {
 }
 if (i < len && strModel.charAt (i) == newLine) strModel = strModel.substring (i + 1);
-if (repEmpty) strModel = JU.PT.simpleReplace (strModel, "" + newLine, "");
+if (repEmpty) strModel = JU.PT.rep (strModel, "" + newLine, "");
  else strModel = strModel.$replace (newLine, '\n');
 }return strModel;
 }, "~S,~S");
@@ -55103,7 +55043,7 @@ f = "name/" + JU.PT.escapeUrl (f);
 case '$':
 if (name.startsWith ("$$")) {
 f = f.substring (1);
-format = JU.PT.simpleReplace (this.global.smilesUrlFormat, "&get3d=True", "");
+format = JU.PT.rep (this.global.smilesUrlFormat, "&get3d=True", "");
 return J.util.Txt.formatStringS (format, "FILE", JU.PT.escapeUrl (f));
 }case 'N':
 case '2':
@@ -55658,8 +55598,6 @@ case 553648154:
 return this.global.percentVdwAtom;
 case 553648157:
 return this.global.pickingSpinRate;
-case 553648158:
-return this.global.platformSpeed;
 case 553648166:
 return this.global.ribbonAspectRatio;
 case 536870922:
@@ -57318,10 +57256,10 @@ if ((i = text0.indexOf ("@{")) < 0 && (i = text0.indexOf ("%{")) < 0) return tex
 var text = text0;
 var isEscaped = (text.indexOf ("\\") >= 0);
 if (isEscaped) {
-text = JU.PT.simpleReplace (text, "\\%", "\1");
-text = JU.PT.simpleReplace (text, "\\@", "\2");
+text = JU.PT.rep (text, "\\%", "\1");
+text = JU.PT.rep (text, "\\@", "\2");
 isEscaped = !text.equals (text0);
-}text = JU.PT.simpleReplace (text, "%{", "@{");
+}text = JU.PT.rep (text, "%{", "@{");
 var name;
 while ((i = text.indexOf ("@{")) >= 0) {
 i++;
@@ -57336,8 +57274,8 @@ if (Clazz_instanceOf (v, JU.P3)) v = J.util.Escape.eP (v);
 text = text.substring (0, i0 - 2) + v.toString () + text.substring (i + 1);
 }
 if (isEscaped) {
-text = JU.PT.simpleReplace (text, "\2", "@");
-text = JU.PT.simpleReplace (text, "\1", "%");
+text = JU.PT.rep (text, "\2", "@");
+text = JU.PT.rep (text, "\1", "%");
 }return text;
 }, "~S");
 $_M(c$, "getElementSymbol", 
@@ -57608,7 +57546,7 @@ if (type.toLowerCase ().indexOf ("property_") == 0) exp = "{selected}.label(\"%{
  else if (type.equalsIgnoreCase ("XYZRN")) exp = "\"\" + {selected}.size + \"\n\n\"+{selected}.label(\"%-2e %8.3x %8.3y %8.3z %4.2[vdw] 1 [%n]%r.%a#%i\").lines";
  else if (type.startsWith ("USER:")) exp = "{selected}.label(\"" + type.substring (5) + "\").lines";
  else exp = "\"\" + {selected}.size + \"\n\n\"+{selected}.label(\"%-2e %10.5x %10.5y %10.5z\").lines";
-if (!atomExpression.equals ("selected")) exp = JU.PT.simpleReplace (exp, "selected", atomExpression);
+if (!atomExpression.equals ("selected")) exp = JU.PT.rep (exp, "selected", atomExpression);
 return this.evaluateExpression (exp);
 }, "~S,~S");
 $_M(c$, "getModelCml", 
@@ -57919,7 +57857,7 @@ return this.getFileAsString (url);
 $_M(c$, "getHelp", 
 function (what) {
 if (this.global.helpPath.indexOf ("?") < 0) {
-if (what.length > 0 && what.indexOf ("?") != 0) what = "?search=" + JU.PT.simpleReplace (what, " ", "%20");
+if (what.length > 0 && what.indexOf ("?") != 0) what = "?search=" + JU.PT.rep (what, " ", "%20");
 what += (what.length == 0 ? "?ver=" : "&ver=") + J.viewer.JC.version;
 } else {
 what = "&" + what;
@@ -57932,7 +57870,7 @@ this.showUrl (this.setLoadFormat ("_" + smiles, '2', false));
 $_M(c$, "getChemicalInfo", 
 function (smiles, type, info) {
 var s = this.setLoadFormat ("_" + smiles, type, false);
-if (type == '/') s += JU.PT.simpleReplace (info, " ", "%20");
+if (type == '/') s += JU.PT.rep (info, " ", "%20");
 return this.getFileAsString4 (s, -1, false, false, false);
 }, "~S,~S,~S");
 $_M(c$, "addCommand", 

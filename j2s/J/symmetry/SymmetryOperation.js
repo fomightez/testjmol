@@ -79,7 +79,7 @@ return (normalized && this.modDim == 0 || this.xyzOriginal == null ? this.xyz : 
 }, "~B");
 $_M(c$, "newPoint", 
 function (atom1, atom2, x, y, z) {
-this.transform2 (atom1, atom2);
+this.rotTrans2 (atom1, atom2);
 atom2.add3 (x, y, z);
 }, "JU.P3,JU.P3,~N,~N,~N");
 $_M(c$, "dumpInfo", 
@@ -133,7 +133,7 @@ $_M(c$, "setMatrix",
 if (this.linearRotTrans.length > 16) {
 this.setGamma (isReverse);
 } else {
-this.setA (this.linearRotTrans, 0);
+this.setA (this.linearRotTrans);
 if (isReverse) this.invertM (this);
 }}, $fz.isPrivate = true, $fz), "~B");
 $_M(c$, "setFromMatrix", 
@@ -175,7 +175,7 @@ var myLabels = (op == null || modDim == 0 ? null : op.myLabels);
 if (myLabels == null) myLabels = J.symmetry.SymmetryOperation.labelsXYZ;
 xyz = xyz.toLowerCase ();
 xyz += ",";
-if (modDim > 0) for (var i = modDim + 3; --i >= 0; ) xyz = JU.PT.simpleReplace (xyz, J.symmetry.SymmetryOperation.labelsXn[i], J.symmetry.SymmetryOperation.labelsXnSub[i]);
+if (modDim > 0) for (var i = modDim + 3; --i >= 0; ) xyz = JU.PT.rep (xyz, J.symmetry.SymmetryOperation.labelsXn[i], J.symmetry.SymmetryOperation.labelsXnSub[i]);
 
 var tpt0 = 0;
 var rowPt = 0;
@@ -377,7 +377,7 @@ this.getRotationScale (mTemp);
 for (var i = vectors.length; --i >= 0; ) {
 ptTemp.setT (vectors[i]);
 unitcell.toFractional (ptTemp, true);
-mTemp.transform (ptTemp);
+mTemp.rotate (ptTemp);
 unitcell.toCartesian (ptTemp, true);
 vRot[i] = JU.V3.newV (ptTemp);
 }
@@ -402,7 +402,7 @@ pt02.setT (ptTarget);
 uc.toUnitCell (pt01, ptemp);
 uc.toUnitCell (pt02, ptemp);
 uc.toFractional (pt01, false);
-this.transform (pt01);
+this.rotTrans (pt01);
 uc.toCartesian (pt01, false);
 uc.toUnitCell (pt01, ptemp);
 if (pt01.distance (pt02) > 0.1) return null;
@@ -410,7 +410,7 @@ pt01.setT (pt00);
 pt02.setT (ptTarget);
 uc.toFractional (pt01, false);
 uc.toFractional (pt02, false);
-this.transform (pt01);
+this.rotTrans (pt01);
 vtrans.sub2 (pt02, pt01);
 pt01.set (0, 0, 0);
 pt02.set (0, 0, 0);
@@ -426,10 +426,10 @@ uc.toFractional (p0, false);
 uc.toFractional (p1, false);
 uc.toFractional (p2, false);
 uc.toFractional (p3, false);
-this.transform2 (p0, p0);
-this.transform2 (p1, p1);
-this.transform2 (p2, p2);
-this.transform2 (p3, p3);
+this.rotTrans2 (p0, p0);
+this.rotTrans2 (p1, p1);
+this.rotTrans2 (p2, p2);
+this.rotTrans2 (p3, p3);
 p0.add (vtrans);
 p1.add (vtrans);
 p2.add (vtrans);
@@ -731,7 +731,7 @@ pa1 = null;
 ax1 = null;
 }if (ax1 != null) ax1.normalize ();
 var m2 = null;
-m2 = JU.M4.newM (this);
+m2 = JU.M4.newM4 (this);
 if (vtrans.length () != 0) {
 m2.m03 += vtrans.x;
 m2.m13 += vtrans.y;
@@ -801,7 +801,7 @@ s += (r < 0 ? "-" : s.endsWith (",") ? "" : "+") + (Math.abs (r) == 1 ? "" : "" 
 }}
 s += J.symmetry.SymmetryOperation.xyzFraction (Clazz.doubleToInt (va[i][0] * (is12ths ? 1 : 12)), false, true);
 }
-return JU.PT.simpleReplace (s.substring (1), ",+", ",");
+return JU.PT.rep (s.substring (1), ",+", ",");
 }, "JU.Matrix,JU.Matrix,~B");
 $_M(c$, "toString", 
 function () {

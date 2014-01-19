@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.adapter.smarter");
-Clazz.load (["java.util.Hashtable"], "J.adapter.smarter.AtomSetCollection", ["java.lang.Boolean", "$.Float", "java.util.Collections", "$.Properties", "JU.AU", "$.BS", "$.List", "$.P3", "$.V3", "J.adapter.smarter.Atom", "$.Bond", "$.SmarterJmolAdapter", "$.XtalSymmetry", "J.util.Logger"], function () {
+Clazz.load (["java.util.Hashtable"], "J.adapter.smarter.AtomSetCollection", ["java.lang.Boolean", "$.Float", "java.util.Collections", "$.Properties", "JU.AU", "$.BS", "$.List", "$.P3", "$.V3", "J.adapter.smarter.Atom", "$.Bond", "$.SmarterJmolAdapter", "J.api.Interface", "J.util.Logger"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.reader = null;
 this.bsAtoms = null;
@@ -516,7 +516,7 @@ return atom.anisoBorU;
 }, "J.adapter.smarter.Atom");
 $_M(c$, "getXSymmetry", 
 function () {
-if (this.xtalSymmetry == null) this.xtalSymmetry =  new J.adapter.smarter.XtalSymmetry (this);
+if (this.xtalSymmetry == null) this.xtalSymmetry = (J.api.Interface.getInterface ("J.adapter.smarter.XtalSymmetry")).set (this);
 return this.xtalSymmetry;
 });
 $_M(c$, "getSymmetry", 

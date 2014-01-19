@@ -649,8 +649,8 @@ doUpdate = true;
 break;
 }
 if (!doUpdate) return;
-if (this.mat4 == null) this.mat4 = JU.M4.newM (null);
-this.mat4.mul2 (m, this.mat4);
+if (this.mat4 == null) this.mat4 = JU.M4.newM4 (null);
+this.mat4.mul42 (m, this.mat4);
 this.recalcAltVertices = true;
 }, "JU.M4,JU.BS");
 });

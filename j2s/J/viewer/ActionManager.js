@@ -802,25 +802,25 @@ var script = (obj)[1];
 var nearestPoint = null;
 if (script.indexOf ("_ATOM") >= 0) {
 var iatom = this.findNearestAtom (x, y, null, true);
-script = JU.PT.simpleReplace (script, "_ATOM", "({" + (iatom >= 0 ? "" + iatom : "") + "})");
-if (iatom >= 0) script = JU.PT.simpleReplace (script, "_POINT", J.util.Escape.eP (this.viewer.getModelSet ().atoms[iatom]));
+script = JU.PT.rep (script, "_ATOM", "({" + (iatom >= 0 ? "" + iatom : "") + "})");
+if (iatom >= 0) script = JU.PT.rep (script, "_POINT", J.util.Escape.eP (this.viewer.getModelSet ().atoms[iatom]));
 }if (!this.drawMode && (script.indexOf ("_POINT") >= 0 || script.indexOf ("_OBJECT") >= 0 || script.indexOf ("_BOND") >= 0)) {
 var t = this.viewer.checkObjectClicked (x, y, mouseAction);
 if (t != null && (nearestPoint = t.get ("pt")) != null) {
 var isBond = t.get ("type").equals ("bond");
-if (isBond) script = JU.PT.simpleReplace (script, "_BOND", "[{" + t.get ("index") + "}]");
-script = JU.PT.simpleReplace (script, "_POINT", J.util.Escape.eP (nearestPoint));
-script = JU.PT.simpleReplace (script, "_OBJECT", J.util.Escape.escapeMap (t));
-}script = JU.PT.simpleReplace (script, "_BOND", "[{}]");
-script = JU.PT.simpleReplace (script, "_OBJECT", "{}");
-}script = JU.PT.simpleReplace (script, "_POINT", "{}");
-script = JU.PT.simpleReplace (script, "_ACTION", "" + mouseAction);
-script = JU.PT.simpleReplace (script, "_X", "" + x);
-script = JU.PT.simpleReplace (script, "_Y", "" + (this.viewer.getScreenHeight () - y));
-script = JU.PT.simpleReplace (script, "_DELTAX", "" + deltaX);
-script = JU.PT.simpleReplace (script, "_DELTAY", "" + deltaY);
-script = JU.PT.simpleReplace (script, "_TIME", "" + time);
-script = JU.PT.simpleReplace (script, "_MODE", "" + mode);
+if (isBond) script = JU.PT.rep (script, "_BOND", "[{" + t.get ("index") + "}]");
+script = JU.PT.rep (script, "_POINT", J.util.Escape.eP (nearestPoint));
+script = JU.PT.rep (script, "_OBJECT", J.util.Escape.escapeMap (t));
+}script = JU.PT.rep (script, "_BOND", "[{}]");
+script = JU.PT.rep (script, "_OBJECT", "{}");
+}script = JU.PT.rep (script, "_POINT", "{}");
+script = JU.PT.rep (script, "_ACTION", "" + mouseAction);
+script = JU.PT.rep (script, "_X", "" + x);
+script = JU.PT.rep (script, "_Y", "" + (this.viewer.getScreenHeight () - y));
+script = JU.PT.rep (script, "_DELTAX", "" + deltaX);
+script = JU.PT.rep (script, "_DELTAY", "" + deltaY);
+script = JU.PT.rep (script, "_TIME", "" + time);
+script = JU.PT.rep (script, "_MODE", "" + mode);
 if (script.startsWith ("+:")) {
 passThrough = true;
 script = script.substring (2);

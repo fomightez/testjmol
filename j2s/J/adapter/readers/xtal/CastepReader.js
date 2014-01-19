@@ -33,10 +33,10 @@ if (this.filter != null) {
 this.chargeType = this.getFilter ("CHARGE=");
 if (this.chargeType != null && this.chargeType.length > 4) this.chargeType = this.chargeType.substring (0, 4);
 this.filter = this.filter.$replace ('(', '{').$replace (')', '}');
-this.filter = JU.PT.simpleReplace (this.filter, "  ", " ");
+this.filter = JU.PT.rep (this.filter, "  ", " ");
 this.isAllQ = this.checkFilterKey ("Q=ALL");
 if (!this.isAllQ && this.filter.indexOf ("{") >= 0) this.setDesiredQpt (this.filter.substring (this.filter.indexOf ("{")));
-this.filter = JU.PT.simpleReplace (this.filter, "-PT", "");
+this.filter = JU.PT.rep (this.filter, "-PT", "");
 }this.continuing = this.readFileData ();
 });
 $_M(c$, "setDesiredQpt", 

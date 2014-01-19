@@ -997,8 +997,8 @@ break;
 if (msg.indexOf ("{0}") < 0) {
 if (value != null) msg += ": " + value;
 } else {
-msg = JU.PT.simpleReplace (msg, "{0}", value);
-if (msg.indexOf ("{1}") >= 0) msg = JU.PT.simpleReplace (msg, "{1}", more);
+msg = JU.PT.rep (msg, "{0}", value);
+if (msg.indexOf ("{1}") >= 0) msg = JU.PT.rep (msg, "{1}", more);
  else if (more != null) msg += ": " + more;
 }if (!translated) J.i18n.GT.setDoTranslate (doTranslate);
 return msg;

@@ -488,11 +488,11 @@ switch (x2.tok) {
 case 9:
 return this.addXPt4 ((J.util.Quaternion.newP4 (x2.value)).inv ().toPoint4f ());
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.invert ();
 return this.addXM3 (m);
 case 12:
-var m4 = JU.M4.newM (x2.value);
+var m4 = JU.M4.newM4 (x2.value);
 m4.invert ();
 return this.addXM4 (m4);
 case 10:
@@ -523,7 +523,7 @@ switch (x2.tok) {
 case 11:
 case 12:
 s = J.script.SV.sValue (x2);
-s = JU.PT.simpleReplace (s.substring (1, s.length - 1), "],[", "]\n[");
+s = JU.PT.rep (s.substring (1, s.length - 1), "],[", "]\n[");
 break;
 case 4:
 s = x2.value;
@@ -531,7 +531,7 @@ break;
 default:
 s = J.script.SV.sValue (x2);
 }
-s = JU.PT.simpleReplace (s, "\n\r", "\n").$replace ('\r', '\n');
+s = JU.PT.rep (s, "\n\r", "\n").$replace ('\r', '\n');
 return this.addXAS (JU.PT.split (s, "\n"));
 case 1766856708:
 switch (x2.tok) {
@@ -672,7 +672,7 @@ switch (x2.tok) {
 default:
 return this.addXFloat (x1.asFloat () + x2.asFloat ());
 case 11:
-m = JU.M3.newM (x1.value);
+m = JU.M3.newM3 (x1.value);
 m.add (x2.value);
 return this.addXM3 (m);
 case 8:
@@ -696,12 +696,12 @@ ht.remove (J.script.SV.sValue (x2));
 return this.addXVar (J.script.SV.getVariableMap (ht));
 case 11:
 if (x2.tok != 11) break;
-m = JU.M3.newM (x1.value);
+m = JU.M3.newM3 (x1.value);
 m.sub (x2.value);
 return this.addXM3 (m);
 case 12:
 if (x2.tok != 12) break;
-var m4 = JU.M4.newM (x1.value);
+var m4 = JU.M4.newM4 (x1.value);
 m4.sub (x2.value);
 return this.addXM4 (m4);
 case 8:
@@ -738,11 +738,11 @@ pt4 = JU.P4.newPt (x2.value);
 pt4.scale (-1.0);
 return this.addXPt4 (pt4);
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.transpose ();
 return this.addXM3 (m);
 case 12:
-var m4 = JU.M4.newM (x2.value);
+var m4 = JU.M4.newM4 (x2.value);
 m4.transpose ();
 return this.addXM4 (m4);
 case 10:
@@ -766,16 +766,16 @@ pt4 = (x1.tok == 12 ? this.planeValue (x2) : x2.tok == 12 ? this.planeValue (x1)
 switch (x2.tok) {
 case 11:
 if (pt != null) {
-var m3b = JU.M3.newM (x2.value);
+var m3b = JU.M3.newM3 (x2.value);
 m3b.transpose ();
-m3b.transform (pt);
+m3b.rotate (pt);
 if (x1.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }if (pt4 != null) return this.addXPt4 ((J.util.Quaternion.newP4 (pt4).mulQ (J.util.Quaternion.newM (x2.value))).toPoint4f ());
 break;
 case 12:
 if (pt4 != null) {
-var m4b = JU.M4.newM (x2.value);
+var m4b = JU.M4.newM4 (x2.value);
 m4b.transpose ();
 m4b.transform4 (pt4);
 if (x1.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt4.x, pt4.y, pt4.z, pt4.w]));
@@ -786,12 +786,12 @@ switch (x1.tok) {
 case 11:
 var m3 = x1.value;
 if (pt != null) {
-m3.transform (pt);
+m3.rotate (pt);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }switch (x2.tok) {
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.mul2 (m3, m);
 return this.addXM3 (m);
 case 9:
@@ -807,7 +807,7 @@ return this.addXM3 (m2);
 case 12:
 var m4 = x1.value;
 if (pt != null) {
-m4.transform (pt);
+m4.rotTrans (pt);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }if (pt4 != null) {
@@ -815,8 +815,8 @@ m4.transform4 (pt4);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt4.x, pt4.y, pt4.z, pt4.w]));
 return this.addXPt4 (pt4);
 }if (x2.tok == 12) {
-var m4b = JU.M4.newM (x2.value);
-m4b.mul2 (m4, m4b);
+var m4b = JU.M4.newM4 (x2.value);
+m4b.mul42 (m4, m4b);
 return this.addXM4 (m4b);
 }return this.addXStr ("NaN");
 case 8:
@@ -838,7 +838,8 @@ var f2;
 switch (x1.tok) {
 case 2:
 if (x2.tok == 2 && x2.intValue != 0) return this.addXInt (Clazz.doubleToInt (x1.intValue / x2.intValue));
-if (!this.isDecimal (x2)) return this.addXInt (Clazz.doubleToInt (x1.intValue / x2.asInt ()));
+var n = (this.isDecimal (x2) ? x2.asInt () : 0);
+if (n != 0) return this.addXInt (Clazz.doubleToInt (x1.intValue / n));
 break;
 case 4:
 var i2;

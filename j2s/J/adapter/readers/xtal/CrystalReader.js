@@ -153,7 +153,7 @@ return !this.isProperties;
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "readTransformationMatrix", 
 ($fz = function () {
-this.primitiveToCryst = JU.M3.newA (this.fillFloatArray (null, 0,  Clazz.newFloatArray (9, 0)));
+this.primitiveToCryst = JU.M3.newA9 (this.fillFloatArray (null, 0,  Clazz.newFloatArray (9, 0)));
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "readShift", 
 ($fz = function () {
@@ -361,7 +361,7 @@ this.atomCount = 0;
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "readEnergy", 
 ($fz = function () {
-this.line = JU.PT.simpleReplace (this.line, "( ", "(");
+this.line = JU.PT.rep (this.line, "( ", "(");
 var tokens = this.getTokens ();
 this.energy = Double.$valueOf (Double.parseDouble (tokens[2]));
 this.setEnergy ();
@@ -419,8 +419,8 @@ this.atomFrag =  Clazz.newIntArray (numAtomsFrag, 0);
 var Sfrag = "";
 while (this.readLine () != null && this.line.indexOf ("(") >= 0) Sfrag += this.line;
 
-Sfrag = JU.PT.simpleReplace (Sfrag, "(", " ");
-Sfrag = JU.PT.simpleReplace (Sfrag, ")", " ");
+Sfrag = JU.PT.rep (Sfrag, "(", " ");
+Sfrag = JU.PT.rep (Sfrag, ")", " ");
 var tokens = J.adapter.smarter.AtomSetCollectionReader.getTokensStr (Sfrag);
 for (var i = 0, pos = 0; i < numAtomsFrag; i++, pos += 3) this.atomFrag[i] = this.getAtomIndexFromPrimitiveIndex (this.parseIntStr (tokens[pos]) - 1);
 
@@ -509,7 +509,7 @@ for (var i = 0; i < this.atomCount; i++) s[i] = "0";
 var data = "";
 while (this.readLine () != null && (this.line.length < 4 || Character.isDigit (this.line.charAt (3)))) data += this.line;
 
-data = JU.PT.simpleReplace (data, "-", " -");
+data = JU.PT.rep (data, "-", " -");
 var tokens = J.adapter.smarter.AtomSetCollectionReader.getTokensStr (data);
 for (var i = 0, pt = nfields - 1; i < this.atomCount; i++, pt += nfields) {
 var iConv = this.getAtomIndexFromPrimitiveIndex (i);

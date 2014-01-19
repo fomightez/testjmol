@@ -1194,9 +1194,9 @@ x.scaleAdd2 (2.828, x, z);
 if (pt != 3) {
 x.normalize ();
 var a = JU.A4.new4 (z.x, z.y, z.z, (pt == 2 ? 1 : -1) * 2.09439507);
-var m = JU.M3.newM (null);
+var m = JU.M3.newM3 (null);
 m.setAA (a);
-m.transform (x);
+m.rotate (x);
 }z.setT (x);
 x.cross (vTemp, z);
 break;
@@ -1585,7 +1585,7 @@ case 1073741824:
 return this.getIdentifierOrNull (specInfo);
 case 1048608:
 var atomSpec = (specInfo).toUpperCase ();
-if (atomSpec.indexOf ("\\?") >= 0) atomSpec = JU.PT.simpleReplace (atomSpec, "\\?", "\1");
+if (atomSpec.indexOf ("\\?") >= 0) atomSpec = JU.PT.rep (atomSpec, "\\?", "\1");
 for (i = this.atomCount; --i >= 0; ) if (this.isAtomNameMatch (this.atoms[i], atomSpec, false)) bs.set (i);
 
 break;
@@ -1665,7 +1665,7 @@ return bs;
 $_M(c$, "getIdentifierOrNull", 
 ($fz = function (identifier) {
 var bs = this.getSpecNameOrNull (identifier, false);
-if (identifier.indexOf ("\\?") >= 0) identifier = JU.PT.simpleReplace (identifier, "\\?", "\1");
+if (identifier.indexOf ("\\?") >= 0) identifier = JU.PT.rep (identifier, "\\?", "\1");
 if (bs != null || identifier.indexOf ("?") > 0) return bs;
 if (identifier.indexOf ("*") > 0) return this.getSpecNameOrNull (identifier, true);
 var len = identifier.length;
@@ -1713,7 +1713,7 @@ $_M(c$, "getSpecNameOrNull",
 ($fz = function (name, checkStar) {
 var bs = null;
 name = name.toUpperCase ();
-if (name.indexOf ("\\?") >= 0) name = JU.PT.simpleReplace (name, "\\?", "\1");
+if (name.indexOf ("\\?") >= 0) name = JU.PT.rep (name, "\\?", "\1");
 for (var i = this.atomCount; --i >= 0; ) {
 var g3 = this.atoms[i].getGroup3 (true);
 if (g3 != null && g3.length > 0) {

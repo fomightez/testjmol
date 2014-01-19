@@ -132,7 +132,7 @@ this.lattvecs.addLast (a);
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "symmetry", 
 ($fz = function () {
-this.setSymmetryOperator (JU.PT.simpleReplace (this.line.substring (9).trim (), " ", ","));
+this.setSymmetryOperator (JU.PT.rep (this.line.substring (9).trim (), " ", ","));
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "readM40Data", 
 ($fz = function () {

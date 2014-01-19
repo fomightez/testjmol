@@ -1791,14 +1791,14 @@ if (this.modelSetProperties != null) {
 var e = this.modelSetProperties.propertyNames ();
 while (e.hasMoreElements ()) {
 var propertyName = e.nextElement ();
-sb.append ("\n <property name=\"").append (propertyName).append ("\" value=").append (J.util.Escape.eS (this.modelSetProperties.getProperty (propertyName))).append (" />");
+sb.append ("\n <property name=\"").append (propertyName).append ("\" value=").append (JU.PT.esc (this.modelSetProperties.getProperty (propertyName))).append (" />");
 }
 sb.append ("\n</properties>");
 }for (var i = 0; i < this.modelCount; ++i) {
-sb.append ("\n<model index=\"").appendI (i).append ("\" n=\"").append (this.getModelNumberDotted (i)).append ("\" id=").append (J.util.Escape.eS ("" + this.getModelAuxiliaryInfoValue (i, "modelID")));
+sb.append ("\n<model index=\"").appendI (i).append ("\" n=\"").append (this.getModelNumberDotted (i)).append ("\" id=").append (JU.PT.esc ("" + this.getModelAuxiliaryInfoValue (i, "modelID")));
 var ib = this.viewer.getJDXBaseModelIndex (i);
-if (ib != i) sb.append (" baseModelId=").append (J.util.Escape.eS (this.getModelAuxiliaryInfoValue (ib, "jdxModelID")));
-sb.append (" name=").append (J.util.Escape.eS (this.getModelName (i))).append (" title=").append (J.util.Escape.eS (this.getModelTitle (i))).append (" hasVibrationVectors=\"").appendB (this.viewer.modelHasVibrationVectors (i)).append ("\" />");
+if (ib != i) sb.append (" baseModelId=").append (JU.PT.esc (this.getModelAuxiliaryInfoValue (ib, "jdxModelID")));
+sb.append (" name=").append (JU.PT.esc (this.getModelName (i))).append (" title=").append (JU.PT.esc (this.getModelTitle (i))).append (" hasVibrationVectors=\"").appendB (this.viewer.modelHasVibrationVectors (i)).append ("\" />");
 }
 sb.append ("\n</models>");
 return sb.toString ();
@@ -2010,7 +2010,7 @@ for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
 if (--atomsMax < 0) break;
 var atom = this.atoms[i];
 var name = atom.getAtomName ();
-JU.PT.simpleReplace (name, "\"", "''");
+JU.PT.rep (name, "\"", "''");
 bsAtoms.set (atom.index);
 xmlUtil.appendTag (sb, "atom/", ["id", "a" + (atom.index + 1), "title", atom.getAtomName (), "elementType", atom.getElementSymbol (), "x3", "" + atom.x, "y3", "" + atom.y, "z3", "" + atom.z]);
 }

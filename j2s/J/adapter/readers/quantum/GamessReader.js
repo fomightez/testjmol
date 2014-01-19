@@ -188,7 +188,7 @@ recognized = true;
 }if (!recognized) this.calculationType += gbasis;
 } else {
 if (this.calculationType.length > 0) this.calculationType += " ";
-this.calculationType += igauss + "-" + JU.PT.simpleReplace (gbasis, "N", "");
+this.calculationType += igauss + "-" + JU.PT.rep (gbasis, "N", "");
 if ("T".equals (this.calcOptions.get ("basis_options_DIFFSP"))) {
 if ("T".equals (this.calcOptions.get ("basis_options_DIFFS"))) this.calculationType += "+";
 this.calculationType += "+";
@@ -234,7 +234,7 @@ this.calcOptions =  new java.util.Hashtable ();
 this.atomSetCollection.setAtomSetCollectionAuxiliaryInfo ("calculationOptions", this.calcOptions);
 }while (this.readLine () != null && (this.line = this.line.trim ()).length > 0) {
 if (this.line.indexOf ("=") < 0) continue;
-var tokens = J.adapter.smarter.AtomSetCollectionReader.getTokensStr (JU.PT.simpleReplace (this.line, "=", " = ") + " ?");
+var tokens = J.adapter.smarter.AtomSetCollectionReader.getTokensStr (JU.PT.rep (this.line, "=", " = ") + " ?");
 for (var i = 0; i < tokens.length; i++) {
 if (!tokens[i].equals ("=")) continue;
 try {

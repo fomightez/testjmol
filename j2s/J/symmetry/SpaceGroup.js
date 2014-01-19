@@ -99,11 +99,11 @@ if (doNormalize && count > 0 && atoms != null) {
 this.finalOperations[0] =  new J.symmetry.SymmetryOperation (this.operations[0], atoms, atomIndex, count, true);
 var atom = atoms[atomIndex];
 var c = JU.P3.newP (atom);
-this.finalOperations[0].transform (c);
+this.finalOperations[0].rotTrans (c);
 if (c.distance (atom) > 0.0001) for (var i = 0; i < count; i++) {
 atom = atoms[atomIndex + i];
 c.setT (atom);
-this.finalOperations[0].transform (c);
+this.finalOperations[0].rotTrans (c);
 atom.setT (c);
 }
 }for (var i = 0; i < this.operationCount; i++) {
@@ -280,7 +280,7 @@ $_M(c$, "addOp",
 var xyz = op.xyz;
 if (!isSpecial) {
 if (this.xyzList.containsKey (xyz)) return this.xyzList.get (xyz).intValue ();
-if (this.latticeOp < 0 && this.xyzList.containsKey (JU.PT.simpleReplace (JU.PT.simpleReplace (xyz, "+1/2", ""), "+1/2", ""))) this.latticeOp = this.operationCount;
+if (this.latticeOp < 0 && this.xyzList.containsKey (JU.PT.rep (JU.PT.rep (xyz, "+1/2", ""), "+1/2", ""))) this.latticeOp = this.operationCount;
 this.xyzList.put (xyz, Integer.$valueOf (this.operationCount));
 }if (xyz != null && !xyz.equals (xyz0)) this.xyzList.put (xyz0, Integer.$valueOf (this.operationCount));
 if (this.operations == null) this.operations =  new Array (4);
@@ -314,15 +314,15 @@ var newOps =  new Array (7);
 for (var i = 0; i < 7; i++) newOps[i] =  new JU.M4 ();
 
 for (var i = 0; i < h.nRotations; i++) {
-mat1.setM (h.rotationTerms[i].seitzMatrix12ths);
+mat1.setM4 (h.rotationTerms[i].seitzMatrix12ths);
 var nRot = h.rotationTerms[i].order;
 newOps[0].setIdentity ();
 var nOps = this.operationCount;
 for (var j = 1; j <= nRot; j++) {
-newOps[j].mul2 (mat1, newOps[0]);
-newOps[0].setM (newOps[j]);
+newOps[j].mul42 (mat1, newOps[0]);
+newOps[0].setM4 (newOps[j]);
 for (var k = 0; k < nOps; k++) {
-operation.mul2 (newOps[j], this.operations[k]);
+operation.mul42 (newOps[j], this.operations[k]);
 J.symmetry.SymmetryOperation.normalizeTranslation (operation);
 var xyz = J.symmetry.SymmetryOperation.getXYZFromMatrix (operation, true, true, true);
 this.addSymmetrySM (xyz, operation);
@@ -335,7 +335,7 @@ function (xyz, operation) {
 var iop = this.addOperation (xyz, 0, false);
 if (iop >= 0) {
 var symmetryOperation = this.operations[iop];
-symmetryOperation.setM (operation);
+symmetryOperation.setM4 (operation);
 }return iop;
 }, "~S,JU.M4");
 c$.determineSpaceGroupN = $_M(c$, "determineSpaceGroupN", 
@@ -474,9 +474,9 @@ this.hmSymbolExt = (parts.length == 1 ? "" : parts[1]);
 var pt = this.hmSymbol.indexOf (" -3");
 if (pt >= 1) if ("admn".indexOf (this.hmSymbol.charAt (pt - 1)) >= 0) {
 this.hmSymbolAlternative = (this.hmSymbol.substring (0, pt) + " 3" + this.hmSymbol.substring (pt + 3)).toLowerCase ();
-}this.hmSymbolAbbr = JU.PT.simpleReplace (this.hmSymbol, " ", "");
-this.hmSymbolAbbrShort = JU.PT.simpleReplace (this.hmSymbol, " 1", "");
-this.hmSymbolAbbrShort = JU.PT.simpleReplace (this.hmSymbolAbbrShort, " ", "");
+}this.hmSymbolAbbr = JU.PT.rep (this.hmSymbol, " ", "");
+this.hmSymbolAbbrShort = JU.PT.rep (this.hmSymbol, " 1", "");
+this.hmSymbolAbbrShort = JU.PT.rep (this.hmSymbolAbbrShort, " ", "");
 this.hallSymbol = terms[3];
 if (this.hallSymbol.length > 1) this.hallSymbol = this.hallSymbol.substring (0, 2).toUpperCase () + this.hallSymbol.substring (2);
 var info = this.intlTableNumber + this.hallSymbol;
@@ -511,7 +511,7 @@ var n = this.finalOperations.length;
 var pts =  new JU.List ();
 for (var i = n; --i >= 0; ) {
 var pt1 = JU.P3.newP (pt);
-this.finalOperations[i].transform (pt1);
+this.finalOperations[i].rotTrans (pt1);
 unitCell.unitize (pt1);
 for (var j = pts.size (); --j >= 0; ) {
 var pt0 = pts.get (j);

@@ -136,7 +136,7 @@ break;
 }
 scaleMatrix[i] = parameters[6 + i] * f;
 }
-this.matrixCartesianToFractional = JU.M4.newA (scaleMatrix);
+this.matrixCartesianToFractional = JU.M4.newA16 (scaleMatrix);
 this.matrixFractionalToCartesian =  new JU.M4 ();
 this.matrixFractionalToCartesian.invertM (this.matrixCartesianToFractional);
 } else if (parameters.length > 14 && !Float.isNaN (parameters[14])) {
@@ -167,12 +167,12 @@ return fpt;
 }, "JU.P3");
 $_M(c$, "toCartesian", 
 function (pt, isAbsolute) {
-if (this.matrixFractionalToCartesian != null) (isAbsolute ? this.matrixFtoCAbsolute : this.matrixFractionalToCartesian).transform (pt);
+if (this.matrixFractionalToCartesian != null) (isAbsolute ? this.matrixFtoCAbsolute : this.matrixFractionalToCartesian).rotTrans (pt);
 }, "JU.T3,~B");
 $_M(c$, "toFractional", 
 function (pt, isAbsolute) {
 if (this.matrixCartesianToFractional == null) return;
-(isAbsolute ? this.matrixCtoFAbsolute : this.matrixCartesianToFractional).transform (pt);
+(isAbsolute ? this.matrixCtoFAbsolute : this.matrixCartesianToFractional).rotTrans (pt);
 }, "JU.T3,~B");
 $_M(c$, "isPolymer", 
 function () {

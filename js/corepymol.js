@@ -1380,10 +1380,10 @@ if (sm.getShapeIdFromObjectName (sID) >= 0) {
 sm.viewer.setObjectProp (sID, 1610625028);
 return;
 }sb =  new JU.SB ();
-sb.append ("isosurface ID ").append (J.util.Escape.eS (sID));
+sb.append ("isosurface ID ").append (JU.PT.esc (sID));
 if (this.modelIndex < 0) this.modelIndex = sm.viewer.getCurrentModelIndex ();
 if (this.bsAtoms == null) {
-sb.append (" model ").append (m.models[this.modelIndex].getModelNumberDotted ()).append (" color density sigma 1.0 ").append (J.util.Escape.eS (this.cacheID)).append (" ").append (J.util.Escape.eS (sID));
+sb.append (" model ").append (m.models[this.modelIndex].getModelNumberDotted ()).append (" color density sigma 1.0 ").append (JU.PT.esc (this.cacheID)).append (" ").append (JU.PT.esc (sID));
 if (doCache) sb.append (";isosurface cache");
 } else {
 var lighting = (this.info)[0];
@@ -1415,7 +1415,7 @@ var mapID = mep.get (mep.size () - 1).toString ();
 var min = J.adapter.readers.pymol.PyMOLScene.floatAt (J.adapter.readers.pymol.PyMOLScene.listAt (mep, 3), 0);
 var max = J.adapter.readers.pymol.PyMOLScene.floatAt (J.adapter.readers.pymol.PyMOLScene.listAt (mep, 3), 2);
 sb =  new JU.SB ();
-sb.append (";isosurface ID ").append (J.util.Escape.eS (sID)).append (" map ").append (J.util.Escape.eS (this.cacheID)).append (" ").append (J.util.Escape.eS (mapID)).append (";color isosurface range " + min + " " + max + ";isosurface colorscheme rwb;set isosurfacekey true");
+sb.append (";isosurface ID ").append (JU.PT.esc (sID)).append (" map ").append (JU.PT.esc (this.cacheID)).append (" ").append (JU.PT.esc (mapID)).append (";color isosurface range " + min + " " + max + ";isosurface colorscheme rwb;set isosurfacekey true");
 if (this.translucency > 0) sb.append (";color isosurface translucent " + this.translucency);
 if (doCache) sb.append (";isosurface cache");
 break;
@@ -1424,7 +1424,7 @@ this.modelIndex = sm.viewer.getCurrentModelIndex ();
 var mesh = this.info;
 sID = mesh.get (mesh.size () - 2).toString ();
 sb =  new JU.SB ();
-sb.append ("isosurface ID ").append (J.util.Escape.eS (sID)).append (" model ").append (m.models[this.modelIndex].getModelNumberDotted ()).append (" color ").append (J.util.Escape.escapeColor (this.argb)).append ("  ").append (J.util.Escape.eS (this.cacheID)).append (" ").append (J.util.Escape.eS (sID)).append (" mesh nofill frontonly");
+sb.append ("isosurface ID ").append (JU.PT.esc (sID)).append (" model ").append (m.models[this.modelIndex].getModelNumberDotted ()).append (" color ").append (J.util.Escape.escapeColor (this.argb)).append ("  ").append (JU.PT.esc (this.cacheID)).append (" ").append (JU.PT.esc (sID)).append (" mesh nofill frontonly");
 var within = J.adapter.readers.pymol.PyMOLScene.floatAt (J.adapter.readers.pymol.PyMOLScene.listAt (J.adapter.readers.pymol.PyMOLScene.listAt (mesh, 2), 0), 11);
 var list = J.adapter.readers.pymol.PyMOLScene.listAt (J.adapter.readers.pymol.PyMOLScene.listAt (J.adapter.readers.pymol.PyMOLScene.listAt (mesh, 2), 0), 12);
 if (within > 0) {
@@ -2905,7 +2905,7 @@ for (var e, $e = map.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ())
 var name = e.getKey ();
 if (!"names".equals (name)) {
 this.viewer.log ("\n===" + name + "===");
-this.viewer.log (JU.PT.simpleReplace (e.getValue ().toString (), "[", "\n["));
+this.viewer.log (JU.PT.rep (e.getValue ().toString (), "[", "\n["));
 }}
 this.viewer.log ("\n===names===");
 for (var i = 1; i < names.size (); i++) {
@@ -2913,7 +2913,7 @@ this.viewer.log ("");
 var list = names.get (i);
 this.viewer.log (" =" + list.get (0).toString () + "=");
 try {
-this.viewer.log (JU.PT.simpleReplace (list.toString (), "[", "\n["));
+this.viewer.log (JU.PT.rep (list.toString (), "[", "\n["));
 } catch (e) {
 }
 }

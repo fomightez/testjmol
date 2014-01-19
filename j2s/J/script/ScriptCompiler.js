@@ -760,8 +760,8 @@ this.addTokenToPrefix (J.script.T.o (10, isBondOrMatrix ?  new J.modelset.BondSe
 return 2;
 }if (isBondOrMatrix) {
 var m = this.lookingAtMatrix ();
-if (Clazz.instanceOf (m, JU.M3) || Clazz.instanceOf (m, JU.M4)) {
-this.addTokenToPrefix (J.script.T.o ((Clazz.instanceOf (m, JU.M3) ? 11 : 12), m));
+if (Clazz.instanceOf (m, JU.M3)) {
+this.addTokenToPrefix (J.script.T.o ((Clazz.instanceOf (m, JU.M4) ? 12 : 11), m));
 return 2;
 }}}return 0;
 }, $fz.isPrivate = true, $fz));

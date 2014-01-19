@@ -71,7 +71,7 @@ function () {
 this.pdbHeader = (this.getHeader ?  new JU.SB () : null);
 this.applySymmetry = !this.checkFilterKey ("NOSYMMETRY");
 this.getTlsGroups = this.checkFilterKey ("TLS");
-if (this.checkFilterKey ("ASSEMBLY")) this.filter = JU.PT.simpleReplace (this.filter, "ASSEMBLY", "BIOMOLECULE");
+if (this.checkFilterKey ("ASSEMBLY")) this.filter = JU.PT.rep (this.filter, "ASSEMBLY", "BIOMOLECULE");
 var isbiomol = this.checkFilterKey ("BIOMOLECULE");
 var byChain = isbiomol && this.checkFilterKey ("BYCHAIN");
 var bySymop = isbiomol && this.checkFilterKey ("BYSYMOP");
@@ -318,7 +318,7 @@ if (this.vCompnds.size () == 0) this.vCompnds.addLast (this.currentCompnd);
 this.currentKey = key;
 }if (value.endsWith (";")) value = value.substring (0, value.length - 1);
 this.currentCompnd.put (this.currentKey, value);
-if (this.currentKey.equals ("CHAIN")) this.currentCompnd.put ("select", "(:" + JU.PT.simpleReplace (JU.PT.simpleReplace (value, ", ", ",:"), " ", "") + ")");
+if (this.currentKey.equals ("CHAIN")) this.currentCompnd.put ("select", "(:" + JU.PT.rep (JU.PT.rep (value, ", ", ",:"), " ", "") + ")");
 }, $fz.isPrivate = true, $fz), "~B");
 $_M(c$, "setBiomoleculeAtomCounts", 
 ($fz = function () {
@@ -343,7 +343,7 @@ var id = "";
 var needLine = true;
 var info = null;
 var nBiomt = 0;
-var mIdent = JU.M4.newM (null);
+var mIdent = JU.M4.newM4 (null);
 while (true) {
 if (needLine) this.readLine ();
  else needLine = true;
@@ -392,7 +392,7 @@ if (i == 4 || i == 8) this.readLine ();
 }
 mat[15] = 1;
 var m4 =  new JU.M4 ();
-m4.setA (mat, 0);
+m4.setA (mat);
 if (m4.equals (mIdent)) biomts.add (0, m4);
  else biomts.addLast (m4);
 continue;

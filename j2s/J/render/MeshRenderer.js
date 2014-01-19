@@ -86,7 +86,7 @@ verticesTemp = (needNormals ?  new Array (this.vertexCount) : null);
 for (var i = this.vertexCount; --i >= 0; ) {
 vTemp.setT (this.vertices[i]);
 unitcell.toFractional (vTemp, true);
-m.transform (vTemp);
+m.rotTrans (vTemp);
 unitcell.toCartesian (vTemp, true);
 this.viewer.transformPtScr (vTemp, this.screens[i]);
 if (needNormals) {

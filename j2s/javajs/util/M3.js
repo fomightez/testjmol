@@ -15,13 +15,13 @@ Clazz.instantialize (this, arguments);
 Clazz.makeConstructor (c$, 
 function () {
 });
-c$.newA = $_M(c$, "newA", 
+c$.newA9 = $_M(c$, "newA9", 
 function (v) {
 var m =  new JU.M3 ();
 m.setA (v);
 return m;
 }, "~A");
-c$.newM = $_M(c$, "newM", 
+c$.newM3 = $_M(c$, "newM3", 
 function (m1) {
 var m =  new JU.M3 ();
 if (m1 == null) {
@@ -44,15 +44,8 @@ return "[\n  [" + this.m00 + "\t" + this.m01 + "\t" + this.m02 + "]" + "\n  [" +
 });
 $_M(c$, "setIdentity", 
 function () {
-this.m00 = 1.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m10 = 0.0;
-this.m11 = 1.0;
-this.m12 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 1.0;
+this.clear ();
+this.m00 = this.m11 = this.m22 = 1;
 });
 $_M(c$, "setElement", 
 function (row, col, v) {
@@ -97,8 +90,12 @@ return;
 }
 break;
 }
-throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+this.err ();
 }, "~N,~N,~N");
+$_M(c$, "err", 
+function () {
+throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+});
 $_M(c$, "getElement", 
 function (row, col) {
 switch (row) {
@@ -133,42 +130,53 @@ return this.m22;
 }
 break;
 }
-throw  new ArrayIndexOutOfBoundsException ("matrix column/row out of bounds");
+this.err ();
+return 0;
 }, "~N,~N");
 $_M(c$, "setRow", 
 function (row, x, y, z) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = x;
 this.m01 = y;
 this.m02 = z;
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = x;
 this.m11 = y;
 this.m12 = z;
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = x;
 this.m21 = y;
 this.m22 = z;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,~N,~N,~N");
+return;
+default:
+this.err ();
+}
+}, "~N,~N,~N,~N");
 $_M(c$, "setRowV", 
 function (row, v) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = v.x;
 this.m01 = v.y;
 this.m02 = v.z;
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = v.x;
 this.m11 = v.y;
 this.m12 = v.z;
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = v.x;
 this.m21 = v.y;
 this.m22 = v.z;
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,JU.T3");
+return;
+default:
+this.err ();
+}
+}, "~N,JU.T3");
 $_M(c$, "getRow", 
 function (row, v) {
 switch (row) {
@@ -188,26 +196,31 @@ v[1] = this.m21;
 v[2] = this.m22;
 return;
 }
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
+this.err ();
 }, "~N,~A");
 $_M(c$, "setRowA", 
 function (row, v) {
-if (row == 0) {
+switch (row) {
+case 0:
 this.m00 = v[0];
 this.m01 = v[1];
 this.m02 = v[2];
-} else if (row == 1) {
+return;
+case 1:
 this.m10 = v[0];
 this.m11 = v[1];
 this.m12 = v[2];
-} else if (row == 2) {
+return;
+case 2:
 this.m20 = v[0];
 this.m21 = v[1];
 this.m22 = v[2];
-} else {
-throw  new ArrayIndexOutOfBoundsException ("row must be 0 to 2 and is " + row);
-}}, "~N,~A");
-$_M(c$, "setColumn", 
+return;
+default:
+this.err ();
+}
+}, "~N,~A");
+$_M(c$, "setColumn3", 
 function (column, x, y, z) {
 if (column == 0) {
 this.m00 = x;
@@ -222,7 +235,7 @@ this.m02 = x;
 this.m12 = y;
 this.m22 = z;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~N,~N,~N");
 $_M(c$, "setColumnV", 
 function (column, v) {
@@ -239,7 +252,7 @@ this.m02 = v.x;
 this.m12 = v.y;
 this.m22 = v.z;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,JU.V3");
 $_M(c$, "setColumnA", 
 function (column, v) {
@@ -256,7 +269,7 @@ this.m02 = v[0];
 this.m12 = v[1];
 this.m22 = v[2];
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~A");
 $_M(c$, "getColumnV", 
 function (column, v) {
@@ -273,7 +286,7 @@ v.x = this.m02;
 v.y = this.m12;
 v.z = this.m22;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,JU.V3");
 $_M(c$, "getColumn", 
 function (column, v) {
@@ -290,7 +303,7 @@ v[0] = this.m02;
 v[1] = this.m12;
 v[2] = this.m22;
 } else {
-throw  new ArrayIndexOutOfBoundsException ("column must be 0 to 2 and is " + column);
+this.err ();
 }}, "~N,~A");
 $_M(c$, "add", 
 function (m1) {
@@ -330,7 +343,7 @@ this.m21 = tmp;
 });
 $_M(c$, "transposeM", 
 function (m1) {
-this.setM (m1);
+this.setM3 (m1);
 this.transpose ();
 }, "JU.M3");
 $_M(c$, "setAA", 
@@ -338,7 +351,7 @@ function (a1) {
 this.setFromAxisAngle (a1.x, a1.y, a1.z, a1.angle);
 }, "JU.A4");
 $_M(c$, "setFromAxisAngle", 
-($fz = function (x, y, z, angle) {
+function (x, y, z, angle) {
 var n = Math.sqrt (x * x + y * y + z * z);
 n = 1 / n;
 x *= n;
@@ -362,8 +375,8 @@ tmp1 = y * z * omc;
 tmp2 = x * s;
 this.m12 = (tmp1 - tmp2);
 this.m21 = (tmp1 + tmp2);
-}, $fz.isPrivate = true, $fz), "~N,~N,~N,~N");
-$_M(c$, "setM", 
+}, "~N,~N,~N,~N");
+$_M(c$, "setM3", 
 function (m1) {
 this.m00 = m1.m00;
 this.m01 = m1.m01;
@@ -387,9 +400,9 @@ this.m20 = m[6];
 this.m21 = m[7];
 this.m22 = m[8];
 }, "~A");
-$_M(c$, "invertM", 
+$_M(c$, "invertM3", 
 function (m1) {
-this.setM (m1);
+this.setM3 (m1);
 this.invert ();
 }, "JU.M3");
 $_M(c$, "invert", 
@@ -397,7 +410,7 @@ function () {
 var s = this.determinant ();
 if (s == 0.0) return;
 s = 1 / s;
-this.set (this.m11 * this.m22 - this.m12 * this.m21, this.m02 * this.m21 - this.m01 * this.m22, this.m01 * this.m12 - this.m02 * this.m11, this.m12 * this.m20 - this.m10 * this.m22, this.m00 * this.m22 - this.m02 * this.m20, this.m02 * this.m10 - this.m00 * this.m12, this.m10 * this.m21 - this.m11 * this.m20, this.m01 * this.m20 - this.m00 * this.m21, this.m00 * this.m11 - this.m01 * this.m10);
+this.set9 (this.m11 * this.m22 - this.m12 * this.m21, this.m02 * this.m21 - this.m01 * this.m22, this.m01 * this.m12 - this.m02 * this.m11, this.m12 * this.m20 - this.m10 * this.m22, this.m00 * this.m22 - this.m02 * this.m20, this.m02 * this.m10 - this.m00 * this.m12, this.m10 * this.m21 - this.m11 * this.m20, this.m01 * this.m20 - this.m00 * this.m21, this.m00 * this.m11 - this.m01 * this.m10);
 this.mulf (s);
 });
 $_M(c$, "determinant", 
@@ -476,11 +489,11 @@ this.mul2 (this, m1);
 }, "JU.M3");
 $_M(c$, "mul2", 
 function (m1, m2) {
-this.set (m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20, m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21, m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22, m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20, m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21, m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22, m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20, m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21, m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22);
+this.set9 (m1.m00 * m2.m00 + m1.m01 * m2.m10 + m1.m02 * m2.m20, m1.m00 * m2.m01 + m1.m01 * m2.m11 + m1.m02 * m2.m21, m1.m00 * m2.m02 + m1.m01 * m2.m12 + m1.m02 * m2.m22, m1.m10 * m2.m00 + m1.m11 * m2.m10 + m1.m12 * m2.m20, m1.m10 * m2.m01 + m1.m11 * m2.m11 + m1.m12 * m2.m21, m1.m10 * m2.m02 + m1.m11 * m2.m12 + m1.m12 * m2.m22, m1.m20 * m2.m00 + m1.m21 * m2.m10 + m1.m22 * m2.m20, m1.m20 * m2.m01 + m1.m21 * m2.m11 + m1.m22 * m2.m21, m1.m20 * m2.m02 + m1.m21 * m2.m12 + m1.m22 * m2.m22);
 }, "JU.M3,JU.M3");
 $_V(c$, "equals", 
 function (o) {
-if (!(Clazz.instanceOf (o, JU.M3))) return false;
+if (Clazz.instanceOf (o, JU.M4) || !(Clazz.instanceOf (o, JU.M3))) return false;
 var m = o;
 return this.m00 == m.m00 && this.m01 == m.m01 && this.m02 == m.m02 && this.m10 == m.m10 && this.m11 == m.m11 && this.m12 == m.m12 && this.m20 == m.m20 && this.m21 == m.m21 && this.m22 == m.m22;
 }, "~O");
@@ -490,35 +503,21 @@ return JU.T3.floatToIntBits0 (this.m00) ^ JU.T3.floatToIntBits0 (this.m01) ^ JU.
 });
 $_M(c$, "setZero", 
 function () {
-this.m00 = 0.0;
-this.m01 = 0.0;
-this.m02 = 0.0;
-this.m10 = 0.0;
-this.m11 = 0.0;
-this.m12 = 0.0;
-this.m20 = 0.0;
-this.m21 = 0.0;
-this.m22 = 0.0;
+this.clear ();
 });
-$_M(c$, "transform", 
+$_M(c$, "clear", 
+function () {
+this.m00 = this.m01 = this.m02 = this.m10 = this.m11 = this.m12 = this.m20 = this.m21 = this.m22 = 0.0;
+});
+$_M(c$, "rotate", 
 function (t) {
-this.transform2 (t, t);
+this.rotate2 (t, t);
 }, "JU.T3");
-$_M(c$, "transform2", 
+$_M(c$, "rotate2", 
 function (t, result) {
 result.set (this.m00 * t.x + this.m01 * t.y + this.m02 * t.z, this.m10 * t.x + this.m11 * t.y + this.m12 * t.z, this.m20 * t.x + this.m21 * t.y + this.m22 * t.z);
 }, "JU.T3,JU.T3");
-$_M(c$, "transformAdd", 
-function (t, scale, t2) {
-t2.x += scale * (this.m00 * t.x + this.m01 * t.y + this.m02 * t.z);
-t2.y += scale * (this.m10 * t.x + this.m11 * t.y + this.m12 * t.z);
-t2.z += scale * (this.m20 * t.x + this.m21 * t.y + this.m22 * t.z);
-}, "JU.T3,~N,JU.T3");
-$_M(c$, "toArrayD", 
-function () {
-return [[this.m00, this.m01, this.m02], [this.m10, this.m11, this.m12], [this.m20, this.m21, this.m22]];
-});
-$_M(c$, "set", 
+$_M(c$, "set9", 
 ($fz = function (m00, m01, m02, m10, m11, m12, m20, m21, m22) {
 this.m00 = m00;
 this.m01 = m01;

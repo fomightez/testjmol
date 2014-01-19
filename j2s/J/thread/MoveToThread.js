@@ -56,7 +56,7 @@ var options = params;
 this.setViewer (viewer, "MoveToThread");
 this.transformManager = manager;
 this.center = options[0];
-this.matrixEnd.setM (options[1]);
+this.matrixEnd.setM3 (options[1]);
 var f = options[3];
 this.ptMoveToCenter = (this.center == null ? this.transformManager.fixedRotationCenter : this.center);
 this.floatSecondsTotal = f[0];
@@ -74,7 +74,7 @@ this.yNav = this.newSlider (this.transformManager.getNavigationOffsetPercent ('Y
 this.cameraX = this.newSlider (this.transformManager.camera.x, f[10]);
 this.cameraY = this.newSlider (this.transformManager.camera.y, f[11]);
 this.transformManager.getRotation (this.matrixStart);
-this.matrixStartInv.invertM (this.matrixStart);
+this.matrixStartInv.invertM3 (this.matrixStart);
 this.matrixStep.mul2 (this.matrixEnd, this.matrixStartInv);
 this.aaTotal.setM (this.matrixStep);
 this.fps = 30;
@@ -136,7 +136,7 @@ $_M(c$, "doStepTransform",
 ($fz = function () {
 if (!Float.isNaN (this.matrixEnd.m00)) {
 this.transformManager.getRotation (this.matrixStart);
-this.matrixStartInv.invertM (this.matrixStart);
+this.matrixStartInv.invertM3 (this.matrixStart);
 this.matrixStep.mul2 (this.matrixEnd, this.matrixStartInv);
 this.aaTotal.setM (this.matrixStep);
 this.aaStep.setAA (this.aaTotal);

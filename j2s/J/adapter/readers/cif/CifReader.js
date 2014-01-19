@@ -148,7 +148,7 @@ this.processUnitCellTransformMatrix ();
 this.auditBlockCode = this.tokenizer.fullTrim (this.data).toUpperCase ();
 this.appendLoadNote (this.auditBlockCode);
 if (this.htAudit != null && this.auditBlockCode.contains ("_MOD_")) {
-var key = JU.PT.simpleReplace (this.auditBlockCode, "_MOD_", "_REFRNCE_");
+var key = JU.PT.rep (this.auditBlockCode, "_MOD_", "_REFRNCE_");
 if (this.atomSetCollection.setSymmetry (this.htAudit.get (key)) != null) {
 this.notionalUnitCell = this.atomSetCollection.getSymmetry ().getNotionalUnitCell ();
 this.iHaveUnitCell = true;
@@ -176,7 +176,7 @@ this.modulated = (this.mr.initialize (this, data) > 0);
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "fixKey", 
 ($fz = function (key) {
-return JU.PT.simpleReplace (key, ".", "_").toLowerCase ();
+return JU.PT.rep (key, ".", "_").toLowerCase ();
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "newModel", 
 function (modelNo) {
@@ -683,7 +683,7 @@ var ssgop = false;
 for (var i = 0; i < this.tokenizer.fieldCount; ++i) {
 switch (this.fieldProperty (i)) {
 case 2:
-if (this.field.indexOf ('~') >= 0) this.field = JU.PT.simpleReplace (this.field, "~", "");
+if (this.field.indexOf ('~') >= 0) this.field = JU.PT.rep (this.field, "~", "");
 case 3:
 this.modulated = true;
 ssgop = true;

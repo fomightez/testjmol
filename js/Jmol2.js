@@ -6,6 +6,8 @@ author: Bob Hanson hansonr@stolaf.edu 5/24/2013 12:06:25 PM
 Script replacement for legacy Jmol.js that uses JSmol instead.
 Can be used to turn most legacy Jmol.js-based sites to JSmol.
 
+BH 1/16/2014 10:33:46 PM adding serverURL indication, more notes
+BH 1/13/2014 11:14:12 AM incorrect default for missing jmolInitialize() (should be ".")
 BH 1/8/2014 5:56:15 AM simplified instructions; removed option for self.Info
 BH 11/12/2013 6:34:22 AM adds jmolAppletInline()
 BH 9/23/2013 10:07:16 PM adds set of loadInline functions
@@ -16,9 +18,9 @@ Summary:
 You should not have to change any of your HTML pages.
 You are going to replace Jmol.js, wherever that is, with this file.
 You are going to replace all your JAR file with the ones in this distribution.
-You are going to add about 1000 files in the  j2s directory to your website. 
+You are going to add about 1000 files in the ./j2s directory to your website. 
   Don't worry; only a few will be called. But you won't know which ones.
-You will be able to switch from HTML5 to JAVA using ?_USE=JAVA in the URL
+You will be able to switch from HTML5 to JAVA using ?_USE=SIGNED in the URL
 
 Procedure:
 
@@ -29,7 +31,7 @@ Procedure:
 2) rename your current Jmol.js file Jmol_old.js in case you want to undo this
 
 3a) concatenate Jmol.min.js if you are not using jQuery (or Jmol.min.nojq.js if you are)
-   with this file to form a new Jmol.js
+   with this file to form a new Jmol.js (Jmol.min.js first, then Jmol2.js)
    
 3b) Alternatively, you can change your HTML file from script src=Jmol.js to two tags,
     first src=JSmol.min.js and second Jmol2.js. But this is a pain if you have lots of HTML pages.
@@ -42,14 +44,23 @@ Procedure:
 
 You can change the parameters below to override what your pages already use:
  
+Note that: 
+
+ -- FireFox works great. You will be able to read binary files from your local machine
+ -- Chrome can only read local files if started with the  --allow-file-access-from-files  flag
+    and even then the files must be ASCII, not binary.
+ -- MSIE and Safari cannot work with local pages
 
 */
 
-Jmol.Info = {      // overrides jmolInitialize()
+Jmol.Info = {      
+      // uncomment one or more of these next lines only if you want to override jmolInitialize()
       //jarPath: "java", 
       //jarFile: "JmolAppletSigned0.jar", 
-      //j2sPath: "j2s",  
+      //j2sPath: "j2s", 
       use: "HTML5", // could be JAVA or HTML5
+      // the serverURL path is only used to load binary files in Safari, Chrome, and MSIE
+      serverURL: "http://your.server.here/jsmol.php", // required for binary file loading (Spartan, .gz, .map, etc.)
 	disableJ2SLoadMonitor: false,
 	disableInitialConsole: true
       
@@ -61,7 +72,7 @@ var _jmol = {
   appletCount: 0,
   applets: {},
   allowedJmolSize: [25, 2048, 300],   // min, max, default (pixels)
-  codebase: "java",
+  codebase: ".",
   targetSuffix: 0,
   target: "jmolApplet0",
   buttonCount: 0,

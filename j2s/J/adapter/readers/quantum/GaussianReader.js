@@ -142,7 +142,7 @@ this.shells.addLast (slater);
 this.gaussianCount += nGaussians;
 for (var i = 0; i < nGaussians; i++) {
 this.readLine ();
-this.line = JU.PT.simpleReplace (this.line, "D ", "D+");
+this.line = JU.PT.rep (this.line, "D ", "D+");
 tokens = this.getTokens ();
 if (J.util.Logger.debugging) J.util.Logger.debug ("Gaussians " + (i + 1) + " " + J.util.Escape.eAS (tokens, true));
 gdata.addLast (tokens);
@@ -222,7 +222,7 @@ continue;
 } else if (this.line.length < 21 || (this.line.charAt (5) != ' ' && !Character.isDigit (this.line.charAt (5)))) {
 continue;
 }try {
-this.line = JU.PT.simpleReplace (this.line, " 0 ", "0  ");
+this.line = JU.PT.rep (this.line, " 0 ", "0  ");
 tokens = this.getTokens ();
 var type = tokens[tokens.length - nThisLine - 1].substring (1);
 if (Character.isDigit (type.charAt (0))) type = type.substring (1);

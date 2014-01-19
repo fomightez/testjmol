@@ -229,7 +229,7 @@ var bytes = this.viewer.getImageAsBytes (isPngjPost ? "PNGJ" : "PNG", 0, 0, -1, 
 if (errMsg[0] != null) return errMsg[0];
 if (isPngjBinaryPost) {
 outputBytes = bytes;
-name = JU.PT.simpleReplace (name, "?_", "=_");
+name = JU.PT.rep (name, "?_", "=_");
 } else {
 name =  new JU.SB ().append (name).append ("=").appendSB (JU.Base64.getBase64 (bytes)).toString ();
 }}var iurl = J.viewer.FileManager.urlTypeIndex (name);
@@ -618,8 +618,8 @@ $_M(c$, "classifyName",
 ($fz = function (name, isFullLoad) {
 if (name == null) return [null];
 var doSetPathForAllFiles = (this.pathForAllFiles.length > 0);
-if (name.startsWith ("?")) {
-if ((name = this.viewer.dialogAsk ("Load", name.substring (1))) == null) return [isFullLoad ? "#CANCELED#" : null];
+if (name.startsWith ("?") || name.startsWith ("http://?")) {
+if ((name = this.viewer.dialogAsk ("Load", name)) == null) return [isFullLoad ? "#CANCELED#" : null];
 doSetPathForAllFiles = false;
 }var file = null;
 var url = null;
@@ -692,7 +692,7 @@ return (name == null ? "" : name.substring (0, name.lastIndexOf ("/")));
 c$.fixPath = $_M(c$, "fixPath", 
 ($fz = function (path) {
 path = path.$replace ('\\', '/');
-path = JU.PT.simpleReplace (path, "/./", "/");
+path = JU.PT.rep (path, "/./", "/");
 var pt = path.lastIndexOf ("//") + 1;
 if (pt < 1) pt = path.indexOf (":/") + 1;
 if (pt < 1) pt = path.indexOf ("/");
@@ -701,7 +701,7 @@ var protocol = path.substring (0, pt);
 path = path.substring (pt);
 while ((pt = path.lastIndexOf ("/../")) >= 0) {
 var pt0 = path.substring (0, pt).lastIndexOf ("/");
-if (pt0 < 0) return JU.PT.simpleReplace (protocol + path, "/../", "/");
+if (pt0 < 0) return JU.PT.rep (protocol + path, "/../", "/");
 path = path.substring (0, pt0) + path.substring (pt + 3);
 }
 if (path.length == 0) path = "/";
@@ -738,6 +738,8 @@ if (!forDialog) viewer.setStringProperty ("defaultDirectoryLocal", path);
 }, "J.viewer.Viewer,~S,~B");
 c$.getLocalPathForWritingFile = $_M(c$, "getLocalPathForWritingFile", 
 function (viewer, file) {
+if (file.startsWith ("http://")) return file;
+file = JU.PT.rep (file, "?", "");
 if (file.indexOf ("file:/") == 0) return file.substring (6);
 if (file.indexOf ("/") == 0 || file.indexOf (":") >= 0) return file;
 var dir = null;
@@ -755,13 +757,13 @@ c$.setScriptFileReferences = $_M(c$, "setScriptFileReferences",
 function (script, localPath, remotePath, scriptPath) {
 if (localPath != null) script = J.viewer.FileManager.setScriptFileRefs (script, localPath, true);
 if (remotePath != null) script = J.viewer.FileManager.setScriptFileRefs (script, remotePath, false);
-script = JU.PT.simpleReplace (script, "\1\"", "\"");
+script = JU.PT.rep (script, "\1\"", "\"");
 if (scriptPath != null) {
 while (scriptPath.endsWith ("/")) scriptPath = scriptPath.substring (0, scriptPath.length - 1);
 
 for (var ipt = 0; ipt < J.viewer.FileManager.scriptFilePrefixes.length; ipt++) {
 var tag = J.viewer.FileManager.scriptFilePrefixes[ipt];
-script = JU.PT.simpleReplace (script, tag + ".", tag + scriptPath);
+script = JU.PT.rep (script, tag + ".", tag + scriptPath);
 }
 }return script;
 }, "~S,~S,~S,~S");
@@ -799,11 +801,11 @@ return name.substring (pt + 1);
 }, "~S");
 c$.fixFileNameVariables = $_M(c$, "fixFileNameVariables", 
 function (format, fname) {
-var str = JU.PT.simpleReplace (format, "%FILE", fname);
+var str = JU.PT.rep (format, "%FILE", fname);
 if (str.indexOf ("%LC") < 0) return str;
 fname = fname.toLowerCase ();
-str = JU.PT.simpleReplace (str, "%LCFILE", fname);
-if (fname.length == 4) str = JU.PT.simpleReplace (str, "%LC13", fname.substring (1, 3));
+str = JU.PT.rep (str, "%LCFILE", fname);
+if (fname.length == 4) str = JU.PT.rep (str, "%LC13", fname.substring (1, 3));
 return str;
 }, "~S,~S");
 $_M(c$, "clearPngjCache", 

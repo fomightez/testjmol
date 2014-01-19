@@ -9981,6 +9981,7 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 
 // see JSmolApi.js for public user-interface. All these are private functions
 
+// BH 1/13/2014 2:12:38 PM adding "http://www.nmrdb.org/tools/jmol/predict.php":"%URL", to _DirectDatabaseCalls
 // BH 12/21/2013 6:38:35 PM applet sync broken
 // BH 12/6/2013 6:18:32 PM cover.htm and coverImage fix
 // BH 12/4/2013 7:44:26 PM fix for JME independent search box
@@ -10099,6 +10100,7 @@ Jmol = (function(document) {
         "cactus.nci.nih.gov": "%URL",
         "www.rcsb.org": "%URL",
         "pubchem.ncbi.nlm.nih.gov":"%URL",
+        "http://www.nmrdb.org/tools/jmol/predict.php":"%URL",
         "$": "http://cactus.nci.nih.gov/chemical/structure/%FILE/file?format=sdf&get3d=True",
         "$$": "http://cactus.nci.nih.gov/chemical/structure/%FILE/file?format=sdf",
         "=": "http://www.rcsb.org/pdb/files/%FILE.pdb",
@@ -10111,8 +10113,6 @@ Jmol = (function(document) {
     },
     _debugAlert: false,
     _document: document,
-    _execLog: "",
-    _execStack: [],
     _isMsie: (navigator.userAgent.toLowerCase().indexOf("msie") >= 0),
     _isXHTML: false,
     _lastAppletID: null,
@@ -10700,7 +10700,7 @@ Jmol = (function(document) {
     
   Jmol._syncBinaryOK="?";
   
-  Jmol._canSyncBinary = function() {
+  Jmol._canSyncBinary = function(isSilent) {
     if (self.VBArray) return (Jmol._syncBinaryOK = false);
     if (Jmol._syncBinaryOK != "?") return Jmol._syncBinaryOK;
     Jmol._syncBinaryOK = true;
@@ -10715,7 +10715,7 @@ Jmol = (function(document) {
     } catch( e ) {
       var s = "JmolCore.js: synchronous binary file transfer is requested but not available";
       System.out.println(s);
-      if (Jmol._alertNoBinary)
+      if (Jmol._alertNoBinary && !isSilent)
         alert(s)
       return Jmol._syncBinaryOK = false;
     }
@@ -10733,8 +10733,9 @@ Jmol = (function(document) {
   Jmol._getFileData = function(fileName) {
     // use host-server PHP relay if not from this host
     var type = (Jmol._isBinaryUrl(fileName) ? "binary" : "text");
-    var asBase64 = ((type == "binary") && !Jmol._canSyncBinary());
-    if (asBase64 && fileName.indexOf("pdb.gz") >= 0 && fileName.indexOf("http://www.rcsb.org/pdb/files/") == 0) {
+    var isPDB = (fileName.indexOf("pdb.gz") >= 0 && fileName.indexOf("http://www.rcsb.org/pdb/files/") == 0);
+    var asBase64 = (type == "binary" && !Jmol._canSyncBinary(isPDB));
+    if (asBase64 && isPDB) {
       // avoid unnecessary binary transfer
       fileName = fileName.replace(/pdb\.gz/,"pdb");
       asBase64 = false;
@@ -10809,10 +10810,10 @@ Jmol = (function(document) {
     return true;
   }
 
-  Jmol._loadFileAsynchronously = function(fileLoadThread, applet, fileName) {
+  Jmol._loadFileAsynchronously = function(fileLoadThread, applet, fileName, appData) {
     // we actually cannot suggest a fileName, I believe.
     if (!Jmol.featureDetection.hasFileReader)
-        return fileLoadThread.setData("Local file reading is not enabled in your browser");
+        return fileLoadThread.setData("Local file reading is not enabled in your browser", null, appData);
     if (!applet._localReader) {
       var div = '<div id="ID" style="z-index:'+Jmol._z.fileOpener + ';position:absolute;background:#E0E0E0;left:10px;top:10px"><div style="margin:5px 5px 5px 5px;"><input type="file" id="ID_files" /><button id="ID_loadfile">load</button><button id="ID_cancel">cancel</button></div><div>'
       Jmol.$after("#" + applet._id + "_appletdiv", div.replace(/ID/g, applet._id + "_localReader"));
@@ -10825,7 +10826,7 @@ Jmol = (function(document) {
       reader.onloadend = function(evt) {
         if (evt.target.readyState == FileReader.DONE) { // DONE == 2
           Jmol.$css(Jmol.$(applet, "localReader"), {display : "none"});
-          fileLoadThread.setData(file.name, Jmol._toBytes(evt.target.result));
+          fileLoadThread.setData(file.name, Jmol._toBytes(evt.target.result), appData);
         }
       };
       reader.readAsArrayBuffer(file);
@@ -10833,7 +10834,7 @@ Jmol = (function(document) {
     Jmol.$appEvent(applet, "localReader_cancel", "click");
     Jmol.$appEvent(applet, "localReader_cancel", "click", function(evt) {
       Jmol.$css(Jmol.$(applet, "localReader"), {display: "none"});
-      fileLoadThread.setData(null, "#CANCELED#");
+      fileLoadThread.setData(null, "#CANCELED#", appData);
     });
     Jmol.$css(Jmol.$(applet, "localReader"), {display : "block"});
   }

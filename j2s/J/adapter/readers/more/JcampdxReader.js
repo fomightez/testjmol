@@ -28,14 +28,14 @@ J.util.Logger.warn ("REVERSE keyword ignored");
 this.reverseModels = false;
 }this.selectedModel = this.desiredModelNumber;
 this.desiredModelNumber = -2147483648;
-this.peakFilePath = J.util.Escape.eS (this.filePath);
+this.peakFilePath = JU.PT.esc (this.filePath);
 this.htParams.remove ("modelNumber");
 if (this.htParams.containsKey ("zipSet")) {
 this.peakIndex = this.htParams.get ("peakIndex");
 if (this.peakIndex == null) {
 this.peakIndex =  Clazz.newIntArray (1, 0);
 this.htParams.put ("peakIndex", this.peakIndex);
-}if (!this.htParams.containsKey ("subFileName")) this.peakFilePath = J.util.Escape.eS (JU.PT.split (this.filePath, "|")[0]);
+}if (!this.htParams.containsKey ("subFileName")) this.peakFilePath = JU.PT.esc (JU.PT.split (this.filePath, "|")[0]);
 } else {
 this.peakIndex =  Clazz.newIntArray (1, 0);
 }if (!this.checkFilterKey ("NOSYNC")) this.addJmolScript ("sync on");
@@ -247,11 +247,11 @@ return J.util.Escape.uB (s);
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "simpleReplace", 
 ($fz = function (s, sfrom, sto) {
-return JU.PT.simpleReplace (s, sfrom, sto);
+return JU.PT.rep (s, sfrom, sto);
 }, $fz.isPrivate = true, $fz), "~S,~S,~S");
 $_M(c$, "escape", 
 ($fz = function (s) {
-return J.util.Escape.eS (s);
+return JU.PT.esc (s);
 }, $fz.isPrivate = true, $fz), "~S");
 $_M(c$, "getQuotedAttribute", 
 ($fz = function (s, attr) {
@@ -266,7 +266,7 @@ peakData.addLast (info);
 }, $fz.isPrivate = true, $fz), "JU.List,~S");
 $_M(c$, "getPeakFilePath", 
 ($fz = function () {
-return " file=" + J.util.Escape.eS (this.peakFilePath);
+return " file=" + JU.PT.esc (this.peakFilePath);
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "discardUntil", 
 ($fz = function (ignored, tag) {

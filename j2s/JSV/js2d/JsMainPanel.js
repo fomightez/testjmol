@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JSV.js2d");
-Clazz.load (["JSV.api.JSVMainPanel", "$.JSVViewPanel"], "JSV.js2d.JsViewPanel", ["JSV.common.Annotation"], function () {
+Clazz.load (["JSV.api.JSVMainPanel"], "JSV.js2d.JsMainPanel", null, function () {
 c$ = Clazz.decorateAsClass (function () {
 this.selectedPanel = null;
 this.currentPanelIndex = 0;
@@ -8,7 +8,7 @@ this.visible = false;
 this.focusable = false;
 this.enabled = false;
 Clazz.instantialize (this, arguments);
-}, JSV.js2d, "JsViewPanel", null, [JSV.api.JSVViewPanel, JSV.api.JSVMainPanel]);
+}, JSV.js2d, "JsMainPanel", null, JSV.api.JSVMainPanel);
 $_V(c$, "getCurrentPanelIndex", 
 function () {
 return this.currentPanelIndex;
@@ -25,26 +25,12 @@ function (title) {
 this.title = title;
 }, "~S");
 $_V(c$, "setSelectedPanel", 
-function (jsvp, panelNodes) {
-if (jsvp !== this.selectedPanel) {
-this.selectedPanel = jsvp;
-}for (var i = panelNodes.size (); --i >= 0; ) {
-var j = panelNodes.get (i).jsvp;
-if (j === jsvp) {
-this.currentPanelIndex = i;
-} else {
-j.setEnabled (false);
-j.setFocusable (false);
-j.getPanelData ().closeAllDialogsExcept (JSV.common.Annotation.AType.NONE);
-}}
-this.markSelectedPanels (panelNodes);
-this.visible = (jsvp != null);
-}, "JSV.api.JSVPanel,JU.List");
-$_V(c$, "markSelectedPanels", 
-function (panelNodes) {
-for (var i = panelNodes.size (); --i >= 0; ) panelNodes.get (i).isSelected = (this.currentPanelIndex == i);
-
-}, "JU.List");
+function (viewer, jsvp, panelNodes) {
+if (jsvp !== this.selectedPanel) this.selectedPanel = jsvp;
+var i = viewer.selectPanel (jsvp, panelNodes);
+if (i >= 0) this.currentPanelIndex = i;
+this.visible = true;
+}, "JSV.common.JSViewer,JSV.api.JSVPanel,JU.List");
 $_M(c$, "getHeight", 
 function () {
 return (this.selectedPanel == null ? 0 : this.selectedPanel.getHeight ());
@@ -65,11 +51,11 @@ $_V(c$, "isVisible",
 function () {
 return this.visible;
 });
-$_M(c$, "setEnabled", 
+$_V(c$, "setEnabled", 
 function (b) {
 this.enabled = b;
 }, "~B");
-$_M(c$, "setFocusable", 
+$_V(c$, "setFocusable", 
 function (b) {
 this.focusable = b;
 }, "~B");

@@ -139,7 +139,7 @@ for (var e, $e = map.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ())
 var name = e.getKey ();
 if (!"names".equals (name)) {
 this.viewer.log ("\n===" + name + "===");
-this.viewer.log (JU.PT.simpleReplace (e.getValue ().toString (), "[", "\n["));
+this.viewer.log (JU.PT.rep (e.getValue ().toString (), "[", "\n["));
 }}
 this.viewer.log ("\n===names===");
 for (var i = 1; i < names.size (); i++) {
@@ -147,7 +147,7 @@ this.viewer.log ("");
 var list = names.get (i);
 this.viewer.log (" =" + list.get (0).toString () + "=");
 try {
-this.viewer.log (JU.PT.simpleReplace (list.toString (), "[", "\n["));
+this.viewer.log (JU.PT.rep (list.toString (), "[", "\n["));
 } catch (e) {
 }
 }

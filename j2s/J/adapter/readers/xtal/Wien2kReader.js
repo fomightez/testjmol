@@ -62,7 +62,7 @@ if (!this.doSymmetry) this.addAtom ();
 var atomName = this.line.substring (0, 10);
 var sym = atomName.substring (0, 2).trim ();
 if (sym.length == 2 && Character.isDigit (sym.charAt (1))) sym = sym.substring (0, 1);
-atomName = JU.PT.simpleReplace (atomName, " ", "");
+atomName = JU.PT.rep (atomName, " ", "");
 var n = 0;
 for (var i = this.atomSetCollection.atomCount; --i >= thisAtom; ) {
 var atom = this.atomSetCollection.atoms[i];

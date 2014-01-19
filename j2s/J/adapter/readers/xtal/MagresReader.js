@@ -54,8 +54,8 @@ return (this.line.length > 0);
 $_M(c$, "checkBlock", 
 ($fz = function () {
 if (!(this.line.startsWith ("<") && this.line.endsWith (">")) && !(this.line.startsWith ("[") && this.line.endsWith ("]"))) return this.currentBlock;
-this.line = JU.PT.simpleReplace (this.line, "<", "[");
-this.line = JU.PT.simpleReplace (this.line, ">", "]");
+this.line = JU.PT.rep (this.line, "<", "[");
+this.line = JU.PT.rep (this.line, ">", "]");
 switch (Clazz.doubleToInt (("...............[calculation]..[/calculation].[atoms]........[/atoms].......[magres].......[/magres]......").indexOf (this.line + ".") / 15)) {
 case 0:
 J.util.Logger.info ("block indicator ignored: " + this.line);
@@ -91,7 +91,7 @@ $_M(c$, "setUnits",
 ($fz = function (isMagresBlock) {
 var tokens = this.getTokens ();
 var id = tokens[1];
-if (isMagresBlock) this.appendLoadNote ("Ellipsoid set " + J.util.Escape.eS (id) + ": " + (id.startsWith ("ms") ? "Magnetic Shielding" : id.startsWith ("efg") ? "Electric Field Gradient" : id.startsWith ("isc") ? "J-Coupling" : "?"));
+if (isMagresBlock) this.appendLoadNote ("Ellipsoid set " + JU.PT.esc (id) + ": " + (id.startsWith ("ms") ? "Magnetic Shielding" : id.startsWith ("efg") ? "Electric Field Gradient" : id.startsWith ("isc") ? "J-Coupling" : "?"));
 this.magresUnits.put (id, tokens[2]);
 return true;
 }, $fz.isPrivate = true, $fz), "~B");

@@ -37,7 +37,7 @@ function (mat) {
 if (mat == null) return;
 var m =  new JU.M4 ();
 m.setM3 (mat);
-this.matrixFractionalToCartesian.mul2 (m, this.matrixFractionalToCartesian);
+this.matrixFractionalToCartesian.mul42 (m, this.matrixFractionalToCartesian);
 this.matrixCartesianToFractional.invertM (this.matrixFractionalToCartesian);
 this.calcUnitcellVertices ();
 }, "JU.M3");
@@ -45,14 +45,14 @@ $_M(c$, "toUnitCell",
 function (pt, offset) {
 if (this.matrixCartesianToFractional == null) return;
 if (offset == null) {
-this.matrixCartesianToFractional.transform (pt);
+this.matrixCartesianToFractional.rotTrans (pt);
 this.unitize (pt);
-this.matrixFractionalToCartesian.transform (pt);
+this.matrixFractionalToCartesian.rotTrans (pt);
 } else {
-this.matrixCtoFAbsolute.transform (pt);
+this.matrixCtoFAbsolute.rotTrans (pt);
 this.unitize (pt);
 pt.add (offset);
-this.matrixFtoCAbsolute.transform (pt);
+this.matrixFtoCAbsolute.rotTrans (pt);
 }}, "JU.P3,JU.P3");
 $_M(c$, "unitize", 
 function (pt) {
@@ -84,13 +84,13 @@ this.cartesianOffset.setT (pt);
 this.matrixFractionalToCartesian.m03 = 0;
 this.matrixFractionalToCartesian.m13 = 0;
 this.matrixFractionalToCartesian.m23 = 0;
-this.matrixFractionalToCartesian.transform (this.cartesianOffset);
+this.matrixFractionalToCartesian.rotTrans (this.cartesianOffset);
 this.matrixFractionalToCartesian.m03 = this.cartesianOffset.x;
 this.matrixFractionalToCartesian.m13 = this.cartesianOffset.y;
 this.matrixFractionalToCartesian.m23 = this.cartesianOffset.z;
 if (this.allFractionalRelative) {
-this.matrixCtoFAbsolute.setM (this.matrixCartesianToFractional);
-this.matrixFtoCAbsolute.setM (this.matrixFractionalToCartesian);
+this.matrixCtoFAbsolute.setM4 (this.matrixCartesianToFractional);
+this.matrixFtoCAbsolute.setM4 (this.matrixFractionalToCartesian);
 }}, "JU.P3");
 $_M(c$, "setCartesianOffset", 
 function (origin) {
@@ -103,13 +103,13 @@ this.fractionalOffset.setT (this.cartesianOffset);
 this.matrixCartesianToFractional.m03 = 0;
 this.matrixCartesianToFractional.m13 = 0;
 this.matrixCartesianToFractional.m23 = 0;
-this.matrixCartesianToFractional.transform (this.fractionalOffset);
+this.matrixCartesianToFractional.rotTrans (this.fractionalOffset);
 this.matrixCartesianToFractional.m03 = -this.fractionalOffset.x;
 this.matrixCartesianToFractional.m13 = -this.fractionalOffset.y;
 this.matrixCartesianToFractional.m23 = -this.fractionalOffset.z;
 if (this.allFractionalRelative) {
-this.matrixCtoFAbsolute.setM (this.matrixCartesianToFractional);
-this.matrixFtoCAbsolute.setM (this.matrixFractionalToCartesian);
+this.matrixCtoFAbsolute.setM4 (this.matrixCartesianToFractional);
+this.matrixFtoCAbsolute.setM4 (this.matrixFractionalToCartesian);
 }}, "JU.T3");
 $_M(c$, "setMinMaxLatticeParameters", 
 function (minXYZ, maxXYZ) {
@@ -201,7 +201,7 @@ pts[i] = JU.P3.newP (J.util.BoxInfo.unitCubePoints[i]);
 if (cell0 != null) {
 scale *= this.unitCellMultiplier.z;
 pts[i].add3 (cell0.x + cell1.x * pts[i].x, cell0.y + cell1.y * pts[i].y, cell0.z + cell1.z * pts[i].z);
-}this.matrixFractionalToCartesian.transform (pts[i]);
+}this.matrixFractionalToCartesian.rotTrans (pts[i]);
 if (withOffset) pts[i].add (this.cartesianOffset);
 }
 return J.util.BoxInfo.getCanonicalCopy (pts, scale);
@@ -215,12 +215,12 @@ return x;
 $_M(c$, "calcUnitcellVertices", 
 ($fz = function () {
 if (this.matrixFractionalToCartesian == null) return;
-this.matrixCtoFAbsolute = JU.M4.newM (this.matrixCartesianToFractional);
-this.matrixFtoCAbsolute = JU.M4.newM (this.matrixFractionalToCartesian);
+this.matrixCtoFAbsolute = JU.M4.newM4 (this.matrixCartesianToFractional);
+this.matrixFtoCAbsolute = JU.M4.newM4 (this.matrixFractionalToCartesian);
 this.vertices =  new Array (8);
 for (var i = 8; --i >= 0; ) {
 this.vertices[i] =  new JU.P3 ();
-this.matrixFractionalToCartesian.transform2 (J.util.BoxInfo.unitCubePoints[i], this.vertices[i]);
+this.matrixFractionalToCartesian.rotTrans2 (J.util.BoxInfo.unitCubePoints[i], this.vertices[i]);
 }
 }, $fz.isPrivate = true, $fz));
 $_M(c$, "checkDistance", 

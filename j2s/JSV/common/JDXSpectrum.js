@@ -421,6 +421,10 @@ $_M(c$, "setNHydrogens",
 function (nH) {
 this.nH = nH;
 }, "~N");
+$_M(c$, "doNormalize", 
+function () {
+System.out.println ("OK");
+});
 Clazz.pu$h ();
 c$ = Clazz.declareType (JSV.common.JDXSpectrum, "IRMode", Enum);
 c$.getMode = $_M(c$, "getMode", 

@@ -129,7 +129,7 @@ if (this.stopped || this.eval.isStopped ()) {
 mode = -2;
 break;
 }{
-return Jmol._loadFileAsynchronously(this, this.viewer.applet, this.fileName);
+return Jmol._loadFileAsynchronously(this, this.viewer.applet, this.fileName, null);
 }break;
 case -2:
 this.resumeEval ();
@@ -138,11 +138,11 @@ return;
 
 }, "~N");
 $_M(c$, "setData", 
-function (fileName, data) {
+function (fileName, data, myData) {
 if (fileName != null) this.sc.parentContext.htFileCache.put (this.key, this.cacheName = this.cacheName.substring (0, this.cacheName.lastIndexOf ("_") + 1) + fileName);
 this.viewer.cachePut (this.cacheName, data);
 this.run1 (-2);
-}, "~S,~O");
+}, "~S,~O,~O");
 });
 Clazz_declarePackage ("J.script");
 Clazz_load (["J.thread.JmolThread"], "J.script.ScriptQueueThread", ["J.util.Logger"], function () {
@@ -307,7 +307,7 @@ Clazz_defineStatics (c$,
 "commandDelay", 50);
 });
 Clazz_declarePackage ("J.script");
-Clazz_load (["J.api.JmolScriptManager", "JU.List"], "J.script.ScriptManager", ["java.io.BufferedReader", "java.lang.Boolean", "$.Thread", "javajs.api.ZInputStream", "JU.PT", "$.SB", "J.api.Interface", "J.io.JmolBinary", "J.script.ScriptQueueThread", "J.util.Escape", "$.Logger"], function () {
+Clazz_load (["J.api.JmolScriptManager", "JU.List"], "J.script.ScriptManager", ["java.io.BufferedReader", "java.lang.Boolean", "$.Thread", "javajs.api.ZInputStream", "JU.PT", "$.SB", "J.api.Interface", "J.io.JmolBinary", "J.script.ScriptQueueThread", "J.util.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.viewer = null;
 this.eval = null;
@@ -617,7 +617,7 @@ var isCached = fileName.startsWith ("cache://");
 if (this.viewer.isApplet () && fileName.indexOf ("://") < 0) fileName = "file://" + (fileName.startsWith ("/") ? "" : "/") + fileName;
 try {
 if (fileName.endsWith (".pse")) {
-cmd = (isCached ? "" : "zap;") + "load SYNC " + J.util.Escape.eS (fileName) + " filter 'DORESIZE'";
+cmd = (isCached ? "" : "zap;") + "load SYNC " + JU.PT.esc (fileName) + " filter 'DORESIZE'";
 return;
 }if (fileName.endsWith ("jvxl")) {
 cmd = "isosurface ";
@@ -626,7 +626,7 @@ return;
 var type = this.getFileTypeName (fileName);
 if (type == null) {
 type = J.io.JmolBinary.determineSurfaceTypeIs (this.viewer.getBufferedInputStream (fileName));
-if (type != null) cmd = "if (_filetype == 'Pdb') { isosurface sigma 1.0 within 2.0 {*} " + J.util.Escape.eS (fileName) + " mesh nofill }; else; { isosurface " + J.util.Escape.eS (fileName) + "}";
+if (type != null) cmd = "if (_filetype == 'Pdb') { isosurface sigma 1.0 within 2.0 {*} " + JU.PT.esc (fileName) + " mesh nofill }; else; { isosurface " + JU.PT.esc (fileName) + "}";
 return;
 } else if (type.equals ("Jmol")) {
 cmd = "script ";
@@ -634,12 +634,12 @@ cmd = "script ";
 cmd = "isosurface sign red blue ";
 } else if (!type.equals ("spt")) {
 cmd = this.viewer.global.defaultDropScript;
-cmd = JU.PT.simpleReplace (cmd, "%FILE", fileName);
-cmd = JU.PT.simpleReplace (cmd, "%ALLOWCARTOONS", "" + pdbCartoons);
+cmd = JU.PT.rep (cmd, "%FILE", fileName);
+cmd = JU.PT.rep (cmd, "%ALLOWCARTOONS", "" + pdbCartoons);
 if (cmd.toLowerCase ().startsWith ("zap") && isCached) cmd = cmd.substring (3);
 return;
 }}if (allowScript && this.viewer.scriptEditorVisible && cmd == null) this.viewer.showEditor ([fileName, this.viewer.getFileAsString (fileName)]);
- else cmd = (cmd == null ? "script " : cmd) + J.util.Escape.eS (fileName);
+ else cmd = (cmd == null ? "script " : cmd) + JU.PT.esc (fileName);
 } finally {
 if (cmd != null) this.viewer.evalString (cmd);
 }
@@ -785,7 +785,7 @@ this.viewer.setStateScriptVersion (null);
 }, "~B,~B,~B,~B,JU.SB,~B");
 $_M(c$, "useThreads", 
 function () {
-return (!this.viewer.autoExit && this.viewer.haveDisplay && this.outputBuffer == null && this.allowJSThreads);
+return (!this.chk && !this.viewer.isHeadless () && !this.viewer.autoExit && this.viewer.haveDisplay && this.outputBuffer == null && this.allowJSThreads);
 });
 $_M(c$, "startEval", 
 function () {
@@ -970,8 +970,8 @@ var s = "";
 if (ichBegin < 0 || ichEnd <= ichBegin || ichEnd > this.$script.length) return "";
 try {
 s = this.$script.substring (ichBegin, ichEnd);
-if (s.indexOf ("\\\n") >= 0) s = JU.PT.simpleReplace (s, "\\\n", "  ");
-if (s.indexOf ("\\\r") >= 0) s = JU.PT.simpleReplace (s, "\\\r", "  ");
+if (s.indexOf ("\\\n") >= 0) s = JU.PT.rep (s, "\\\n", "  ");
+if (s.indexOf ("\\\r") >= 0) s = JU.PT.rep (s, "\\\r", "  ");
 if (s.length > 0 && !s.endsWith (";")) s += ";";
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
@@ -1041,7 +1041,7 @@ try {
 this.pushContext (null, "getAtomBitSet");
 var scr = "select (" + atomExpression + ")";
 scr = JU.PT.replaceAllCharacters (scr, "\n\r", "),(");
-scr = JU.PT.simpleReplace (scr, "()", "(none)");
+scr = JU.PT.rep (scr, "()", "(none)");
 if (this.compileScript (null, scr, false)) {
 this.st = this.aatoken[0];
 bs = this.atomExpression (this.st, 1, 0, false, false, true, true);
@@ -1919,8 +1919,8 @@ if (filename != null && strScript.indexOf ("$SCRIPT_PATH$") >= 0) {
 var path = filename;
 var pt = Math.max (filename.lastIndexOf ("|"), filename.lastIndexOf ("/"));
 path = path.substring (0, pt + 1);
-strScript = JU.PT.simpleReplace (strScript, "$SCRIPT_PATH$/", path);
-strScript = JU.PT.simpleReplace (strScript, "$SCRIPT_PATH$", path);
+strScript = JU.PT.rep (strScript, "$SCRIPT_PATH$/", path);
+strScript = JU.PT.rep (strScript, "$SCRIPT_PATH$", path);
 }return strScript;
 }, "~S,~S");
 $_M(c$, "setScriptExtensions", 
@@ -2320,9 +2320,7 @@ fixed[j] = J.script.SV.newV (8, v);
 } else if (Clazz_instanceOf (v, JU.P4)) {
 fixed[j] = J.script.SV.newV (9, v);
 } else if (Clazz_instanceOf (v, JU.M3)) {
-fixed[j] = J.script.SV.newV (11, v);
-} else if (Clazz_instanceOf (v, JU.M4)) {
-fixed[j] = J.script.SV.newV (12, v);
+fixed[j] = J.script.SV.newV (Clazz_instanceOf (v, JU.M4) ? 12 : 11, v);
 } else if (Clazz_instanceOf (v, java.util.Map)) {
 fixed[j] = J.script.SV.newV (6, v);
 } else if (Clazz_instanceOf (v, JU.List)) {
@@ -2753,10 +2751,10 @@ break;
 if (msg.indexOf ("{0}") < 0) {
 if (value != null) msg += ": " + value;
 } else {
-msg = JU.PT.simpleReplace (msg, "{0}", value);
-if (msg.indexOf ("{1}") >= 0) msg = JU.PT.simpleReplace (msg, "{1}", more);
+msg = JU.PT.rep (msg, "{0}", value);
+if (msg.indexOf ("{1}") >= 0) msg = JU.PT.rep (msg, "{1}", more);
  else if (more != null) msg += ": " + more;
-if (msg.indexOf ("{2}") >= 0) msg = JU.PT.simpleReplace (msg, "{2}", more);
+if (msg.indexOf ("{2}") >= 0) msg = JU.PT.rep (msg, "{2}", more);
 }if (doTranslate) J.i18n.GT.setDoTranslate (true);
 return msg;
 }, "~N,~S,~S,~S,~B");
@@ -3134,7 +3132,7 @@ refreshed = true;
 rpn.addXBs (this.viewer.getVisibleSet ());
 break;
 case 3145766:
-if (!this.chk && allowRefresh) this.refresh ();
+if (!this.chk && allowRefresh) this.refresh (false);
 rpn.addXBs (this.viewer.getClickableSet ());
 break;
 case 1048608:
@@ -3742,7 +3740,7 @@ this.iToken = i;
 switch (this.tokAt (i)) {
 case 4:
 s = J.script.SV.sValue (this.st[i]);
-s = JU.PT.replaceAllCharacter (s, "{},[]\"'", ' ');
+s = JU.PT.replaceWithCharacter (s, "{},[]\"'", ' ');
 fparams = JU.PT.parseFloatArray (s);
 n = fparams.length;
 break;
@@ -4335,7 +4333,7 @@ this.executionPaused = true;
 return true;
 }if (J.util.Logger.debugging) {
 J.util.Logger.debug ("script execution paused at command " + (this.pc + 1) + " level " + this.scriptLevel + ": " + this.thisCommand);
-}this.refresh ();
+}this.refresh (false);
 while (this.executionPaused) {
 this.viewer.popHoldRepaint ("pause \u0001## REPAINT_IGNORE ##");
 var script = this.viewer.getInsertedCommand ();
@@ -4381,7 +4379,7 @@ this.viewer.scriptStatus ("script execution " + (this.$error || this.executionSt
 $_M(c$, "doDelay", 
 function (millis) {
 if (!this.useThreads ()) return;
-if (this.isJS && this.allowJSThreads) throw  new J.script.ScriptInterruption (this, "delay", millis);
+if (this.isJS) throw  new J.script.ScriptInterruption (this, "delay", millis);
 this.delayScript (millis);
 }, "~N");
 $_M(c$, "dispatchCommands", 
@@ -4414,7 +4412,7 @@ var isForCheck = false;
 var vProcess = null;
 var lastTime = System.currentTimeMillis ();
 for (; this.pc < this.aatoken.length && this.pc < this.pcEnd; this.pc++) {
-if (!this.chk && this.isJS && this.useThreads () && !fromFunc) {
+if (this.isJS && this.useThreads () && !fromFunc) {
 if (!this.executionPaused && System.currentTimeMillis () - lastTime > 1000) {
 this.pc--;
 this.doDelay (-1);
@@ -4633,7 +4631,7 @@ case 4165:
 this.undoRedoMove ();
 break;
 case 266284:
-this.refresh ();
+this.refresh (true);
 break;
 case 4141:
 this.reset ();
@@ -5279,7 +5277,7 @@ var dSlab = this.floatParameter (8);
 var floatSecondsTotal = this.floatParameter (9);
 var fps = (this.slen == 11 ? this.intParameter (10) : 30);
 if (this.chk) return;
-this.refresh ();
+this.refresh (false);
 if (!this.useThreads ()) floatSecondsTotal = 0;
 this.viewer.move (this, dRot, dZoom, dTrans, dSlab, floatSecondsTotal, fps);
 if (floatSecondsTotal > 0 && this.isJS) throw  new J.script.ScriptInterruption (this, "move", 1);
@@ -5294,7 +5292,7 @@ if (this.slen == 2 && this.isFloatParameter (1)) {
 floatSecondsTotal = this.floatParameter (1);
 if (this.chk) return;
 if (!this.useThreads ()) floatSecondsTotal = 0;
-if (floatSecondsTotal > 0) this.refresh ();
+if (floatSecondsTotal > 0) this.refresh (false);
 this.viewer.moveTo (this, floatSecondsTotal, null, J.viewer.JC.axisZ, 0, null, 100, 0, 0, 0, null, NaN, NaN, NaN, NaN, NaN, NaN);
 if (this.isJS && floatSecondsTotal > 0 && this.viewer.global.waitForMoveTo) throw  new J.script.ScriptInterruption (this, "moveTo", 1);
 return;
@@ -5431,7 +5429,7 @@ if (!isChange && Math.abs (cameraY - this.viewer.getCamera ().y) >= 0.01) isChan
 }}}this.checkLength (i);
 if (this.chk) return;
 if (!isChange) floatSecondsTotal = 0;
-if (floatSecondsTotal > 0) this.refresh ();
+if (floatSecondsTotal > 0) this.refresh (false);
 if (!this.useThreads ()) floatSecondsTotal = 0;
 if (cameraDepth == 0) {
 cameraDepth = cameraX = cameraY = NaN;
@@ -6328,7 +6326,7 @@ case 135270407:
 isData = true;
 loadScript.append (" /*data*/ data");
 var key = this.stringParameter (++i).toLowerCase ();
-loadScript.append (" ").append (J.util.Escape.eS (key));
+loadScript.append (" ").append (JU.PT.esc (key));
 isAppend = key.startsWith ("append");
 var strModel = (key.indexOf ("@") >= 0 ? "" + this.getParameter (key.substring (key.indexOf ("@") + 1), 4) : this.parameterAsString (++i));
 strModel = J.viewer.Viewer.fixInlineString (strModel, this.viewer.getInlineChar ());
@@ -6337,7 +6335,7 @@ htParams.put ("isData", Boolean.TRUE);
 loadScript.appendC ('\n');
 loadScript.append (strModel);
 if (key.indexOf ("@") < 0) {
-loadScript.append (" end ").append (J.util.Escape.eS (key));
+loadScript.append (" end ").append (JU.PT.esc (key));
 i += 2;
 }break;
 case 1073741839:
@@ -6428,7 +6426,7 @@ filenames = J.util.Escape.unescapeStringArray (filename);
 if (filenames != null) {
 if (i == 1) loadScript.append (" files");
 nFiles = filenames.length;
-}}}}if (filenames != null) for (var j = 0; j < nFiles; j++) loadScript.append (" /*file*/").append (J.util.Escape.eS (filenames[j]));
+}}}}if (filenames != null) for (var j = 0; j < nFiles; j++) loadScript.append (" /*file*/").append (JU.PT.esc (filenames[j]));
 
 } else if (this.getToken (i + 1).tok == 1073742010 || this.theTok == 2 || this.theTok == 7 || this.theTok == 269484096 || this.theTok == 1073742195 || this.theTok == 1048586 || this.theTok == 8 || this.theTok == 1073742080 || this.theTok == 1095761926 || this.theTok == 1073742163 || this.theTok == 1073742114 || this.theTok == 1073742152 || this.theTok == 1614417948 || this.theTok == 1073742066 || this.theTok == 1073741940 && this.tokAt (i + 3) != 1048582 || this.theTok == 1073741839 || this.theTok == 1073741824 && this.tokAt (i + 3) != 1048582) {
 if ((filename = this.parameterAsString (filePt)).length == 0 && (filename = this.getFullPathName ()) == null) {
@@ -6439,7 +6437,7 @@ if (filename.indexOf ("[]") >= 0) return;
 if ((tok = this.tokAt (i)) == 1073742010) {
 var manifest = this.stringParameter (++i);
 htParams.put ("manifest", manifest);
-sOptions += " MANIFEST " + J.util.Escape.eS (manifest);
+sOptions += " MANIFEST " + JU.PT.esc (manifest);
 tok = this.tokAt (++i);
 }switch (tok) {
 case 2:
@@ -6520,8 +6518,8 @@ var sg;
 var iGroup = -2147483648;
 if (this.tokAt (i) == 1073742152) {
 ++i;
-spacegroup = JU.PT.simpleReplace (this.parameterAsString (i++), "''", "\"");
-sOptions += " spacegroup " + J.util.Escape.eS (spacegroup);
+spacegroup = JU.PT.rep (this.parameterAsString (i++), "''", "\"");
+sOptions += " spacegroup " + JU.PT.esc (spacegroup);
 if (spacegroup.equalsIgnoreCase ("ignoreOperators")) {
 iGroup = -999;
 } else {
@@ -6625,7 +6623,7 @@ if (filter.toUpperCase ().indexOf ("DOCACHE") >= 0) {
 if (!this.isStateScript && !isAppend) this.viewer.cacheClear ();
 }htParams.put ("filter", filter);
 if (filter.equalsIgnoreCase ("2d")) filter = "2D-noMin";
-sOptions += " FILTER " + J.util.Escape.eS (filter);
+sOptions += " FILTER " + JU.PT.esc (filter);
 }var isVariable = false;
 if (filenames == null) {
 if (isInline) {
@@ -6634,7 +6632,7 @@ htParams.put ("fileData", filename);
 isVariable = true;
 var s = this.getStringParameter (filename.substring (1), false);
 htParams.put ("fileData", s);
-loadScript =  new JU.SB ().append ("{\n    var ").append (filename.substring (1)).append (" = ").append (J.util.Escape.eS (s)).append (";\n    ").appendSB (loadScript);
+loadScript =  new JU.SB ().append ("{\n    var ").append (filename.substring (1)).append (" = ").append (JU.PT.esc (s)).append (";\n    ").appendSB (loadScript);
 } else if (filename.startsWith ("?") && this.viewer.isJS) {
 localName = null;
 filename = this.loadFileAsync ("LOAD" + (isAppend ? "_APPEND_" : "_"), filename, i, !isAppend);
@@ -6649,11 +6647,11 @@ if (out == null) J.util.Logger.error ("Could not create output stream for " + fu
 }if (filenames == null && tokType == 0) {
 loadScript.append (" ");
 if (isVariable || isInline) {
-loadScript.append (J.util.Escape.eS (filename));
+loadScript.append (JU.PT.esc (filename));
 } else if (!isData) {
 if (!filename.equals ("string") && !filename.equals ("string[]")) loadScript.append ("/*file*/");
 if (localName != null) localName = this.viewer.getFilePath (localName, false);
-loadScript.append ((localName != null ? J.util.Escape.eS (localName) : "$FILENAME$"));
+loadScript.append ((localName != null ? JU.PT.esc (localName) : "$FILENAME$"));
 }if (sOptions.length > 0) loadScript.append (" /*options*/ ").append (sOptions);
 if (isVariable) loadScript.append ("\n  }");
 htParams.put ("loadScript", loadScript);
@@ -6773,11 +6771,12 @@ msg = this.parameterExpressionString (1, 0);
 }if (!this.chk) this.viewer.prompt (msg, "OK", null, true);
 });
 $_M(c$, "refresh", 
-function () {
+function (doDelay) {
 if (this.chk) return;
 this.viewer.setTainted (true);
 this.viewer.requestRepaintAndWait ("refresh cmd");
-});
+if (this.isJS && doDelay) this.doDelay (10);
+}, "~B");
 $_M(c$, "reset", 
 function () {
 if (this.slen == 3 && this.tokAt (1) == 135368713) {
@@ -7487,7 +7486,7 @@ if (this.slen == 1 || !isZapCommand) {
 var doAll = (isZapCommand && !this.isStateScript);
 if (doAll) this.viewer.cacheFileByName (null, false);
 this.viewer.zap (true, doAll, true);
-this.refresh ();
+this.refresh (false);
 return;
 }var bs = this.atomExpressionAt (1);
 if (this.chk) return;
@@ -7618,8 +7617,7 @@ break;
 default:
 this.error (34);
 }
-if (this.chk || this.viewer.isHeadless () || this.viewer.autoExit) return;
-this.refresh ();
+this.refresh (false);
 this.doDelay (Math.abs (millis));
 });
 $_M(c$, "slab", 
@@ -10737,8 +10735,8 @@ this.addTokenToPrefix (J.script.T.o (10, isBondOrMatrix ?  new J.modelset.BondSe
 return 2;
 }if (isBondOrMatrix) {
 var m = this.lookingAtMatrix ();
-if (Clazz_instanceOf (m, JU.M3) || Clazz_instanceOf (m, JU.M4)) {
-this.addTokenToPrefix (J.script.T.o ((Clazz_instanceOf (m, JU.M3) ? 11 : 12), m));
+if (Clazz_instanceOf (m, JU.M3)) {
+this.addTokenToPrefix (J.script.T.o ((Clazz_instanceOf (m, JU.M4) ? 12 : 11), m));
 return 2;
 }}}return 0;
 });
@@ -12806,8 +12804,8 @@ break;
 if (msg.indexOf ("{0}") < 0) {
 if (value != null) msg += ": " + value;
 } else {
-msg = JU.PT.simpleReplace (msg, "{0}", value);
-if (msg.indexOf ("{1}") >= 0) msg = JU.PT.simpleReplace (msg, "{1}", more);
+msg = JU.PT.rep (msg, "{0}", value);
+if (msg.indexOf ("{1}") >= 0) msg = JU.PT.rep (msg, "{1}", more);
  else if (more != null) msg += ": " + more;
 }if (!translated) J.i18n.GT.setDoTranslate (doTranslate);
 return msg;
@@ -13570,11 +13568,11 @@ switch (x2.tok) {
 case 9:
 return this.addXPt4 ((J.util.Quaternion.newP4 (x2.value)).inv ().toPoint4f ());
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.invert ();
 return this.addXM3 (m);
 case 12:
-var m4 = JU.M4.newM (x2.value);
+var m4 = JU.M4.newM4 (x2.value);
 m4.invert ();
 return this.addXM4 (m4);
 case 10:
@@ -13605,7 +13603,7 @@ switch (x2.tok) {
 case 11:
 case 12:
 s = J.script.SV.sValue (x2);
-s = JU.PT.simpleReplace (s.substring (1, s.length - 1), "],[", "]\n[");
+s = JU.PT.rep (s.substring (1, s.length - 1), "],[", "]\n[");
 break;
 case 4:
 s = x2.value;
@@ -13613,7 +13611,7 @@ break;
 default:
 s = J.script.SV.sValue (x2);
 }
-s = JU.PT.simpleReplace (s, "\n\r", "\n").$replace ('\r', '\n');
+s = JU.PT.rep (s, "\n\r", "\n").$replace ('\r', '\n');
 return this.addXAS (JU.PT.split (s, "\n"));
 case 1766856708:
 switch (x2.tok) {
@@ -13754,7 +13752,7 @@ switch (x2.tok) {
 default:
 return this.addXFloat (x1.asFloat () + x2.asFloat ());
 case 11:
-m = JU.M3.newM (x1.value);
+m = JU.M3.newM3 (x1.value);
 m.add (x2.value);
 return this.addXM3 (m);
 case 8:
@@ -13778,12 +13776,12 @@ ht.remove (J.script.SV.sValue (x2));
 return this.addXVar (J.script.SV.getVariableMap (ht));
 case 11:
 if (x2.tok != 11) break;
-m = JU.M3.newM (x1.value);
+m = JU.M3.newM3 (x1.value);
 m.sub (x2.value);
 return this.addXM3 (m);
 case 12:
 if (x2.tok != 12) break;
-var m4 = JU.M4.newM (x1.value);
+var m4 = JU.M4.newM4 (x1.value);
 m4.sub (x2.value);
 return this.addXM4 (m4);
 case 8:
@@ -13820,11 +13818,11 @@ pt4 = JU.P4.newPt (x2.value);
 pt4.scale (-1.0);
 return this.addXPt4 (pt4);
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.transpose ();
 return this.addXM3 (m);
 case 12:
-var m4 = JU.M4.newM (x2.value);
+var m4 = JU.M4.newM4 (x2.value);
 m4.transpose ();
 return this.addXM4 (m4);
 case 10:
@@ -13848,16 +13846,16 @@ pt4 = (x1.tok == 12 ? this.planeValue (x2) : x2.tok == 12 ? this.planeValue (x1)
 switch (x2.tok) {
 case 11:
 if (pt != null) {
-var m3b = JU.M3.newM (x2.value);
+var m3b = JU.M3.newM3 (x2.value);
 m3b.transpose ();
-m3b.transform (pt);
+m3b.rotate (pt);
 if (x1.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }if (pt4 != null) return this.addXPt4 ((J.util.Quaternion.newP4 (pt4).mulQ (J.util.Quaternion.newM (x2.value))).toPoint4f ());
 break;
 case 12:
 if (pt4 != null) {
-var m4b = JU.M4.newM (x2.value);
+var m4b = JU.M4.newM4 (x2.value);
 m4b.transpose ();
 m4b.transform4 (pt4);
 if (x1.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt4.x, pt4.y, pt4.z, pt4.w]));
@@ -13868,12 +13866,12 @@ switch (x1.tok) {
 case 11:
 var m3 = x1.value;
 if (pt != null) {
-m3.transform (pt);
+m3.rotate (pt);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }switch (x2.tok) {
 case 11:
-m = JU.M3.newM (x2.value);
+m = JU.M3.newM3 (x2.value);
 m.mul2 (m3, m);
 return this.addXM3 (m);
 case 9:
@@ -13889,7 +13887,7 @@ return this.addXM3 (m2);
 case 12:
 var m4 = x1.value;
 if (pt != null) {
-m4.transform (pt);
+m4.rotTrans (pt);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt.x, pt.y, pt.z]));
 return this.addXPt (pt);
 }if (pt4 != null) {
@@ -13897,8 +13895,8 @@ m4.transform4 (pt4);
 if (x2.tok == 7) return this.addXVar (J.script.SV.getVariableAF ([pt4.x, pt4.y, pt4.z, pt4.w]));
 return this.addXPt4 (pt4);
 }if (x2.tok == 12) {
-var m4b = JU.M4.newM (x2.value);
-m4b.mul2 (m4, m4b);
+var m4b = JU.M4.newM4 (x2.value);
+m4b.mul42 (m4, m4b);
 return this.addXM4 (m4b);
 }return this.addXStr ("NaN");
 case 8:
@@ -13920,7 +13918,8 @@ var f2;
 switch (x1.tok) {
 case 2:
 if (x2.tok == 2 && x2.intValue != 0) return this.addXInt (Clazz_doubleToInt (x1.intValue / x2.intValue));
-if (!this.isDecimal (x2)) return this.addXInt (Clazz_doubleToInt (x1.intValue / x2.asInt ()));
+var n = (this.isDecimal (x2) ? x2.asInt () : 0);
+if (n != 0) return this.addXInt (Clazz_doubleToInt (x1.intValue / n));
 break;
 case 4:
 var i2;

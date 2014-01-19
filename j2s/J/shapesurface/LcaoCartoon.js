@@ -188,7 +188,7 @@ this.setPropI ("translucency", "translucent", null);
 }, $fz.isPrivate = true, $fz), "~N");
 $_M(c$, "getID", 
 ($fz = function (id, i) {
-return (id != null ? id : (this.isLonePair || this.isRadical ? "lp_" : "lcao_") + (i + 1) + "_") + (this.thisType == null ? "" : JU.PT.simpleReplace (this.thisType, "-", (this.thisType.indexOf ("-p") == 0 ? "" : "_")));
+return (id != null ? id : (this.isLonePair || this.isRadical ? "lp_" : "lcao_") + (i + 1) + "_") + (this.thisType == null ? "" : JU.PT.rep (this.thisType, "-", (this.thisType.indexOf ("-p") == 0 ? "" : "_")));
 }, $fz.isPrivate = true, $fz), "~S,~N");
 $_M(c$, "getShapeState", 
 function () {

@@ -181,7 +181,7 @@ this.setPropI ("thisID", id, null);
 this.setPropI ("modelIndex", Integer.$valueOf (imodel), null);
 this.setPropI ("fileName", "cache://isosurface_" + id, null);
 this.setPropI ("readFile", null, null);
-this.setPropI ("finalize", "isosurface ID " + J.util.Escape.eS (id) + (imodel >= 0 ? " modelIndex " + imodel : "") + " /*file*/" + J.util.Escape.eS ("cache://isosurface_" + id), null);
+this.setPropI ("finalize", "isosurface ID " + JU.PT.esc (id) + (imodel >= 0 ? " modelIndex " + imodel : "") + " /*file*/" + JU.PT.esc ("cache://isosurface_" + id), null);
 this.setPropI ("clear", null, null);
 return;
 }if ("delete" === propertyName) {
@@ -677,10 +677,10 @@ if (imesh == null || imesh.scriptCommand == null) return;
 var cmd = imesh.scriptCommand;
 var modelCount = this.viewer.getModelCount ();
 if (modelCount > 1) J.shape.Shape.appendCmd (sb, "frame " + this.viewer.getModelNumberDotted (imesh.modelIndex));
-cmd = JU.PT.simpleReplace (cmd, ";; isosurface map", " map");
-cmd = JU.PT.simpleReplace (cmd, "; isosurface map", " map");
+cmd = JU.PT.rep (cmd, ";; isosurface map", " map");
+cmd = JU.PT.rep (cmd, "; isosurface map", " map");
 cmd = cmd.$replace ('\t', ' ');
-cmd = JU.PT.simpleReplace (cmd, ";#", "; #");
+cmd = JU.PT.rep (cmd, ";#", "; #");
 var pt = cmd.indexOf ("; #");
 if (pt >= 0) cmd = cmd.substring (0, pt);
 if (imesh.connections != null) cmd += " connect " + J.util.Escape.eAI (imesh.connections);
@@ -688,7 +688,7 @@ cmd = JU.PT.trim (cmd, ";");
 if (imesh.linkedMesh != null) cmd += " LINK";
 if (this.myType === "lcaoCartoon" && imesh.atomIndex >= 0) cmd += " ATOMINDEX " + imesh.atomIndex;
 J.shape.Shape.appendCmd (sb, cmd);
-var id = this.myType + " ID " + J.util.Escape.eS (imesh.thisID);
+var id = this.myType + " ID " + JU.PT.esc (imesh.thisID);
 if (imesh.jvxlData.thisSet >= 0) J.shape.Shape.appendCmd (sb, id + " set " + (imesh.jvxlData.thisSet + 1));
 if (imesh.mat4 != null) J.shape.Shape.appendCmd (sb, id + " move " + J.util.Escape.matrixToScript (imesh.mat4));
 if (imesh.scale3d != 0) J.shape.Shape.appendCmd (sb, id + " scale3d " + imesh.scale3d);
@@ -820,9 +820,9 @@ if (rotAxis.x != 0) a.setVA (x, rotRadians);
  else a.setVA (z, rotRadians);
 var m =  new JU.M3 ();
 m.setAA (a);
-m.transform (x);
-m.transform (y);
-m.transform (z);
+m.rotate (x);
+m.rotate (y);
+m.rotate (z);
 }if (this.thisMesh == null && this.nLCAO == 0) this.nLCAO = this.meshCount;
 var id = (this.thisMesh == null ? (nElectrons > 0 ? "lp" : "lcao") + (++this.nLCAO) + "_" + lcaoCartoon : this.thisMesh.thisID);
 if (this.thisMesh == null) this.allocMesh (id, null);
@@ -1041,7 +1041,7 @@ this.thisMesh.dataType = this.sg.getParams ().dataType;
 this.thisMesh.scale3d = this.sg.getParams ().scale3d;
 if (script != null) {
 if (script.charAt (0) == ' ') {
-script = this.myType + " ID " + J.util.Escape.eS (this.thisMesh.thisID) + script;
+script = this.myType + " ID " + JU.PT.esc (this.thisMesh.thisID) + script;
 pt = script.indexOf ("; isosurface map");
 }}if (pt > 0 && this.scriptAppendix.length > 0) this.thisMesh.scriptCommand = script.substring (0, pt) + this.scriptAppendix + script.substring (pt);
  else this.thisMesh.scriptCommand = script + this.scriptAppendix;
@@ -1350,7 +1350,7 @@ c$.jvxlSetCompressionRatio = $_M(c$, "jvxlSetCompressionRatio",
 function (data, jvxlData, len) {
 var s = data.toString ();
 var r = Clazz_floatToInt (jvxlData.nBytes > 0 ? (jvxlData.nBytes) / len : ((jvxlData.nPointsX * jvxlData.nPointsY * jvxlData.nPointsZ * 13)) / len);
-return JU.PT.simpleReplace (s, "\"not calculated\"", (r > 0 ? "\"" + r + ":1\"" : "\"?\""));
+return JU.PT.rep (s, "\"not calculated\"", (r > 0 ? "\"" + r + ":1\"" : "\"?\""));
 }, "JU.SB,J.jvxl.data.JvxlData,~N");
 c$.appendXmlEdgeData = $_M(c$, "appendXmlEdgeData", 
 function (sb, jvxlData) {
@@ -2114,7 +2114,7 @@ function () {
 for (var i = 0; i < 3; i++) this.volumetricMatrix.setColumnV (i, this.volumetricVectors[i]);
 
 try {
-this.inverseMatrix.invertM (this.volumetricMatrix);
+this.inverseMatrix.invertM3 (this.volumetricMatrix);
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
 J.util.Logger.error ("VolumeData error setting matrix -- bad unit vectors? ");
@@ -2127,7 +2127,7 @@ return true;
 });
 $_V(c$, "transform", 
 function (v1, v2) {
-this.volumetricMatrix.transform2 (v1, v2);
+this.volumetricMatrix.rotate2 (v1, v2);
 }, "JU.V3,JU.V3");
 $_V(c$, "setPlaneParameters", 
 function (plane) {
@@ -2186,7 +2186,7 @@ $_V(c$, "xyzToVoxelPt",
 function (x, y, z, pt3i) {
 this.ptXyzTemp.set (x, y, z);
 this.ptXyzTemp.sub (this.volumetricOrigin);
-this.inverseMatrix.transform (this.ptXyzTemp);
+this.inverseMatrix.rotate (this.ptXyzTemp);
 pt3i.set (Math.round (this.ptXyzTemp.x), Math.round (this.ptXyzTemp.y), Math.round (this.ptXyzTemp.z));
 }, "~N,~N,~N,JU.P3i");
 $_V(c$, "lookupInterpolatedVoxelValue", 
@@ -2196,7 +2196,7 @@ if (this.sr != null) {
 var v = this.sr.getValueAtPoint (point, getSource);
 return (this.isSquared ? v * v : v);
 }this.ptXyzTemp.sub2 (point, this.volumetricOrigin);
-this.inverseMatrix.transform (this.ptXyzTemp);
+this.inverseMatrix.rotate (this.ptXyzTemp);
 var iMax;
 var xLower = this.indexLower (this.ptXyzTemp.x, iMax = this.voxelCounts[0] - 1);
 var xUpper = this.indexUpper (this.ptXyzTemp.x, xLower, iMax);
@@ -3001,7 +3001,7 @@ this.params = value;
 } else {
 this.params.script = value;
 if (this.params.script != null && this.params.script.indexOf (";#") >= 0) {
-this.params.script = JU.PT.simpleReplace (this.params.script, ";#", "; #");
+this.params.script = JU.PT.rep (this.params.script, ";#", "; #");
 }}return false;
 }if ("map" === propertyName) {
 this.params.resetForMapping ((value).booleanValue ());
@@ -4038,10 +4038,10 @@ var z = JU.V3.new3 (0, 0, 1);
 ecc.add (z);
 ecc.normalize ();
 if (Float.isNaN (ecc.x)) ecc.set (1, 0, 0);
-this.eccentricityMatrix = JU.M3.newM (null);
+this.eccentricityMatrix = JU.M3.newM3 (null);
 this.eccentricityMatrix.setAA (JU.A4.newVA (ecc, 3.141592653589793));
 this.eccentricityMatrixInverse =  new JU.M3 ();
-this.eccentricityMatrixInverse.invertM (this.eccentricityMatrix);
+this.eccentricityMatrixInverse.invertM3 (this.eccentricityMatrix);
 this.isEccentric = this.isAnisotropic = true;
 this.eccentricityScale = c;
 this.eccentricityRatio = fab_c;
@@ -6270,8 +6270,8 @@ doUpdate = true;
 break;
 }
 if (!doUpdate) return;
-if (this.mat4 == null) this.mat4 = JU.M4.newM (null);
-this.mat4.mul2 (m, this.mat4);
+if (this.mat4 == null) this.mat4 = JU.M4.newM4 (null);
+this.mat4.mul42 (m, this.mat4);
 this.recalcAltVertices = true;
 }, "JU.M4,JU.BS");
 });
@@ -6417,10 +6417,10 @@ break;
 case 2:
 this.volumetricVectors[2].set (0, 0, d);
 this.volumetricOrigin.z = min;
-if (this.isEccentric) this.eccentricityMatrix.transform (this.volumetricOrigin);
+if (this.isEccentric) this.eccentricityMatrix.rotate (this.volumetricOrigin);
 if (this.center != null && this.center.x != 3.4028235E38) this.volumetricOrigin.add (this.center);
 }
-if (this.isEccentric) this.eccentricityMatrix.transform (this.volumetricVectors[index]);
+if (this.isEccentric) this.eccentricityMatrix.rotate (this.volumetricVectors[index]);
 return this.voxelCounts[index];
 }, "~N,~N,~N,~N,~N,~N");
 $_V(c$, "readSurfaceData", 

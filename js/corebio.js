@@ -165,7 +165,7 @@ function () {
 this.pdbHeader = (this.getHeader ?  new JU.SB () : null);
 this.applySymmetry = !this.checkFilterKey ("NOSYMMETRY");
 this.getTlsGroups = this.checkFilterKey ("TLS");
-if (this.checkFilterKey ("ASSEMBLY")) this.filter = JU.PT.simpleReplace (this.filter, "ASSEMBLY", "BIOMOLECULE");
+if (this.checkFilterKey ("ASSEMBLY")) this.filter = JU.PT.rep (this.filter, "ASSEMBLY", "BIOMOLECULE");
 var isbiomol = this.checkFilterKey ("BIOMOLECULE");
 var byChain = isbiomol && this.checkFilterKey ("BYCHAIN");
 var bySymop = isbiomol && this.checkFilterKey ("BYSYMOP");
@@ -412,7 +412,7 @@ if (this.vCompnds.size () == 0) this.vCompnds.addLast (this.currentCompnd);
 this.currentKey = key;
 }if (value.endsWith (";")) value = value.substring (0, value.length - 1);
 this.currentCompnd.put (this.currentKey, value);
-if (this.currentKey.equals ("CHAIN")) this.currentCompnd.put ("select", "(:" + JU.PT.simpleReplace (JU.PT.simpleReplace (value, ", ", ",:"), " ", "") + ")");
+if (this.currentKey.equals ("CHAIN")) this.currentCompnd.put ("select", "(:" + JU.PT.rep (JU.PT.rep (value, ", ", ",:"), " ", "") + ")");
 }, "~B");
 $_M(c$, "setBiomoleculeAtomCounts", 
 function () {
@@ -437,7 +437,7 @@ var id = "";
 var needLine = true;
 var info = null;
 var nBiomt = 0;
-var mIdent = JU.M4.newM (null);
+var mIdent = JU.M4.newM4 (null);
 while (true) {
 if (needLine) this.readLine ();
  else needLine = true;
@@ -486,7 +486,7 @@ if (i == 4 || i == 8) this.readLine ();
 }
 mat[15] = 1;
 var m4 =  new JU.M4 ();
-m4.setA (mat, 0);
+m4.setA (mat);
 if (m4.equals (mIdent)) biomts.add (0, m4);
  else biomts.addLast (m4);
 continue;
@@ -3455,7 +3455,7 @@ vB.sub2 (ptCa, this.getNitrogenAtom ());
 vB.cross (vC, vB);
 var mat =  new JU.M3 ();
 mat.setAA (JU.A4.newVA (vB, -0.29670596));
-mat.transform (vC);
+mat.rotate (vC);
 vA.cross (vB, vC);
 break;
 case 'b':
@@ -5156,7 +5156,7 @@ return sb.toString ();
 $_M(c$, "dumpTags", 
 function (ap, lines, bsBad, mode) {
 var prefix = ap.monomers[0].getLeadAtom ().getChainID () + "." + (ap.bioPolymerIndexInModel + 1);
-lines = JU.PT.simpleReplace (lines, "$", prefix);
+lines = JU.PT.rep (lines, "$", prefix);
 var iFirst = ap.monomers[0].getResno ();
 var pre = "\n" + prefix;
 var sb =  new JU.SB ();
@@ -6277,7 +6277,7 @@ this.mat.setAA (this.aa);
 }this.pt1.setT (this.controlHermites[p]);
 var theta = (isFlatMesh ? 0 : angle);
 for (var k = 0; k < nPer; k++, theta += angle) {
-if (useMat && k > 0) this.mat.transform (this.wing);
+if (useMat && k > 0) this.mat.rotate (this.wing);
 switch (mode) {
 case 1:
 this.wingT.setT (this.wing1);

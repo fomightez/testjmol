@@ -1,11 +1,15 @@
 Clazz.declarePackage ("JSV.js2d");
 Clazz.load (["JSV.api.JSVFileHelper"], "JSV.js2d.JsFileHelper", ["JSV.js2d.JsFile"], function () {
-c$ = Clazz.declareType (JSV.js2d, "JsFileHelper", null, JSV.api.JSVFileHelper);
+c$ = Clazz.decorateAsClass (function () {
+this.viewer = null;
+Clazz.instantialize (this, arguments);
+}, JSV.js2d, "JsFileHelper", null, JSV.api.JSVFileHelper);
 Clazz.makeConstructor (c$, 
 function () {
 });
 $_V(c$, "set", 
 function (viewer) {
+this.viewer = viewer;
 return this;
 }, "JSV.common.JSViewer");
 $_V(c$, "getFile", 
@@ -22,4 +26,24 @@ return name;
 $_V(c$, "setFileChooser", 
 function (pdf) {
 }, "JSV.common.ExportType");
+$_V(c$, "showFileOpenDialog", 
+function (panelOrFrame, isAppend) {
+var applet = this.viewer.applet;
+{
+Jmol._loadFileAsynchronously(this, applet, "", isAppend);
+}return null;
+}, "~O,~B");
+$_M(c$, "setData", 
+function (fileName, data, isAppend) {
+if (fileName == null) return;
+if (data == null) {
+this.viewer.selectedPanel.showMessage (fileName, "File Open Error");
+return;
+}this.viewer.si.siOpenDataOrFile ( String.instantialize (data), fileName, null, null, -1, -1, isAppend != null);
+}, "~S,~O,~O");
+$_V(c$, "getUrlFromDialog", 
+function (info, msg) {
+{
+return prompt(info, msg);
+}}, "~S,~S");
 });

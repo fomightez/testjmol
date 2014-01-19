@@ -209,12 +209,12 @@ if (check) return (n1 == n2 ? "diastereomers" : "ambiguous stereochemistry!");
 }, "~S,~S");
 $_V(c$, "reverseChirality", 
 function (smiles) {
-smiles = JU.PT.simpleReplace (smiles, "@@", "!@");
-smiles = JU.PT.simpleReplace (smiles, "@", "@@");
-smiles = JU.PT.simpleReplace (smiles, "!@@", "@");
-smiles = JU.PT.simpleReplace (smiles, "@@SP", "@SP");
-smiles = JU.PT.simpleReplace (smiles, "@@OH", "@OH");
-smiles = JU.PT.simpleReplace (smiles, "@@TB", "@TB");
+smiles = JU.PT.rep (smiles, "@@", "!@");
+smiles = JU.PT.rep (smiles, "@", "@@");
+smiles = JU.PT.rep (smiles, "!@@", "@");
+smiles = JU.PT.rep (smiles, "@@SP", "@SP");
+smiles = JU.PT.rep (smiles, "@@OH", "@OH");
+smiles = JU.PT.rep (smiles, "@@TB", "@TB");
 return smiles;
 }, "~S");
 $_V(c$, "getSubstructureSet", 
@@ -319,7 +319,7 @@ return null;
 }, "~S,~A,~N,JU.BS,JU.BS,~B,~B,~B,~N");
 $_M(c$, "countStereo", 
 function (s) {
-s = JU.PT.simpleReplace (s, "@@", "@");
+s = JU.PT.rep (s, "@@", "@");
 var i = s.lastIndexOf ('@') + 1;
 var n = 0;
 for (; --i >= 0; ) if (s.charAt (i) == '@') n++;
@@ -3830,12 +3830,12 @@ return (i < 10 ? "" + i : i < 100 ? "%" + i : "%(" + i + ")");
 c$.cleanPattern = $_M(c$, "cleanPattern", 
 function (pattern) {
 pattern = JU.PT.replaceAllCharacters (pattern, " \t\n\r", "");
-pattern = JU.PT.simpleReplace (pattern, "^^", "'");
+pattern = JU.PT.rep (pattern, "^^", "'");
 var i = 0;
 var i2 = 0;
 while ((i = pattern.indexOf ("//*")) >= 0 && (i2 = pattern.indexOf ("*//")) >= i) pattern = pattern.substring (0, i) + pattern.substring (i2 + 3);
 
-pattern = JU.PT.simpleReplace (pattern, "//", "");
+pattern = JU.PT.rep (pattern, "//", "");
 return pattern;
 }, "~S");
 });
