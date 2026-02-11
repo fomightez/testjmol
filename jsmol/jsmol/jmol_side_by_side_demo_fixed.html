@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jmol Applets Demo</title>
+    <script type="text/javascript" src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align: center;">Jmol Molecular Visualization Demo</h1>
+    
+    <table border="0" align="center">
+        <tr>
+            <td align="center">
+                <h2>Water Molecule (H₂O)</h2>
+            </td>
+            <td align="center">
+                <h2>Caffeine Molecule</h2>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info1 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
+                        serverURL: "https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
+                        script: "load $water; spacefill 100%; wireframe 0.15; spin on;"
+                    };
+                    Jmol.getApplet("jmol1", Info1);
+                </script>
+            </td>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info2 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
+                        serverURL: "https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
+                        script: "load $caffeine; wireframe 0.2; spacefill 20%; spin on;"
+                    };
+                    Jmol.getApplet("jmol2", Info2);
+                </script>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
