@@ -1,13 +1,13 @@
-# Jmol state version 16.2.5  2024-04-16 21:43;
-  # fullName = "jmolApplet0__459485849585566__";
-  # documentBase = "https://www.bioinformatics.org/firstglance/fgij/fg.htm?mol=8gft";
-  # codeBase = "https://www.bioinformatics.org/firstglance/fgij/jsmol/j2s/";
+# Jmol state version 16.3.49  2026-01-31 18:34;
+  # fullName = "jmol1__504491481579445__";
+  # documentBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/jmol_side_by_side_w_pngj.html";
+  # codeBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/j2s/";
 
 
 function _setWindowState() {
-# width 1062;
-# height 933;
-  stateVersion = 1602005;
+# width 400;
+# height 400;
+  stateVersion = 1603049;
   background [x000000];
   axis1Color = "[xff0000]";
   axis2Color = "[x008000]";
@@ -169,6 +169,7 @@ function _setParameterState() {
   set nbocharges true;
   set nmrpredictformat "https://www.nmrdb.org/service/predictor?POST?molfile=";
   set nmrurlformat "https://www.nmrdb.org/new_predictor?POST?molfile=";
+  set occupancythreshold 50;
   set partialdots false;
   set particleradius 20.0;
   set pdbaddhydrogens false;
@@ -253,9 +254,9 @@ function _setModelState() {
   color atoms opaque [xbf00bf];
   select ({0:35506});
   color balls opaque none;
-  select BONDS ({0:35739});
+  select /*16.2*/ BONDS ({0:35739});
   wireframe 0.0;
-  select BONDS ({35740:35825});
+  select /*16.2*/ BONDS ({35740:35825});
   wireframe 0.25;
 
   select ({2490});
@@ -273,8 +274,6 @@ function _setModelState() {
   select ({2490});
   color label [x1d8fff];
   set labelOffset 11 -2;
-  select ({2490 12884 23295 25017 27740 29501});
-  font label 14 SansSerif Plain;
   select ({12884});
   color label [x86cdf9];
   set labelOffset -13 -8;
@@ -290,6 +289,8 @@ function _setModelState() {
   select ({29501});
   color label [xcb7fff];
   set labelOffset 2 2;
+  select ({2490 12884 23295 25017 27740 29501});
+  font label 14 SansSerif Plain;
 
   select ({0:45 105:124 365:432 813:826 917:1012 1110:1179 1274:1337 1481:1487 1521:1552 1698:1870 1996:2011 2162:2231 2330:2364 2460:2574 2708:2756 3078:3175 3268:3304 3359:3447 3511:3568 3617:3737 4129:4191 4340:4412 4558:4845 4943:4990 5063:5161 5245:5283 5370:5601 6008:6022 6414:6438 6555:6607 6684:6773 6916:7022 7128:7149 7437:7478 7549:7591 7703:7760 7796:7814 7894:8049 8497:8583 8655:8774 8846:8922 9085:9154 9285:9316 9409:9448 9673:9708 10011:10082 10380:10440 10516:10535 10756:10843 11346:11423 11521:11590 11685:11748 11892:11898 11932:11963 12109:12281 12407:12422 12573:12659 12741:12775 12871:12985 13119:13140 13489:13586 13679:13810 13944:13979 14371:14433 14604:14654 14800:15087 15185:15232 15305:15403 15487:15525 15612:15843 16250:16264 16656:16680 16850:16894 16926:17029 17158:17264 17370:17391 17679:17720 17791:17833 17981:18002 18038:18056 18136:18291 18811:18825 18897:19016 19088:19164 19317:19433 19527:19558 19651:19690 19915:19950 20253:20324 20622:20722 20807:21031 21900:21924 22528:22668 22818:22962 23369:23555 24008:24022 24453:24468 24732:24847 24980:25379 25522:25609 25967:26149 26208:26224 26266:26279 26337:26490 26589:26696 26970:27120 27310:27372 27456:27523 27717:27760 27853:27866 28103:28109 28406:28427 28687:28711 28960:28974 29206:29249 29500:29506 29790:29854 30242:30404 30498:30738 30989:31068 31361:31426 31491:31589 31672:31745 31938:32066 32106:32228 32506:32568 32605:32693 32977:32990 33211:33262 33320:33362 33417:33564 33687:33850 33985:34272 34465:34495 34579:34727 34754:34808 34850:35055 35170:35187 35348:35418});
   Cartoon 0.2;
@@ -309,7 +310,7 @@ function _setModelState() {
   color Cartoon opaque [x1d8fff];
 
   set echo off;set echo "%SCALE" off;
-  #set echo ID "%scale" [40 100%]; echo "%SCALE \u00c5";
+  #set echo ID "%SCALE" [40 100%]; echo "%SCALE \u00c5";
   font echo 22 SansSerif Plain; color echo [xffffff]; color echo background [x000000];
 
   frank on;
