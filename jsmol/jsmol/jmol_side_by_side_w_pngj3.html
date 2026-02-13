@@ -3,6 +3,17 @@
 <head>
     <title>Opening PNGjs in Jmol Applets Demo</title>
     <script type="text/javascript" src="JSmol.min.js"></script>
+    <style>
+        .scene-link {
+            color: #00AA00;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .scene-link:hover {
+            text-decoration: underline;
+        }
+    </style>
     <script type="text/javascript">
         var spinning1 = false;
         var spinning2 = false;
@@ -61,7 +72,8 @@
                 </script>
                 <br>
                 <button onclick="toggleSpin1()">Toggle Spin</button>
-                <button onclick="loadAltView1()">Load Alt View</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadAltView1()">Alternative View</a>
             </td>
             <td align="center">
                 <script type="text/javascript">
@@ -77,7 +89,8 @@
                 </script>
                 <br>
                 <button onclick="toggleSpin2()">Toggle Spin</button>
-                <button onclick="loadAltView2()">Load Alt View on this side</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadAltView2()">Alternative View</a>
             </td>
         </tr>
     </table>
