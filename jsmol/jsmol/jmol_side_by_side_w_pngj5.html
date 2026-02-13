@@ -93,13 +93,13 @@
                 displayName: "Default View",
                 pdb: '8GFT',
                 stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
-                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spaecfill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spaecfill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;background white;'
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;background white;'
             },
             spacefill: {
                 displayName: "Spacefill View",
                 pdb: '8GFT',
                 stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
-                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spaecfill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spaecfill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;background white;'
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;background white;'
             }
         };
         
@@ -154,7 +154,7 @@
         
         function toggleBackground2() {
             black_back2 = !black_back2;
-            Jmol.script(jmol1, black_back2 ? "background black;" : "background white;");
+            Jmol.script(jmol2, black_back2 ? "background black;" : "background white;");
         }
     </script>
 </head>
