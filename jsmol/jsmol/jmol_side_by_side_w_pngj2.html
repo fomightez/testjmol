@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opening PNGjs in Jmol Applets Demo</title>
+    <script type="text/javascript" src="JSmol.min.js"></script>
+    <script type="text/javascript">
+        var spinning1 = false;
+        var spinning2 = false;
+        
+        function toggleSpin1() {
+            spinning1 = !spinning1;
+            if (spinning1) {
+                Jmol.script(jmol1, "spin on;");
+            } else {
+                Jmol.script(jmol1, "spin off;");
+            }
+        }
+        
+        function toggleSpin2() {
+            spinning2 = !spinning2;
+            if (spinning2) {
+                Jmol.script(jmol2, "spin on;");
+            } else {
+                Jmol.script(jmol2, "spin off;");
+            }
+        }
+        
+        function loadAltView1() {
+            Jmol.script(jmol1, 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;');
+        }
+        
+        function loadAltView2() {
+            Jmol.script(jmol2, 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;');
+        }
+    </script>
+</head>
+<body>
+    <h1 style="text-align: center;">Opening PNGjs in Jmol Applets Demo</h1>
+    
+    <table border="0" align="center">
+        <tr>
+            <td align="center">
+                <h2>Left Molecule</h2>
+            </td>
+            <td align="center">
+                <h2>Right Molecule</h2>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info1 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "j2s",
+                        serverURL: "php/jsmol.php",
+                        script: 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
+                    };
+                    jmol1 = Jmol.getApplet("jmol1", Info1);
+                </script>
+                <br>
+                <button onclick="toggleSpin1()">Toggle Spin</button>
+                <button onclick="loadAltView1()">Load Alt View</button>
+            </td>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info2 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "j2s",
+                        serverURL: "php/jsmol.php",
+                        script: 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
+                    };
+                    jmol2 = Jmol.getApplet("jmol2", Info2);
+                </script>
+                <br>
+                <button onclick="toggleSpin2()">Toggle Spin</button>
+                <button onclick="loadAltView2()">Load Alt View</button>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
