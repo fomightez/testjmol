@@ -21,7 +21,7 @@
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -70,6 +70,15 @@
             text-decoration: underline;
         }
         
+        .scene-indicator {
+            position: relative;
+            margin-top: 10px;
+            text-align: right;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
         @media (max-width: 900px) {
             .container {
                 flex-direction: column;
@@ -81,26 +90,47 @@
         // Define all scenes in one central location
         var scenes = {
             default: {
+                displayName: "Default View",
                 pdb: '8GFT',
                 stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
                 commands: 'select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP]; wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
             },
             spacefill: {
+                displayName: "Spacefill View",
                 pdb: '8GFT',
                 stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
                 commands: 'select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP]; wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;'
             }
         };
         
+        // Track current scene for each applet
+        var currentScene1 = 'default';
+        var currentScene2 = 'default';
+        
         // Function to build the complete script from a scene definition
         function buildScript(scene) {
             return 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands;
         }
         
+        // Function to update scene indicator
+        function updateIndicator(appletNum, sceneName) {
+            var indicatorId = 'indicator' + appletNum;
+            var displayName = scenes[sceneName].displayName;
+            document.getElementById(indicatorId).innerHTML = 'Current: ' + displayName;
+        }
+        
         // Function to load a scene into a specific applet
-        function loadScene(applet, sceneName) {
+        function loadScene(applet, appletNum, sceneName) {
             var script = buildScript(scenes[sceneName]);
             Jmol.script(applet, script);
+            
+            // Update tracking and indicator
+            if (appletNum === 1) {
+                currentScene1 = sceneName;
+            } else {
+                currentScene2 = sceneName;
+            }
+            updateIndicator(appletNum, sceneName);
         }
         
         var spinning1 = false;
@@ -118,15 +148,15 @@
     </script>
 </head>
 <body>
-    <h1>Compare Two Structures Demo</h1>
+    <h1>Compare Two Structures Demo<</h1>
     
     <div class="container">
         <div class="applet-panel">
             <h2>Molecule #1</h2>
             <script type="text/javascript">
                 var Info1 = {
-                    width: 600,
-                    height: 600,
+                    width: 400,
+                    height: 400,
                     use: "HTML5",
                     j2sPath: "j2s",
                     serverURL: "php/jsmol.php",
@@ -134,10 +164,12 @@
                 };
                 jmol1 = Jmol.getApplet("jmol1", Info1);
             </script>
+            <div class="scene-indicator" id="indicator1">Current: Default View</div>
             <div class="controls">
                 <button onclick="toggleSpin1()">Toggle Spin</button>
                 <br>
-                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 'spacefill')">Spacefill View</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default')">Default View</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'spacefill')">Spacefill View</a>
             </div>
         </div>
         
@@ -145,8 +177,8 @@
             <h2>Molecule #2</h2>
             <script type="text/javascript">
                 var Info2 = {
-                    width: 600,
-                    height: 600,
+                    width: 400,
+                    height: 400,
                     use: "HTML5",
                     j2sPath: "j2s",
                     serverURL: "php/jsmol.php",
@@ -154,10 +186,12 @@
                 };
                 jmol2 = Jmol.getApplet("jmol2", Info2);
             </script>
+            <div class="scene-indicator" id="indicator2">Current: Default View</div>
             <div class="controls">
                 <button onclick="toggleSpin2()">Toggle Spin</button>
                 <br>
-                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 'spacefill')">Spacefill View</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default')">Default View</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'spacefill')">Spacefill View</a>
             </div>
         </div>
     </div>
