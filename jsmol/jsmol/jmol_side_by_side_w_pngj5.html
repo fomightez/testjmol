@@ -2,16 +2,79 @@
 <html>
 <head>
     <title>Opening PNGjs in Jmol Applets Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="JSmol.min.js"></script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .applet-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 0 1 auto;
+        }
+        
+        .applet-panel h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .controls {
+            margin-top: 10px;
+        }
+        
+        .controls button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .controls button:hover {
+            background-color: #2980b9;
+        }
+        
         .scene-link {
             color: #00AA00;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
+            margin: 5px;
         }
+        
         .scene-link:hover {
             text-decoration: underline;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
     <script type="text/javascript">
@@ -55,53 +118,48 @@
     </script>
 </head>
 <body>
-    <h1 style="text-align: center;">Opening PNGjs in Jmol Applets Demo</h1>
+    <h1>Opening PNGjs in Jmol Applets Demo</h1>
     
-    <table border="0" align="center">
-        <tr>
-            <td align="center">
-                <h2>Left Molecule</h2>
-            </td>
-            <td align="center">
-                <h2>Right Molecule</h2>
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                <script type="text/javascript">
-                    var Info1 = {
-                        width: 400,
-                        height: 400,
-                        use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
-                        script: buildScript(scenes.default)
-                    };
-                    jmol1 = Jmol.getApplet("jmol1", Info1);
-                </script>
-                <br>
+    <div class="container">
+        <div class="applet-panel">
+            <h2>Left Molecule</h2>
+            <script type="text/javascript">
+                var Info1 = {
+                    width: 400,
+                    height: 400,
+                    use: "HTML5",
+                    j2sPath: "j2s",
+                    serverURL: "php/jsmol.php",
+                    script: buildScript(scenes.default)
+                };
+                jmol1 = Jmol.getApplet("jmol1", Info1);
+            </script>
+            <div class="controls">
                 <button onclick="toggleSpin1()">Toggle Spin</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 'spacefill')">Spacefill View</a>
-            </td>
-            <td align="center">
-                <script type="text/javascript">
-                    var Info2 = {
-                        width: 400,
-                        height: 400,
-                        use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
-                        script: buildScript(scenes.default)
-                    };
-                    jmol2 = Jmol.getApplet("jmol2", Info2);
-                </script>
-                <br>
+            </div>
+        </div>
+        
+        <div class="applet-panel">
+            <h2>Right Molecule</h2>
+            <script type="text/javascript">
+                var Info2 = {
+                    width: 400,
+                    height: 400,
+                    use: "HTML5",
+                    j2sPath: "j2s",
+                    serverURL: "php/jsmol.php",
+                    script: buildScript(scenes.default)
+                };
+                jmol2 = Jmol.getApplet("jmol2", Info2);
+            </script>
+            <div class="controls">
                 <button onclick="toggleSpin2()">Toggle Spin</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 'spacefill')">Spacefill View</a>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
