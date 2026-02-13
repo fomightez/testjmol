@@ -135,6 +135,8 @@
         
         var spinning1 = false;
         var spinning2 = false;
+        var black_back1 = false;
+        var black_back2 = false;
         
         function toggleSpin1() {
             spinning1 = !spinning1;
@@ -144,6 +146,15 @@
         function toggleSpin2() {
             spinning2 = !spinning2;
             Jmol.script(jmol2, spinning2 ? "spin on;" : "spin off;");
+        }
+        function toggleBackground1() {
+            black_back1 = !black_back1;
+            Jmol.script(jmol1, black_back1 ? "background black;" : "background white;");
+        }
+        
+        function toggleBackground2() {
+            black_back2 = !black_back2;
+            Jmol.script(jmol1, black_back2 ? "background black;" : "background white;");
         }
     </script>
 </head>
@@ -166,7 +177,8 @@
             </script>
             <div class="scene-indicator" id="indicator1">Current: Default View</div>
             <div class="controls">
-                <button onclick="toggleSpin1()">Toggle Spin</button>
+                <button onclick="toggleSpin1()">Spin</button>
+                <button onclick="toggleBackground1()">Background</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default')">Default View</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'spacefill')">Spacefill View</a>
@@ -188,7 +200,8 @@
             </script>
             <div class="scene-indicator" id="indicator2">Current: Default View</div>
             <div class="controls">
-                <button onclick="toggleSpin2()">Toggle Spin</button>
+                <button onclick="toggleSpin2()">Spin</button>
+                <button onclick="toggleBackground2()">Background</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default')">Default View</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'spacefill')">Spacefill View</a>
