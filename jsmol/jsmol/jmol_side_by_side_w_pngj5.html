@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opening PNGjs in Jmol Applets Demo</title>
+    <script type="text/javascript" src="JSmol.min.js"></script>
+    <style>
+        .scene-link {
+            color: #00AA00;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .scene-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript">
+        // Define all scenes in one central location
+        var scenes = {
+            default: {
+                pdb: '8GFT',
+                stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP]; wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
+            },
+            spacefill: {
+                pdb: '8GFT',
+                stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP]; wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;'
+            }
+        };
+        
+        // Function to build the complete script from a scene definition
+        function buildScript(scene) {
+            return 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands;
+        }
+        
+        // Function to load a scene into a specific applet
+        function loadScene(applet, sceneName) {
+            var script = buildScript(scenes[sceneName]);
+            Jmol.script(applet, script);
+        }
+        
+        var spinning1 = false;
+        var spinning2 = false;
+        
+        function toggleSpin1() {
+            spinning1 = !spinning1;
+            Jmol.script(jmol1, spinning1 ? "spin on;" : "spin off;");
+        }
+        
+        function toggleSpin2() {
+            spinning2 = !spinning2;
+            Jmol.script(jmol2, spinning2 ? "spin on;" : "spin off;");
+        }
+    </script>
+</head>
+<body>
+    <h1 style="text-align: center;">Opening PNGjs in Jmol Applets Demo</h1>
+    
+    <table border="0" align="center">
+        <tr>
+            <td align="center">
+                <h2>Left Molecule</h2>
+            </td>
+            <td align="center">
+                <h2>Right Molecule</h2>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info1 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "j2s",
+                        serverURL: "php/jsmol.php",
+                        script: buildScript(scenes.default)
+                    };
+                    jmol1 = Jmol.getApplet("jmol1", Info1);
+                </script>
+                <br>
+                <button onclick="toggleSpin1()">Toggle Spin</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 'spacefill')">Spacefill View</a>
+            </td>
+            <td align="center">
+                <script type="text/javascript">
+                    var Info2 = {
+                        width: 400,
+                        height: 400,
+                        use: "HTML5",
+                        j2sPath: "j2s",
+                        serverURL: "php/jsmol.php",
+                        script: buildScript(scenes.default)
+                    };
+                    jmol2 = Jmol.getApplet("jmol2", Info2);
+                </script>
+                <br>
+                <button onclick="toggleSpin2()">Toggle Spin</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 'spacefill')">Spacefill View</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
