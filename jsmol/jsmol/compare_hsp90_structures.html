@@ -132,6 +132,14 @@
             }
             updateIndicator(appletNum, sceneName);
         }
+
+        function labelsOff1() {
+            Jmol.script(jmol1, "label off;");
+        }
+
+        function labelsOff2() {
+            Jmol.script(jmol2, "label off;");
+        }
         
         var spinning1 = false;
         var spinning2 = false;
@@ -179,6 +187,7 @@
             <div class="controls">
                 <button onclick="toggleSpin1()">Spin</button>
                 <button onclick="toggleBackground1()">Background</button>
+                <button onclick="labelsOff1()">Hide Labels</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a>
@@ -202,6 +211,7 @@
             <div class="controls">
                 <button onclick="toggleSpin2()">Spin</button>
                 <button onclick="toggleBackground2()">Background</button>
+                <button onclick="labelsOff2()">Hide Labels</button>
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a>
