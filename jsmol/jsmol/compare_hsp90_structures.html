@@ -92,19 +92,19 @@
             default8gft: {
                 displayName: "Hsp90 with Craf kinase, cochaperone Cdc37, & Phosphatase PP5",
                 pdb: '8GFT',
-                stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
+                stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off_andCartoon_remediated.spt',
                 commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;background white; set frank off;'
             },
             default7z38: {
                 displayName: "Hsp90 with Craf kinase & Cdc37",
                 pdb: '7Z38',
-                stateScript: 'hsp90/7z38_state_with_load_commented_off.spt',
+                stateScript: 'hsp90/7z38_state_with_load_commented_off_andCartoon_remediated.spt',
                 commands: 'select :D; wireframe off; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; set frank off;'
             },
             default5fwk: {
                 displayName: "Hsp90 with Cdk4 kinase & Cdc37",
                 pdb: '5FWK',
-                stateScript: 'hsp90/5fwk_state_with_load_commented_off.spt',
+                stateScript: 'hsp90/5fwk_state_with_load_commented_off_andCartoon_remediated.spt',
                 commands: 'select :E; wireframe off; select :K; wireframe off; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; zoom +15; set frank off;'
             }
         };
@@ -114,11 +114,14 @@
         var currentScene2 = 'default';
         
         // Function to load the specified PBB id code & build the complete script from a scene definition 
-        // Adding in the `calculate sturcture` after loading the PDB file because seeing artifacts in Jmol display
-        // where cartoon looks 'off', like tubes in place of helices. See https://proteopedia.org/w/Secondary_structure 
+        // Adding in remediated 'Cartoon' section in state script because Jmol state script had sections 
+        // where cartoon of atom spans was set to 1.2 or 0.2 and these looked like artifacts in the cartoon 
+        // display. By changing those to just 'Cartoon on', it makes it look more like what get if freshly 
+        //run `calculate structure` in Jmol after loading the PDB file. Putting it earlier didn't help because 
+         //was near end of state script what was causing seeing artifacts in Jmol display where cartoon looks 'off', like tubes in place of helices. See https://proteopedia.org/w/Secondary_structure 
         // and https://proteopedia.org/w/Calculate_structure .
         function buildScript(scene) {
-            return 'load =' + scene.pdb + '; calculate structure; script ' + scene.stateScript + '; ' + scene.commands;
+            return 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands;
         }
         
         // Function to update scene indicator
