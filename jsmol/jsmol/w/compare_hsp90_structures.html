@@ -112,6 +112,11 @@
         // Track current scene for each applet
         var currentScene1 = 'default';
         var currentScene2 = 'default';
+
+        var spinning1 = false;
+        var spinning2 = false;
+        var black_back1 = false;
+        var black_back2 = false;
         
         // Function to load the specified PBB id code & build the complete script from a scene definition 
         // Adding in remediated 'Cartoon' section in state script because Jmol state script had sections 
@@ -139,8 +144,12 @@
             // Update tracking and indicator
             if (appletNum === 1) {
                 currentScene1 = sceneName;
+                black_back1 = false;  // Reset the background state
+                spinning1 = false; // Reset the spin state
             } else {
                 currentScene2 = sceneName;
+                black_back2 = false;  // Reset the background state
+                spinning2 = false; // Reset the spin state
             }
             updateIndicator(appletNum, sceneName);
         }
@@ -153,10 +162,7 @@
             Jmol.script(jmol2, "select all; labels off;");
         }
         
-        var spinning1 = false;
-        var spinning2 = false;
-        var black_back1 = false;
-        var black_back2 = false;
+        
         
         function toggleSpin1() {
             spinning1 = !spinning1;
