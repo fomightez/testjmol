@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Opening PNGjs in Jmol Applets Demo</title>
-    <script type="text/javascript" src="JSmol.min.js"></script>
+    <script type="text/javascript" src="../JSmol.min.js"></script>
     <style>
         .scene-link {
             color: #00AA00;
@@ -64,8 +64,8 @@
                         width: 400,
                         height: 400,
                         use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
+                        j2sPath: "../j2s",
+                        serverURL: "../php/jsmol.php",
                         script: 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
                     };
                     jmol1 = Jmol.getApplet("jmol1", Info1);
@@ -81,8 +81,8 @@
                         width: 400,
                         height: 400,
                         use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
+                        j2sPath: "../j2s",
+                        serverURL: "../php/jsmol.php",
                         script: 'load =8GFT; script hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt; select [ATP]; wireframe 0.3; spacefill 0.35; select [ADP];wireframe 0.3; spacefill 0.35; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;'
                     };
                     jmol2 = Jmol.getApplet("jmol2", Info2);
