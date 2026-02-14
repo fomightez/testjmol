@@ -289,7 +289,7 @@ function _setModelState() {
   select ({22795});
   color label [xffdd5e];
   select ({22818 25188});
-  color label [x84bf00];
+  color label [x8cb266];
   select ({2490 12890 22795 22818 25188});
   font label 17.5 SansSerif Plain;
 
