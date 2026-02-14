@@ -113,9 +113,12 @@
         var currentScene1 = 'default';
         var currentScene2 = 'default';
         
-        // Function to build the complete script from a scene definition
+        // Function to load the specified PBB id code & build the complete script from a scene definition 
+        // Adding in the `calculate sturcture` after loading the PDB file because seeing artifacts in Jmol display
+        // where cartoon looks 'off', like tubes in place of helices. See https://proteopedia.org/w/Secondary_structure 
+        // and https://proteopedia.org/w/Calculate_structure .
         function buildScript(scene) {
-            return 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands;
+            return 'load =' + scene.pdb + '; calculate structure; script ' + scene.stateScript + '; ' + scene.commands;
         }
         
         // Function to update scene indicator
