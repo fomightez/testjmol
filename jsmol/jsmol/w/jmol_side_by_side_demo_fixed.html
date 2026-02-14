@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Jmol Applets Demo</title>
-    <script type="text/javascript" src="JSmol.min.js"></script>
+    <script type="text/javascript" src="../JSmol.min.js"></script>
 </head>
 <body>
     <h1 style="text-align: center;">Jmol Molecular Visualization Demo</h1>
@@ -23,8 +23,8 @@
                         width: 400,
                         height: 400,
                         use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
+                        j2sPath: "../j2s",
+                        serverURL: "../php/jsmol.php",
                         script: "load $water; spacefill 100%; wireframe 0.15; spin on;"
                     };
                     Jmol.getApplet("jmol1", Info1);
@@ -36,8 +36,8 @@
                         width: 400,
                         height: 400,
                         use: "HTML5",
-                        j2sPath: "j2s",
-                        serverURL: "php/jsmol.php",
+                        j2sPath: "../j2s",
+                        serverURL: "../php/jsmol.php",
                         script: "load $caffeine; wireframe 0.2; spacefill 20%; spin on;"
                     };
                     Jmol.getApplet("jmol2", Info2);
