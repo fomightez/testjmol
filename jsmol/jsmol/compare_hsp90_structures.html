@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compare Two Structures Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="JSmol.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        .applet-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 0 1 auto;
+        }
+        
+        .applet-panel h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .controls {
+            margin-top: 10px;
+        }
+        
+        .controls button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .controls button:hover {
+            background-color: #2980b9;
+        }
+        
+        .scene-link {
+            color: #00AA00;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .scene-link:hover {
+            text-decoration: underline;
+        }
+        
+        .scene-indicator {
+            position: relative;
+            margin-top: 10px;
+            text-align: right;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        // Define all scenes in one central location
+        var scenes = {
+            default8gft: {
+                displayName: "Hsp90 with Craf kinase, cochaperone Cdc37, and Phosphatase PP5",
+                pdb: '8GFT',
+                stateScript: 'hsp90/8gft_state_with_load_and_scale_echo_commented_off.spt',
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON;background white;'
+            },
+            default7z38: {
+                displayName: "Spacefill View",
+                pdb: '7Z38',
+                stateScript: 'hsp90/7z38_state_with_load_commented_off.spt',
+                commands: 'select [ATP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select [ADP]; wireframe 0.3; spacefill 0.35;spacefill on; color white; select :E; wireframe off; zoom -5; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; select all; spacefill on;background white;'
+            }
+        };
+        
+        // Track current scene for each applet
+        var currentScene1 = 'default';
+        var currentScene2 = 'default';
+        
+        // Function to build the complete script from a scene definition
+        function buildScript(scene) {
+            return 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands;
+        }
+        
+        // Function to update scene indicator
+        function updateIndicator(appletNum, sceneName) {
+            var indicatorId = 'indicator' + appletNum;
+            var displayName = scenes[sceneName].displayName;
+            document.getElementById(indicatorId).innerHTML = 'Current: ' + displayName;
+        }
+        
+        // Function to load a scene into a specific applet
+        function loadScene(applet, appletNum, sceneName) {
+            var script = buildScript(scenes[sceneName]);
+            Jmol.script(applet, script);
+            
+            // Update tracking and indicator
+            if (appletNum === 1) {
+                currentScene1 = sceneName;
+            } else {
+                currentScene2 = sceneName;
+            }
+            updateIndicator(appletNum, sceneName);
+        }
+        
+        var spinning1 = false;
+        var spinning2 = false;
+        var black_back1 = false;
+        var black_back2 = false;
+        
+        function toggleSpin1() {
+            spinning1 = !spinning1;
+            Jmol.script(jmol1, spinning1 ? "spin on;" : "spin off;");
+        }
+        
+        function toggleSpin2() {
+            spinning2 = !spinning2;
+            Jmol.script(jmol2, spinning2 ? "spin on;" : "spin off;");
+        }
+        function toggleBackground1() {
+            black_back1 = !black_back1;
+            Jmol.script(jmol1, black_back1 ? "background black;" : "background white;");
+        }
+        
+        function toggleBackground2() {
+            black_back2 = !black_back2;
+            Jmol.script(jmol2, black_back2 ? "background black;" : "background white;");
+        }
+    </script>
+</head>
+<body>
+    <h1>Compare Two Structures Demo</h1>
+    
+    <div class="container">
+        <div class="applet-panel">
+            <h2>Molecule #1</h2>
+            <script type="text/javascript">
+                var Info1 = {
+                    width: 600,
+                    height: 600,
+                    use: "HTML5",
+                    j2sPath: "j2s",
+                    serverURL: "php/jsmol.php",
+                    script: buildScript(scenes.default8gft)
+                };
+                jmol1 = Jmol.getApplet("jmol1", Info1);
+            </script>
+            <div class="scene-indicator" id="indicator1">Current: Default View</div>
+            <div class="controls">
+                <button onclick="toggleSpin1()">Spin</button>
+                <button onclick="toggleBackground1()">Background</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default8gft')">Hsp90 with Craf kinase, cochaperone Cdc37 (N-terminus & mid-portion), and Phosphatase PP5</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default7z38')">Hsp90 with Craf kinase and N-terminus & mid-portion of cochaperone Cdc37.</a>
+            </div>
+        </div>
+        
+        <div class="applet-panel">
+            <h2>Molecule #2</h2>
+            <script type="text/javascript">
+                var Info2 = {
+                    width: 600,
+                    height: 600,
+                    use: "HTML5",
+                    j2sPath: "j2s",
+                    serverURL: "php/jsmol.php",
+                    script: buildScript(scenes.default7z38)
+                };
+                jmol2 = Jmol.getApplet("jmol2", Info2);
+            </script>
+            <div class="scene-indicator" id="indicator2">Current: Default View</div>
+            <div class="controls">
+                <button onclick="toggleSpin2()">Spin</button>
+                <button onclick="toggleBackground2()">Background</button>
+                <br>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default8gft')">Hsp90 with Craf kinase, cochaperone Cdc37 (N-terminus & mid-portion), and Phosphatase PP5</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default7z38')">Hsp90 with Craf kinase and N-terminus & mid-portion of cochaperone Cdc37</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
