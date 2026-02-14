@@ -101,6 +101,12 @@
                 stateScript: 'hsp90/7z38_state_with_load_commented_off.spt',
                 commands: 'select :D; wireframe off; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; set frank off;'
             }
+            default5fwk: {
+                displayName: "Hsp90 with Cdk4 kinase and Cdc37",
+                pdb: '5FWK',
+                stateScript: 'hsp90/5fwk_state_with_load_commented_off.spt',
+                commands: 'set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; set frank off;'
+            }
         };
         
         // Track current scene for each applet
@@ -191,6 +197,7 @@
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default5fwk')">Hsp90  with Cdk4 kinase & Cdc37</a>
             </div>
         </div>
         
@@ -215,10 +222,12 @@
                 <br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default5fwk')">Hsp90  with Cdk4 kinase & Cdc37</a>
             </div>
         </div>
     </div>
     Hsp90 with Craf kinase, cochaperone Cdc37 (N-terminus & mid-portion), and Phosphatase PP5</br>
-    Hsp90 with Craf kinase and N-terminus & mid-portion of cochaperone Cdc37.
+    Hsp90 with Craf kinase and N-terminus & mid-portion of cochaperone Cdc37.</br>
+    Hsp90 with Cdk4 kinase and N-terminus of cochaperone Cdc37
 </body>
 </html>

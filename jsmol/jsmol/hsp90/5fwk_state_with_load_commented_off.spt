@@ -1,0 +1,358 @@
+# Jmol state version 16.3.49  2026-01-31 18:34;
+  # fullName = "jmol1__368540906413378__";
+  # documentBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/compare_hsp90_structures.html";
+  # codeBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/j2s/";
+
+
+function _setWindowState() {
+# width 600;
+# height 600;
+  stateVersion = 1603049;
+  background [x000000];
+  axis1Color = "[xff0000]";
+  axis2Color = "[x008000]";
+  axis3Color = "[x0000ff]";
+  set ambientPercent 45;
+  set diffusePercent 84;
+  set specular true;
+  set specularPercent 22;
+  set specularPower 40;
+  set specularExponent 6;
+  set celShading false;
+  set celShadingPower 10;
+  set zShadePower 1;
+}
+
+function _setFileState() {
+
+  set allowEmbeddedScripts false;
+  set appendNew true;
+  set appletProxy "";
+  set applySymmetryToBonds false;
+  set autoBond true;
+  set bondRadiusMilliAngstroms 150;
+  set bondTolerance 0.45;
+  set defaultLattice {0 0 0};
+  set defaultLoadFilter "";
+  set defaultLoadScript "";
+  set defaultStructureDssp true;
+  set defaultVDW Jmol;
+  set forceAutoBond false;
+  #set defaultDirectory "";
+  #set loadFormat "https://files.rcsb.org/download/%FILE.pdb";
+  #set loadLigandFormat "https://files.rcsb.org/ligands/download/%FILE.cif";
+  #set smilesUrlFormat "https://cactus.nci.nih.gov/chemical/structure/%FILE/file?format=sdf&get3d=true";
+  #set nihResolverFormat "https://cactus.nci.nih.gov/chemical/structure";
+  #set pubChemFormat "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/%FILE/SDF?record_type=3d";
+  set bondingVersion 0;
+  set legacyAutoBonding false;
+  set legacyAutoBonding false;
+  set legacyHAddition false;
+  set legacyJavaFloat true;
+  set minBondDistance 0.4;
+  set minimizationCriterion  0.001;
+  set minimizationSteps  100;
+  set multipleBondBananas false;
+  set pdbAddHydrogens false;
+  set pdbGetHeader false;
+  set pdbSequential false;
+  set percentVdwAtom 23;
+  set smallMoleculeMaxAtoms 40000;
+  set smartAromatic true;
+  #load /*file*/"cache://DROP_5FWK_start.pse";
+
+}
+
+function _setParameterState() {
+
+   set defaultanglelabel "%VALUE %UNITS";
+   set defaultcolorscheme "Jmol";
+   set defaultdistancelabel "%VALUE %UNITS";
+   set defaultdrawarrowscale 0.5;
+   set defaultlabelpdb "%m%r";
+   set defaultlabelxyz "%a";
+   set defaultlattice "{0 0 0}";
+   set defaultloadfilter "";
+   set defaultloadscript "";
+   set defaulttorsionlabel "%VALUE %UNITS";
+   set defaulttranslucent 0.5;
+   set defaultvdw "Jmol";
+  set allowembeddedscripts true;
+  set allowmoveatoms false;
+  set allowrotateselected false;
+  set animationmode "once";
+  set appletproxy "";
+  set applysymmetrytobonds false;
+  set atomtypes "";
+  set autobond true;
+  set autofps false;
+  set axes window;
+  set axesmode 0;
+  set axesoffset 0.0;
+  set axesscale 2.0;
+  set bondmodeor false;
+  set bondradiusmilliangstroms 150;
+  set bondtolerance 0.45;
+  set cartoonbaseedges false;
+  set cartoonblockheight 0.5;
+  set cartoonblocks false;
+  set cartoonfancy false;
+  set cartoonladders false;
+  set cartoonrockets false;
+  set cartoonsfancy false;
+  set cartoonsteps false;
+  set chaincasesensitive false;
+  set dataseparator "~~~";
+  set defaultstructuredssp true;
+  set delaymaximumms 0;
+  set dipolescale 1.0;
+  set disablepopupmenu false;
+  set displaycellparameters true;
+  set dotdensity 3;
+  set dotscale 1;
+  set dotsselectedonly false;
+  set dotsurface true;
+  set doubleprecision true;
+  set dragselected false;
+  set drawfontsize 16.0;
+  set drawhover false;
+  set dsspcalculatehydrogenalways true;
+  set ellipsoidarcs false;
+  set ellipsoidarrows false;
+  set ellipsoidaxes false;
+  set ellipsoidaxisdiameter 0.02;
+  set ellipsoidball true;
+  set ellipsoiddotcount 200;
+  set ellipsoiddots false;
+  set ellipsoidfill false;
+  set energyunits "kJ";
+  set forceautobond false;
+  set gestureswipefactor 1.0;
+  set greyscalerendering false;
+  set hbondhxdistancemaximum 2.5;
+  set hbondsbackbone false;
+  set hbondsrasmol true;
+  set hbondssolid false;
+  set helixstep 1;
+  set helppath "https://chemapps.stolaf.edu/jmol/docs/index.htm";
+  set hermitelevel 0;
+  set hiddenlinesdashed false;
+  set hidenameinpopup false;
+  set hidenavigationpoint false;
+  set highresolution false;
+  set hoverdelay 0.5;
+  set infofontsize 20;
+  set isosurfacekey false;
+  set isosurfacepropertysmoothing true;
+  set isosurfacepropertysmoothingpower 7;
+  set jmolinjspecview true;
+  set justifymeasurements false;
+  set labelpointerwidth 2;
+  set loadatomdatatolerance 0.01;
+  set measureallmodels false;
+  set measurementlabels true;
+  set meshscale 1;
+  set messagestylechime false;
+  set minbonddistance 0.4;
+  set minimizationcriterion 0.001;
+  set minimizationrefresh true;
+  set minimizationsilent false;
+  set minimizationsteps 100;
+  set minpixelselradius 6;
+  set modulationscale 1.0;
+  set monitorenergy false;
+  set multiplebondbananas false;
+  set multiplebondradiusfactor 0.0;
+  set multiplebondspacing -1.0;
+  set navigationperiodic false;
+  set navigationspeed 5.0;
+  set nbocharges true;
+  set nmrpredictformat "https://www.nmrdb.org/service/predictor?POST?molfile=";
+  set nmrurlformat "https://www.nmrdb.org/new_predictor?POST?molfile=";
+  set occupancythreshold 50;
+  set partialdots false;
+  set particleradius 20.0;
+  set pdbaddhydrogens false;
+  set pdbgetheader false;
+  set pdbsequential false;
+  set percentvdwatom 23;
+  set pickingspinrate 10;
+  set propertyatomnumbercolumncount 0;
+  set propertyatomnumberfield 0;
+  set propertydatacolumncount 0;
+  set propertydatafield 0;
+  set quaternionframe "p";
+  set rangeselected false;
+  set ribbonaspectratio 16;
+  set ribbonborder true;
+  set rocketbarrels false;
+  set sheetsmoothing 1.0;
+  set showhiddenselectionhalos false;
+  set showhydrogens true;
+  set showmeasurements true;
+  set showmodulationvectors false;
+  set showmultiplebonds true;
+  set shownavigationpointalways false;
+  set showunitcelldetails true;
+  set slabbyatom false;
+  set slabbymolecule false;
+  set smallmoleculemaxatoms 40000;
+  set smartaromatic true;
+  set solventprobe false;
+  set solventproberadius 1.2;
+  set ssbondsbackbone false;
+  set starwidth 0.05;
+  set stereodegrees -5;
+  set strandcountformeshribbon 7;
+  set strandcountforstrands 5;
+  set strutdefaultradius 0.3;
+  set strutlengthmaximum 7.0;
+  set strutsmultiple false;
+  set strutspacing 6;
+  set tracealpha true;
+  set translucent false;
+  set twistedsheets false;
+  set usenumberlocalization true;
+  set vectorscale 1.0;
+  set vectorscentered false;
+  set vectorsymmetry false;
+  set vectortrail 0;
+  set vibrationscale 1.0;
+  set waitformoveto true;
+  set wireframerotation false;
+  set zdepth 0;
+  set zoomheight true;
+  set zoomlarge true;
+  set zslab 50;
+
+# label defaults;
+  select none;
+  color label none;
+  background label none;
+  set labelOffset 4 4;
+  set labelAlignment left;
+  set labelPointer off;
+  font label 13 SansSerif Plain;
+
+}
+
+function _setModelState() {
+
+  select ({0:20827 20829:26160});
+  Spacefill 0.0;
+  select ({0:10399});
+  color atoms opaque [x33ff33];
+  select ({10400:20642});
+  color atoms opaque [x00ffff];
+  select ({20643:20827 20829:22816});
+  color atoms opaque [xff33cc];
+  select ({20828 26161 26165 26169 26193 26197 26201});
+  Spacefill 1.7995;
+  select ({20828});
+  color atoms opaque [xff8c26];
+  select ({22817:26160});
+  color atoms opaque [xffff00];
+  select ({26161:26191 26193:26223});
+  color atoms opaque [xffffff];
+  select ({26162:26164 26166:26168 26170:26173 26176 26178 26180 26194:26196 26198:26200 26202:26205 26208 26210 26212});
+  Spacefill 1.5195;
+  select ({26174 26175 26177 26179 26181 26183 26185 26186 26189 26191 26206 26207 26209 26211 26213 26215 26217 26218 26221 26223});
+  Spacefill 1.7;
+  select ({26182 26184 26187 26188 26190 26214 26216 26219 26220 26222});
+  Spacefill 1.5495;
+  select ({26192 26224});
+  Spacefill 1.73;
+  color atoms opaque [xff3333];
+  select ({0:26224});
+  color balls opaque none;
+  select /*16.2*/ BONDS ({0:20993 21007:26390});
+  wireframe 0.0;
+  select /*16.2*/ BONDS ({20994:21002 26391:26456});
+  wireframe 0.25;
+  select /*16.2*/ BONDS ({21003:21006});
+  wireframe 0.1;
+
+  select ({2490});
+  label "Hsp90(A)";set labelOffset [1.0, 6.0, -13.0, 0.0, 0.0, 0.0, 0.0];
+  select ({12890});
+  label "Hsp90(B)";set labelOffset [1.0, -3.0, -12.0, 0.0, 0.0, 0.0, 0.0];
+  select ({22795});
+  label "Cdc37";set labelOffset [1.0, -7.0, 0.30000001192092896, 0.0, 0.0, 0.0, 0.0];
+  select ({22818});
+  label "Cdk4 (N-lobe)";set labelOffset [1.0, -10.300000190734863, -0.30000001192092896, 0.0, 0.0, 0.0, 0.0];
+  select ({25188});
+  label "Cdk4 (C-lobe)";set labelOffset [1.0, 2.0, 1.2999999523162842, 0.0, 0.0, 0.0, 0.0];
+  select ({2490});
+  color label [x1d8fff];
+  select ({12890});
+  color label [x86cdf9];
+  select ({22795});
+  color label [xffdd5e];
+  select ({22818 25188});
+  color label [x84bf00];
+  select ({2490 12890 22795 22818 25188});
+  font label 17.5 SansSerif Plain;
+
+  select ({0:45 105:124 365:432 917:1012 1096:1179 1274:1337 1462:1487 1521:1563 1698:1870 1996:2011 2140:2248 2330:2364 2460:2581 2708:2756 3050:3175 3283:3547 3600:3616 3702:3832 4115:4227 4340:4412 4544:4845 4943:4990 5063:5074 5245:5283 5370:5601 6008:6022 6414:6438 6555:6607 6684:6773 6916:7033 7128:7149 7437:7478 7549:7562 7686:7760 7796:7814 7894:8049 8497:8605 8655:8774 8832:8922 9112:9166 9295:9338 9409:9448 9673:9708 10011:10082 10380:10398 10400:10429 10505:10524 10717:10847 11213:11226 11317:11412 11510:11579 11674:11737 11862:11887 11921:11952 12132:12270 12396:12411 12562:12631 12730:12764 12860:12974 13108:13129 13478:13575 13705:13756 13933:14063 14360:14458 14593:14643 14775:15076 15174:15221 15294:15305 15476:15514 15601:15832 16645:16669 16801:16883 16915:17018 17147:17253 17359:17380 17668:17709 17780:17822 17970:17991 18027:18045 18125:18280 18728:18814 18886:19005 19077:19153 19306:19385 19499:19547 19640:19679 19926:19939 20242:20313 20611:20641 20643:20670 20755:20979 21858:21879 22504:22616 22766:22815 22817:23019 23173:23240 23605:23722 23774:23787 23842:23894 23952:23993 24073:24366 24460:24522 24824:24930 25159:25448 25494:25517 25608:25653 25851:25980 26092:26159});
+  Cartoon 0.2;
+  select ({152:364 433:916 1338:1461 1564:1697 1871:1995 2757:3049 3617:3701 3833:4114 5075:5244 5602:6007 6023:6413 6439:6554 6799:6915 7150:7436 7563:7685 8050:8496 8923:9111 9167:9294 9449:9672 9709:10010 10083:10379 10552:10716 10848:11212 11227:11316 11738:11861 11953:12131 12271:12395 13130:13477 13848:13932 14064:14359 15306:15475 15833:16644 16670:16800 17019:17146 17381:17667 17823:17969 18281:18727 19154:19305 19386:19498 19680:19925 19940:20241 20314:20610 20671:20754 20980:21857 21880:22503 23020:23172 23241:23604 23723:23773 23994:24072 24367:24459 24523:24823 24931:25132 25518:25607 25654:25850 25981:26091});
+  Cartoon 1.2;
+  select ({46:104 125:151 1013:1095 1180:1273 1488:1520 2012:2139 2249:2329 2365:2459 2582:2707 3176:3282 3548:3599 4228:4339 4413:4543 4846:4942 4991:5062 5284:5369 6608:6683 6774:6798 7034:7127 7479:7548 7761:7795 7815:7893 8606:8654 8775:8831 9339:9408 10430:10504 10525:10551 11413:11509 11580:11673 11888:11920 12412:12561 12632:12729 12765:12859 12975:13107 13576:13704 13757:13847 14459:14592 14644:14774 15077:15173 15222:15293 15515:15600 16884:16914 17254:17358 17710:17779 17992:18026 18046:18124 18815:18885 19006:19076 19548:19639 22617:22765 23788:23841 23895:23951 25133:25158 25449:25493});
+  Cartoon 1.4;
+  select ({22817:26159});
+  color Cartoon opaque [x8cb266];
+  select ({20643:22815});
+  color Cartoon opaque [xffdd5e];
+  select ({10400:20641});
+  color Cartoon opaque [x86cdf9];
+  select ({0:10398});
+  color Cartoon opaque [x1d8fff];
+
+  set echo off;set echo "%SCALE" off;
+
+  hover "%U";
+
+  frank off;
+  font frank 16 SansSerif Plain;
+  select *;
+  set fontScaling false;
+
+}
+
+function _setPerspectiveState() {
+  set perspectiveModel 11;
+  set scaleAngstromsPerInch 0;
+  set perspectiveDepth true;
+  set visualRange 5;
+  set cameraDepth 2.3356409098088546;
+  boundbox corners {118.39199829101562 110.18299865722656 113.55999755859375} {206.4199981689453 242.81700134277344 234.95700073242188} # volume = 1417371.4355647478;
+  center {168.06288146972656 168.05862426757812 173.40121459960938};
+   moveto -1.0 { 730 392 -560 75.03} 100.0 0.0 0.0 {168.06288146972656 168.05862426757812 173.40121459960938} 74.75837801104097 {0 0 0} 0 0 0 2.34 0.0 0.0;
+  save orientation "default";
+  moveto 0.0 { 730 392 -560 75.03} 94.11 0.0 0.0 {168.06288146972656 168.05862426757812 173.40121459960938} 74.75837801104097 {0 0 0} 0 0 0 2.34 0.0 0.0;;
+  slab 100;depth 0;
+  set slabRange 0.0;
+  set spinX 0; set spinY 5; set spinZ 0; set spinFps 10;  set navX 0; set navY 0; set navZ 0; set navFps 10;
+}
+
+function _setSelectionState() {
+  select ({20643:22816});
+  set hideNotSelected false;
+}
+
+function _setState() {
+  initialize;
+  set refreshing false;
+  _setWindowState;
+  _setFileState;
+  _setParameterState;
+  _setModelState;
+  _setPerspectiveState;
+  _setSelectionState;
+  set refreshing true;
+  set antialiasDisplay true;
+  set antialiasTranslucent true;
+  set antialiasImages true;
+}
+
+_setState;
