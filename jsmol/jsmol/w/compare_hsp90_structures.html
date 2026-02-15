@@ -106,6 +106,13 @@
                 pdb: '5FWK',
                 stateScript: 'hsp90/5fwk_state_with_load_commented_off_andCartoon_remediated.spt',
                 commands: 'select :E; wireframe off; select :K; wireframe off; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; zoom +15; set frank off;'
+            },
+            },
+            default7krj: {
+                displayName: "Hsp90 with GR & p23",
+                pdb: '7KRJ',
+                stateScript: 'hsp90/7krj_state_with_load_commented_off_andCartoon_remediated.spt',
+                commands: 'set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; zoom +1; set frank off;'
             }
         };
         
@@ -210,6 +217,7 @@
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a></br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default5fwk')">Hsp90  with Cdk4 kinase & Cdc37</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol1, 1, 'default7krj')">Hsp90  with GR & p23</a>
             </div>
         </div>
         
@@ -235,11 +243,13 @@
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default8gft')">Hsp90, Craf, Cdc37, and PP5</a>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default7z38')">Hsp90  with Craf kinase & Cdc37</a></br>
                 <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default5fwk')">Hsp90  with Cdk4 kinase & Cdc37</a>
+                <a href="javascript:void(0);" class="scene-link" onclick="loadScene(jmol2, 2, 'default7krj')">Hsp90  with GR & p23</a>
             </div>
         </div>
     </div>
-    Hsp90 with Craf kinase, cochaperone Cdc37 (N-terminus & mid-portion), and Phosphatase PP5</br>
-    Hsp90 with Craf kinase and N-terminus & mid-portion of cochaperone Cdc37.</br>
-    Hsp90 with Cdk4 kinase and N-terminus of cochaperone Cdc37
+    Hsp90 with Craf kinase as client, cochaperone Cdc37 (N-terminus & mid-portion), and Phosphatase PP5</br>
+    Hsp90 with Craf kinase as client and N-terminus & mid-portion of cochaperone Cdc37.</br>
+    Hsp90 with Cdk4 kinase as client and N-terminus of cochaperone Cdc37.</br>
+    Hsp90 with glucocorticoid receptor (GR) as client and cochaperone p23.</br>
 </body>
 </html>
