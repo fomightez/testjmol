@@ -1,5 +1,5 @@
 # Jmol state version 16.3.49  2026-01-31 18:34;
-  # fullName = "jmol1__5996493950019__";
+  # fullName = "jmol1__549263710261986__";
   # documentBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/w/compare_hsp90_structures.html";
   # codeBase = "https://fomightez.github.io/testjmol/jsmol/jsmol/w/../j2s/";
 
@@ -281,9 +281,9 @@ function _setModelState() {
   select ({21456});
   label "p23";set labelOffset [1.0, 1.0, 0.30000001192092896, 0.0, 0.0, 0.0, 0.0];
   select ({22603});
-  label "GR (C-lobe)";set labelOffset [1.0, -4.800000190734863, 0.30000001192092896, 0.0, 0.0, 0.0, 0.0];
+  label "GR (N-lobe)";set labelOffset [1.0, -4.800000190734863, 0.30000001192092896, 0.0, 0.0, 0.0, 0.0];
   select ({25922});
-  label "GR (N-lobe)";set labelOffset [1.0, 5.800000190734863, 0.0, 0.0, 0.0, 0.0, 0.0];
+  label "GR (C-lobe)";set labelOffset [1.0, 5.800000190734863, 0.0, 0.0, 0.0, 0.0, 0.0];
   select ({2412});
   color label [x1d8fff];
   select ({12652});
@@ -309,13 +309,6 @@ function _setModelState() {
   color Cartoon opaque [x86cdf9];
   select ({0:10239});
   color Cartoon opaque [x1d8fff];
-
-  set echo off;set echo "%SCALE" off;
-
-  hover "%U";
-
-  frank on;
-  font frank 16 SansSerif Plain;
   select *;
   set fontScaling false;
 
