@@ -142,11 +142,12 @@ Jmol.setButtonCss(null,"style='width:160px'")
 Jmol.setMenuCss(null,"style='width:160px'")
 jmolHtml("Hsp90 Scenes:")
 jmolBr()
-jmolHtml("<select style='width:160px' onchange='loadScene(this.value); this.selectedIndex=this.selectedIndex;'>"
-    + "<option value=''>-- select a scene --</option>"
-    + "<option value='default8gft'>Hsp90, Craf, Cdc37, and PP5</option>"
-    + "<option value='default7z38'>Hsp90 with Craf kinase & Cdc37</option>"
-    + "</select>")
+var sceneOptions = "<select style='width:160px' onchange='loadScene(this.value)'>";
+for (var key in scenes) {
+    sceneOptions += "<option value='" + key + "'>" + scenes[key].displayName + "</option>";
+}
+sceneOptions += "</select>";
+jmolHtml(sceneOptions);
 jmolBr()
 jmolBr()
 jmolMenu(Styles)
