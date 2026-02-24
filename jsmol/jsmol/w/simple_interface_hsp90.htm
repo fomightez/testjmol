@@ -32,21 +32,13 @@ Styles.push(["reset lighting; set cartoonsfancy off;set hermitelevel 0;set antia
 Styles.push(["reset lighting; set cartoonsfancy; set hermitelevel 20;set antialiasDisplay;", "Jmol Fancy Style"]);
 Styles.push(["set ambientpercent 25; set specularpower 100; set specularpercent 22; set specularexponent 4; set cartoonsfancy; set antialiasdisplay; set hermitelevel 20;","Chimera Style"]);
 
-var xxxx = document.location.search
-if (xxxx.indexOf("_USE=") > 0)xxxx = xxxx.substring(0, xxxx.indexOf("_USE=") - 1);
-if (xxxx.length == 5 || xxxx.length == 0) { 
-	xxxx = (xxxx + "?1crn").substring(1,5)
-	script = 'h2oOn=true;set animframecallback "jmolscript:if (!selectionHalos) {select model=_modelNumber}";'
-     + ' set antialiasdisplay;'
-	+'set errorCallback "myCallback";'
-	+'set defaultloadscript "isDssp = false;set defaultVDW babel;if(!h2oOn){display !water}";'
-	+'set zoomlarge false;set echo top left;echo loading XXXX...;refresh;'
-	+'load "=XXXX";set echo top center;echo XXXX;'
-	+'spacefill off;wireframe off;cartoons on;color structure;'
-	script = script.replace(/XXXX/g, xxxx)
-} else {
-	script = unescape(xxxx.substring(1))
-}
+// Default script
+var script = 'set antialiasdisplay;'
+	+ 'set defaultloadscript "set defaultVDW babel; display *";'
+	+ 'set zoomlarge false;'
+	+ 'load "=1crn";'
+	+ 'spacefill off;wireframe off;cartoons on;color structure;';
+
 
 
 var Info = {
@@ -93,7 +85,7 @@ function jmolMenu(a) {Jmol.jmolMenu(jmolApplet0, a)}
 
 </script>
 </head>
-<body onload="document.getElementsByTagName('form')[0].reset()">
+<body>
 
 <center>
 
