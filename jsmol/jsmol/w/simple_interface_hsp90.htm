@@ -32,9 +32,6 @@ Styles.push(["reset lighting; set cartoonsfancy off;set hermitelevel 0;set antia
 Styles.push(["reset lighting; set cartoonsfancy; set hermitelevel 20;set antialiasDisplay;", "Jmol Fancy Style"]);
 Styles.push(["set ambientpercent 25; set specularpower 100; set specularpercent 22; set specularexponent 4; set cartoonsfancy; set antialiasdisplay; set hermitelevel 20;","Chimera Style"]);
 
-// Default script
-var default_script = 'load =' + scenes.default8gft.pdb + '; script ' + scenes.default8gft.stateScript + '; ' + scenes.default8gft.commands;
-
 
 var scenes = {
     default8gft: {
@@ -50,6 +47,11 @@ var scenes = {
         commands: 'select :D; wireframe off; set ribbonborder on; set antialiasdisplay on; set hermitelevel 5; set highResolution ON; background white; set frank off;'
     }
 };
+
+
+// Default script
+var default_script = 'load =' + scenes.default8gft.pdb + '; script ' + scenes.default8gft.stateScript + '; ' + scenes.default8gft.commands;
+
 
 function loadScene(sceneName) {
     if (!sceneName) return;
