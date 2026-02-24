@@ -240,7 +240,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>JSmol Molecular Viewer</h1>
+        <h1>Hsp90 Structures</h1>
         
         <div class="main-layout">
             <div class="viewer-panel">
@@ -293,31 +293,8 @@
                         </select>
                     </div>
 
-                    <div class="control-section">
-                        <h3>Load Structure</h3>
-                        <script type="text/javascript">
-                            Jmol.setButtonCss(null, "width: 100%;");
-                            jmolButton("if (!xid) { xid = '1crn'}; var x = prompt('Enter a four-digit PDB ID', xid); if (!x) { quit }; xid = x; load @{'=' + x}", "Load PDB by ID");
-                            jmolBr();
-                            jmolCheckbox("set pdbAddHydrogens TRUE", "set pdbAddHydrogens FALSE", "with hydrogens", false);
-                            jmolBr();
-                            jmolCheckbox("set defaultLoadFilter 'biomolecule 1'", "set defaultLoadFilter ''", "biomolecule 1", false);
-                        </script>
-                    </div>
+
                     
-                    <div class="control-section">
-                        <h3>Other Load Options</h3>
-                        <script type="text/javascript">
-                            Jmol.setButtonCss(null, "width: 100%;");
-                            jmolButton("if (!molname) { molname = 'tylenol'}; var x = prompt('Enter the name or identifier (SMILES, InChI, CAS) of a molecule', molname); if (!x) { quit }; molname = x; load @{'$' + molname}", "Load MOL by NAME");
-                            jmolBr();
-                            jmolButton("load ?", "Load URL");
-                            jmolBr();
-                            jmolButton("load file://?", "Load FILE");
-                            jmolBr();
-                            jmolButton("script ?.spt", "Load SCRIPT");
-                        </script>
-                    </div>
                     
                     <div class="control-section">
                         <h3>Display Options</h3>
