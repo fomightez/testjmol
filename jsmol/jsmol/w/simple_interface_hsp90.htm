@@ -38,7 +38,7 @@ var script = 'set antialiasdisplay;'
 	+ 'set zoomlarge false;'
 	+ 'load "=1crn";'
 	+ 'set platformSpeed 8;spacefill off;wireframe off;cartoons on;color structure;';
-
+var def_script = 'load =' + scenes.default8gft.pdb + '; script ' + scenes.default8gft.stateScript + '; ' + scenes.default8gft.commands;
 
 
 var scenes = {
@@ -73,7 +73,7 @@ var Info = {
 	use: "HTML5",
 	j2sPath: "../j2s",
 	readyFunction: jmol_isReady,
-	script: script,
+	script: def_script,
 	//jarPath: "java",
 	//jarFile: (useSignedApplet ? "JmolAppletSigned.jar" : "JmolApplet.jar"),
 	//isSigned: useSignedApplet,
