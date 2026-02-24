@@ -89,7 +89,6 @@ function jmolButton(script, text) {Jmol.jmolButton(jmolApplet0, script,text)}
 function jmolHtml(s) { document.write(s) };
 function jmolBr() { jmolHtml("<br>") }
 function jmolMenu(a) {Jmol.jmolMenu(jmolApplet0, a)}
- 
 
 
 </script>
@@ -114,7 +113,7 @@ Jmol.setButtonCss(null,"style='width:160px'")
 Jmol.setMenuCss(null,"style='width:160px'")
 jmolHtml("Hsp90 Scenes:")
 jmolBr()
-jmolMenu(jmolApplet0, [
+jmolMenu([
     ["loadScene('default8gft')", "Hsp90, Craf, Cdc37, and PP5"],
     ["loadScene('default7z38')", "Hsp90 with Craf kinase & Cdc37"]
 ])
