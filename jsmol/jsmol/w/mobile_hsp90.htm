@@ -323,8 +323,6 @@
                     <div class="control-section">
                         <h3>Display Options</h3>
                         <script type="text/javascript">
-                            jmolCheckbox("if (getproperty('shapeInfo.isosurface').length) {isosurface on} else {isosurface @{'=' + _modelName};}", "isosurface off", "show electron density", false);
-                            jmolBr();
                             Jmol.setMenuCss(null, "width: 100%;");
                             jmolMenu(Styles);
                             jmolBr();
@@ -336,7 +334,7 @@
                             jmolBr();
                             jmolCheckbox("set antialiasdisplay TRUE", "set antialiasdisplay FALSE", "antialiasDisplay", true);
                             jmolBr();
-                            jmolButton("select all; labels off;", "Hide `Labels");
+                            jmolButton("select all; labels off;", "Hide Labels");
                         </script>
                     </div>
                     
