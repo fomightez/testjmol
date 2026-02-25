@@ -193,11 +193,11 @@ jmolBr()
 document.getElementById('sceneIndicator').innerHTML = 'Current: ' + scenes.default8gft.displayName;
 jmolBr()
 Jmol.setButtonCss(null,"style='width:96px'")
-jmolButton("select all; labels off;", "Hide Labels");
-jmolButton("spin on;", "Spin On");
-jmolButton("background black;", "Black Bkg.");
+jmolButton("backbone only", "backbone")
+jmolButton("trace only", "trace")
 jmolButton("cartoon only", "cartoon")
 jmolButton("spacefill only", "spacefill")
+jmolButton("spacefill only;spacefill 23%;wireframe 0.15","ball&stick")
 jmolBr()
 Jmol.setButtonCss(null,"style='width:80px'")
 jmolButton("console")
