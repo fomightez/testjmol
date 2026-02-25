@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hsp90 Mobile</title>
+    <title>Explore Hsp90 on Mobile</title>
     <script type="text/javascript" src="../JSmol.min.js"></script>
     <style>
         * {
@@ -288,15 +288,6 @@
                 <div class="control-section" style="margin-top: 20px;">
                     <div class="button-group">
                         <script type="text/javascript">
-                            Jmol.setButtonCss(null, "");
-                            jmolButton("color cpk", "CPK");
-                            jmolButton("color group", "Group");
-                            jmolButton("color amino", "Amino");
-                            jmolButton("color structure", "Structure");
-                        </script>
-                    </div>
-                    <div class="button-group">
-                        <script type="text/javascript">
                             jmolButton("backbone only", "Backbone");
                             jmolButton("trace only", "Trace");
                             jmolButton("cartoon only", "Cartoon");
@@ -317,12 +308,15 @@
                 <form>
                     <div class="control-section">
                         <h3>Scenes</h3>
-                        <select style="width: 100%;" onchange="loadScene(this.value)">
-                            <option value="default8gft">Hsp90, Craf, Cdc37, and PP5</option>
-                            <option value="default7z38">Hsp90 with Craf kinase &amp; Cdc37</option>
-                        </select>
+                        <script type="text/javascript">
+                            var sceneOptions = "<select style='width:100%' onchange='loadScene(this.value)'>";
+                            for (var key in scenes) {
+                                sceneOptions += "<option value='" + key + "'>" + scenes[key].displayName + "</option>";
+                            }
+                            sceneOptions += "</select>";
+                            document.write(sceneOptions);
+                        </script>
                     </div>
-
 
                     
                     
