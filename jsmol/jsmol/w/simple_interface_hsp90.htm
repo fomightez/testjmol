@@ -150,18 +150,20 @@ for (var key in scenes) {
 sceneOptions += "</select>";
 jmolHtml(sceneOptions);
 jmolBr();
-jmolButton("select all; labels off;", "Labels Off");
 jmolBr();
 jmolMenu(Styles)
+jmolBr();
 jmolBr()
 jmolCheckbox("set antialiasdisplay TRUE","set antialiasdisplay FALSE","antialiasDisplay",true)
 jmolBr()
 jmolCheckbox("spin on", "spin off", "spin", false);
 jmolBr();
-jmolCheckbox("set zshade true","set zshade false","zshade (fog)",false)
-jmolBr()
 jmolCheckbox("background black","background white","background black",false)
 jmolBr()
+jmolCheckbox("set zshade true","set zshade false","zshade (fog)",false)
+jmolBr();
+jmolButton("select all; labels off;", "Labels Off");
+jmolBr();
 jmolBr()
 jmolButton("write FILE ?","Save FILE")
 jmolBr()
