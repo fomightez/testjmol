@@ -324,8 +324,6 @@
                         <h3>Display Options</h3>
                         <script type="text/javascript">
                             Jmol.setMenuCss(null, "width: 100%;");
-                            jmolMenu(Styles);
-                            jmolBr();
                             jmolCheckbox("spin on", "spin off", "spin", false);
                             jmolBr();
                             jmolCheckbox("background black", "background white", "background black", false);
@@ -335,6 +333,8 @@
                             jmolCheckbox("set antialiasdisplay TRUE", "set antialiasdisplay FALSE", "antialiasDisplay", true);
                             jmolBr();
                             jmolButton("select all; labels off;", "Hide Labels");
+                            jmolBr();
+                            jmolMenu(Styles);
                         </script>
                     </div>
                     

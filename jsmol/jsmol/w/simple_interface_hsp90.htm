@@ -150,9 +150,6 @@ for (var key in scenes) {
 sceneOptions += "</select>";
 jmolHtml(sceneOptions);
 jmolBr();
-jmolBr();
-jmolMenu(Styles)
-jmolBr();
 jmolBr()
 jmolCheckbox("spin on", "spin off", "spin", false);
 jmolBr();
@@ -163,6 +160,9 @@ jmolBr();
 jmolCheckbox("set antialiasdisplay TRUE","set antialiasdisplay FALSE","antialiasDisplay",true)
 jmolBr();
 jmolButton("select all; labels off;", "Hide Labels");
+jmolBr();
+jmolBr();
+jmolMenu(Styles)
 jmolBr();
 jmolBr()
 jmolButton("write FILE ?","Save FILE")
