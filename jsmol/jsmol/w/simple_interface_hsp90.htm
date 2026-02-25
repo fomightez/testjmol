@@ -149,14 +149,15 @@ for (var key in scenes) {
 }
 sceneOptions += "</select>";
 jmolHtml(sceneOptions);
-jmolBr()
-jmolBr()
+jmolBr();
+jmolButton("select all; labels off;", "Labels Off");
+jmolBr();
 jmolMenu(Styles)
 jmolBr()
 jmolCheckbox("set antialiasdisplay TRUE","set antialiasdisplay FALSE","antialiasDisplay",true)
 jmolBr()
-jmolCheckbox("h2oOn=true;display *","h2oOn=false;display !water","display water",true)
-jmolBr()
+jmolCheckbox("spin on", "spin off", "spin", false);
+jmolBr();
 jmolCheckbox("set zshade true","set zshade false","zshade (fog)",false)
 jmolBr()
 jmolCheckbox("background black","background white","background black",false)
@@ -196,7 +197,7 @@ jmolButton("cartoon only", "cartoon")
 jmolButton("spacefill only", "spacefill")
 jmolButton("spacefill only;spacefill 23%;wireframe 0.15","ball&stick")
 jmolBr()
-Jmol.setButtonCss(null,"style='width:100px'")
+Jmol.setButtonCss(null,"style='width:80px'")
 jmolButton("console")
 Jmol.jmolCommandInput(jmolApplet0)
 </script>
