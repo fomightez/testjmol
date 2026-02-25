@@ -80,13 +80,13 @@ var scenes = {
 
 
 // Default script
-var default_script = 'load =' + scenes.default8gft.pdb + '; script ' + scenes.default8gft.stateScript + '; ' + scenes.default8gft.commands;
+var default_script = 'load =' + scenes.default8gft.pdb + '; script ' + scenes.default8gft.stateScript + '; ' + scenes.default8gft.commands + '; select all;';
 
 
 function loadScene(sceneName) {
     if (!sceneName) return;
     var scene = scenes[sceneName];
-    Jmol.script(jmolApplet0, 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands);
+    Jmol.script(jmolApplet0, 'load =' + scene.pdb + '; script ' + scene.stateScript + '; ' + scene.commands + '; select all;');
     document.getElementById('sceneIndicator').innerHTML = 'Current: ' + scene.displayName;
 }
 
